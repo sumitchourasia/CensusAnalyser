@@ -6,12 +6,13 @@ namespace CensusAnalyser
     {
         static void Main(string[] args)
         {
+            string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\StateCensusData.csv";
+
             Console.WriteLine("Welcome to Census Analyser!");
             StateCensusAnalyser obj = new StateCensusAnalyser();
-            obj.GetDataTabletFromCSVFile();
-
+            Console.WriteLine( obj.LoadstateCensusFile(path));
             CSVStateCensus obj2 = new CSVStateCensus();
-            obj2.LoadFile();
+            Console.WriteLine(obj2.LoadCSVStateCensusFile(path));
         }
     }
 }

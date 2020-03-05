@@ -1,57 +1,39 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using Microsoft.VisualBasic.FileIO;
+using System.IO;
 
 namespace CensusAnalyser
 {
-    public class StateCensusAnalyser
+    /// <summary>
+    /// contains method to load csv file and use iterator(IEnumerable)
+    /// </summary>
+    public class StateCensusAnalyser 
     {
-        public DataTable GetDataTabletFromCSVFile()
+        int count = 0;
+        /// <summary>
+        /// Gets the iterator.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static IEnumerable<string> GetIterator(string path)
         {
-            string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\StateCensusData.csv";
-
-            DataTable csvData = new DataTable();
-
-            TextFieldParser csvReader = new TextFieldParser(path);
-            try
-            {
-                csvReader.SetDelimiters(new string[] { "," });
-                    //csvReader.HasFieldsEnclosedInQuotes = true;
-                    string[] colFields = csvReader.ReadFields();
-                    foreach (string column in colFields)
-                    {
-                        DataColumn datacolumn = new DataColumn(column,typeof(string));
-                        //datacolumn.AllowDBNull = true;
-                        csvData.Columns.Add(datacolumn);
-                    }
-                    while (!csvReader.EndOfData)
-                    {
-                        string[] fieldData = csvReader.ReadFields();
-                        //Making empty value as null
-                        for (int i = 0; i < fieldData.Length; i++)
-                        {
-                            if (fieldData[i] == "")
-                            {
-                                fieldData[i] = null;
-                            }
-                        }
-                        csvData.Rows.Add(fieldData);
-                    }
-            }
-            catch (Exception ex)
-            {
-            }
-            foreach (DataRow dataRow in csvData.Rows)
-            {
-                foreach (var item in dataRow.ItemArray)
-                {
-                    Console.Write(item + "     ");
-                }
-                Console.WriteLine();
-            }
-            Console.WriteLine("Rows count:" + csvData.Rows.Count);
-            return csvData;
+            //// Iterating array elements and returning  
+            foreach (string line in File.ReadLines(path))
+                yield return line; //// It returns elements after executing each iteration  
+        }
+        /// <summary>
+        /// Load the states census file.
+        /// uses iterator(IEnumeration)
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public int LoadstateCensusFile(string path)
+        {
+            IEnumerable<string> elements = StateCensusAnalyser.GetIterator(path);
+            foreach (string element in elements)
+                count++;
+            return count;
         }
     }
 }

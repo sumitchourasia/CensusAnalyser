@@ -1,41 +1,30 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CensusAnalyser
 {
+    /// <summary>
+    /// contains a method to load csv file
+    /// </summary>
     public class CSVStateCensus
     {
-        public IEnumerable<string> GetArray(string[] arr)
-        {
-            // Iterating array elements and returning  
-            foreach (var element in arr)
-            {
-                yield return element.ToString(); // It returns elements after executing each iteration  
-            }
-        }
-        public void LoadFile()
+        /// <summary>
+        /// Loads the CSV state census file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public int LoadCSVStateCensusFile(string path)
         {
             int count = 0;
-            string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\StateCensusData.csv";
             TextFieldParser csvParser = new TextFieldParser(path);
             csvParser.SetDelimiters(new string[] { "," });
             while (!csvParser.EndOfData)
             {
-                // Read current line fields, pointer moves to the next line.
-                string[] fields = csvParser.ReadFields();
-                IEnumerable<string> elements = GetArray(fields);
-                foreach (var element in elements) // Iterating returned elements  
-                {
-                    Console.Write(element + "            ");
-                    
-                }
                 count++;
-                Console.WriteLine();
+                csvParser.ReadFields();
             }
-            Console.WriteLine("count = "+count);
-            csvParser.Close();
+            return count;
         }
     }
 }
+
