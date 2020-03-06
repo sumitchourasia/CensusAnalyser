@@ -11,9 +11,9 @@ namespace CensusAnalyser
         /// Defines the entry point of the application.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        static void Main(string[] args)
+        static void Main()
         {
-            string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\StateCensusData.csv";
+            string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv";
             Console.WriteLine("Welcome to Census Analyser!");
             StateCensusAnalyser obj = new StateCensusAnalyser();
             Console.WriteLine( obj.LoadstateCensusFile(path));

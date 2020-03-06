@@ -8,6 +8,9 @@ namespace CensusAnalyser
     public enum Enum_Exception 
     {
        No_Such_File_Exception,
+       File_Type_MisMatch_Exception,
+       Incorrect_Delimiter_Exception,
+       Incorrect_Header_Exception
     }
 
     /// <summary>
