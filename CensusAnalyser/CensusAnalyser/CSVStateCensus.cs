@@ -13,7 +13,7 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        public int LoadCSVStateCensusFile(string path)
+        public string LoadCSVStateCensusFile(string path)
         {
             int count = 0;
             TextFieldParser csvParser = new TextFieldParser(path);
@@ -23,7 +23,7 @@ namespace CensusAnalyser
                 count++;
                 csvParser.ReadFields();
             }
-            return count;
+            return count.ToString();
         }
     }
 }

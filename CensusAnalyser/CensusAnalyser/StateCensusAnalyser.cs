@@ -18,9 +18,9 @@ namespace CensusAnalyser
         /// <returns></returns>
         public static IEnumerable<string> GetIterator(string path)
         {
-            //// Iterating array elements and returning  
-            foreach (string line in File.ReadLines(path))
-                yield return line; //// It returns elements after executing each iteration  
+                //// Iterating array elements and returning  
+                foreach (string line in File.ReadLines(path))
+                    yield return line; //// It returns elements after executing each iteration  
         }
         /// <summary>
         /// Load the states census file.
@@ -28,12 +28,21 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        public int LoadstateCensusFile(string path)
+        public string LoadstateCensusFile(string path)
         {
-            IEnumerable<string> elements = StateCensusAnalyser.GetIterator(path);
-            foreach (string element in elements)
-                count++;
-            return count;
+            try
+            {
+                if (!File.Exists(path))
+                    throw new CensusAnalyserException(Enum_Exception.No_Such_File_Exception.ToString());
+                IEnumerable<string> elements = StateCensusAnalyser.GetIterator(path);
+                foreach (string element in elements)
+                    count++;
+                return count.ToString();
+            }
+            catch (CensusAnalyserException e)
+            {
+                return Enum_Exception.No_Such_File_Exception.ToString();
+            }
         }
     }
 }
