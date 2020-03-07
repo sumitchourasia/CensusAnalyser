@@ -120,5 +120,19 @@ namespace TestCensusAnalyser
             string expected = Enum_Exception.File_Type_MisMatch_Exception.ToString();
             Assert.AreEqual(actual, expected);
         }
+        /// <summary>
+        /// test case 2.4
+        /// sad test case in case of incorrect delimiter throws custom exception.
+        /// </summary>
+        [TestCase]
+        public void IncorrectCSVStateCodeFileCheckDelimiterTest()
+        {
+            string pathCSVStateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
+            string Delimiter = ".";
+            StateCensusAnalyser obj3 = new StateCensusAnalyser();
+            string actual = obj3.LoadCSVstateCodeFile(pathCSVStateCode,Delimiter);
+            string expected = Enum_Exception.Incorrect_Delimiter_Exception.ToString();
+            Assert.AreEqual(actual, expected);
+        }
     }
 }

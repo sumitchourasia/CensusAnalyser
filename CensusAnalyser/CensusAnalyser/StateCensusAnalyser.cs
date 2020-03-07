@@ -125,7 +125,36 @@ namespace CensusAnalyser
             {
                 return e.Msg;
             }
-           
+        }
+        /// <summary>
+        /// Load the states code file.
+        /// uses iterator(IEnumeration)
+        /// check for the corret Delimiter
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public string LoadCSVstateCodeFile(string path,string Delimiter)
+        {
+            count = 0;
+            try
+            {
+                if (!File.Exists(path))
+                    throw new CensusAnalyserException(Enum_Exception.No_Such_File_Exception.ToString());
+                if (!Regex.IsMatch(path, "^[a-zA-Z][:][\a-zA-Z]+.csv$"))
+                    throw new CensusAnalyserException(Enum_Exception.File_Type_MisMatch_Exception.ToString());
+                IEnumerable<string> elements = StateCensusAnalyser.GetIterator(path);
+                foreach (string element in elements)
+                {
+                    string[] arr = element.Split(Delimiter);
+                    if (arr.Length < 2)
+                        throw new CensusAnalyserException(Enum_Exception.Incorrect_Delimiter_Exception.ToString());
+                }
+                return count.ToString();
+            }
+            catch (CensusAnalyserException e)
+            {
+                return e.Msg;
+            }
         }
     }
 }
