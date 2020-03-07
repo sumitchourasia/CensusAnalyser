@@ -101,6 +101,19 @@ namespace CensusAnalyser
                 return e.Msg;
             }
         }
-
+        /// <summary>
+        /// Load the states code file.
+        /// uses iterator(IEnumeration)
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public string LoadCSVstateCodesFile(string path)
+        {
+            count = 0;
+            IEnumerable<string> elements = StateCensusAnalyser.GetIterator(path);
+            foreach (string element in elements)
+                count++;
+            return count.ToString();
+        }
     }
 }

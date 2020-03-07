@@ -80,5 +80,19 @@ namespace TestCensusAnalyser
             string ExpectedException = Enum_Exception.Incorrect_Header_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
         }
+        /// <summary>
+        /// test case 2.1
+        /// Happy case matches the records in CSVStateCode file.
+        /// </summary>
+        [TestCase]
+        public void HappyCaseRecordsMatchCSVStateCode()
+        {
+            string pathCSVStateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
+            StateCensusAnalyser obj3 = new StateCensusAnalyser();
+            string actual = obj3.LoadCSVstateCodesFile(pathCSVStateCode);
+            CSVStateCode codeobj = new CSVStateCode();
+            string expected = codeobj.LoadCSVStateCodeFile(pathCSVStateCode);
+            Assert.AreEqual(actual,expected);
+        }
     }
 }
