@@ -134,5 +134,22 @@ namespace TestCensusAnalyser
             string expected = Enum_Exception.Incorrect_Delimiter_Exception.ToString();
             Assert.AreEqual(actual, expected);
         }
+        /// <summary>
+        /// test case 2.5
+        /// test case of Incorrect Header .
+        /// </summary>
+        [TestCase]
+        public void IncorrectHeaderCSVStateCodeTest()
+        {
+            string pathCSVStateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
+            string Header1 = "St";
+            string Header2 = "Poion";
+            string Header3 = "Area";
+            string Header4 = "DentyPrSm";
+            StateCensusAnalyser obj = new StateCensusAnalyser();
+            string ActualException = obj.LoadstateCensusFile(pathCSVStateCode, Header1, Header2, Header3, Header4);
+            string ExpectedException = Enum_Exception.Incorrect_Header_Exception.ToString();
+            Assert.AreEqual(ActualException, ExpectedException);
+        }
     }
 }

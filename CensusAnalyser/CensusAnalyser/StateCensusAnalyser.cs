@@ -156,5 +156,34 @@ namespace CensusAnalyser
                 return e.Msg;
             }
         }
+        /// <summary>
+        /// Load the states census file.
+        /// uses iterator(IEnumeration)
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public string LoadCSVstateCodeFile(string path, string header1, string header2, string header3, string header4)
+        {
+            try
+            {
+                if (!File.Exists(path))
+                    throw new CensusAnalyserException(Enum_Exception.No_Such_File_Exception.ToString());
+                IEnumerable<string> elements = StateCensusAnalyser.GetIterator(path);
+                foreach (string element in elements)
+                {
+                    string[] arr = element.Split(",");
+                    if (arr[0].Equals(header1) && arr[1].Equals(header2) && arr[2].Equals(header3) && arr[3].Equals(header4))
+                        count++;
+                    else
+                        throw new CensusAnalyserException(Enum_Exception.Incorrect_Header_Exception.ToString());
+                }
+                return count.ToString();
+            }
+            catch (CensusAnalyserException e)
+            {
+                return e.Msg;
+            }
+        }
     }
+
 }
