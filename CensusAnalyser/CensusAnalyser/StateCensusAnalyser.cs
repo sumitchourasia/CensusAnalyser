@@ -73,7 +73,6 @@ namespace CensusAnalyser
                 return e.Msg;
             }
         }
-
         /// <summary>
         /// Load the states census file.
         /// uses iterator(IEnumeration)

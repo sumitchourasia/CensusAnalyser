@@ -49,7 +49,6 @@ namespace TestCensusAnalyser
             string ExpectedException = Enum_Exception.File_Type_MisMatch_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
         }
-
         /// <summary>
         /// test case 1.4
         /// test case of Incorrect Delimiter .
@@ -64,7 +63,6 @@ namespace TestCensusAnalyser
             string ExpectedException = Enum_Exception.Incorrect_Delimiter_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
         }
-
         /// <summary>
         /// test case 1.5
         /// test case of Incorrect Header .
@@ -75,8 +73,8 @@ namespace TestCensusAnalyser
             string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\WrongFileType.txt";
             string Header1 = "St";
             string Header2 = "Poion";
-            string Header3 = "AreaInSqKm";
-            string Header4 = "DensityPerSqKm";
+            string Header3 = "Area";
+            string Header4 = "DentyPrSm";
             StateCensusAnalyser obj = new StateCensusAnalyser();
             string ActualException = obj.LoadstateCensusFile(path, Header1,Header2,Header3,Header4);
             string ExpectedException = Enum_Exception.Incorrect_Header_Exception.ToString();
