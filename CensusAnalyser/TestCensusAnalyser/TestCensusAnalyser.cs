@@ -107,5 +107,18 @@ namespace TestCensusAnalyser
             string expected = Enum_Exception.No_Such_File_Exception.ToString();
             Assert.AreEqual(actual, expected);
         }
+        /// <summary>
+        /// test case 2.3
+        /// sad test case in case of incorrect CSVStateCode File Path throws custom exception.
+        /// </summary>
+        [TestCase]
+        public void IncorrectCSVStateCodeFileTypeTest()
+        {
+            string pathCSVStateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\WrongFileType.txt";
+            StateCensusAnalyser obj3 = new StateCensusAnalyser();
+            string actual = obj3.LoadCSVstateCodesFile(pathCSVStateCode);
+            string expected = Enum_Exception.File_Type_MisMatch_Exception.ToString();
+            Assert.AreEqual(actual, expected);
+        }
     }
 }

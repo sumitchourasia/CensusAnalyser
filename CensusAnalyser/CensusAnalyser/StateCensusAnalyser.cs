@@ -114,6 +114,8 @@ namespace CensusAnalyser
             {
                 if (!File.Exists(path))
                     throw new CensusAnalyserException(Enum_Exception.No_Such_File_Exception.ToString());
+                if (!Regex.IsMatch(path, "^[a-zA-Z][:][\a-zA-Z]+.csv$"))
+                    throw new CensusAnalyserException(Enum_Exception.File_Type_MisMatch_Exception.ToString());
                 IEnumerable<string> elements = StateCensusAnalyser.GetIterator(path);
                 foreach (string element in elements)
                     count++;
