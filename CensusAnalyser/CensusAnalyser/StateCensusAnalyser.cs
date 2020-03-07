@@ -110,10 +110,20 @@ namespace CensusAnalyser
         public string LoadCSVstateCodesFile(string path)
         {
             count = 0;
-            IEnumerable<string> elements = StateCensusAnalyser.GetIterator(path);
-            foreach (string element in elements)
-                count++;
-            return count.ToString();
+            try
+            {
+                if (!File.Exists(path))
+                    throw new CensusAnalyserException(Enum_Exception.No_Such_File_Exception.ToString());
+                IEnumerable<string> elements = StateCensusAnalyser.GetIterator(path);
+                foreach (string element in elements)
+                    count++;
+                return count.ToString();
+            }
+            catch (CensusAnalyserException e)
+            {
+                return e.Msg;
+            }
+           
         }
     }
 }

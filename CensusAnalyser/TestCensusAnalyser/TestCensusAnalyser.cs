@@ -94,5 +94,18 @@ namespace TestCensusAnalyser
             string expected = codeobj.LoadCSVStateCodeFile(pathCSVStateCode);
             Assert.AreEqual(actual,expected);
         }
+        /// <summary>
+        /// test case 2.2
+        /// sad test case in case of incorrect CSVStateCode File Path throws custom exception.
+        /// </summary>
+        [TestCase]
+        public void IncorrectCSVStateCodePathTest()
+        {
+            string pathCSVStateCode = @"wrongfilepath";
+            StateCensusAnalyser obj3 = new StateCensusAnalyser();
+            string actual = obj3.LoadCSVstateCodesFile(pathCSVStateCode);
+            string expected = Enum_Exception.No_Such_File_Exception.ToString();
+            Assert.AreEqual(actual, expected);
+        }
     }
 }
