@@ -1,4 +1,5 @@
 ﻿using System;
+using static CensusAnalyser.StateCensusAnalyser;
 
 namespace CensusAnalyser
 {
@@ -14,8 +15,8 @@ namespace CensusAnalyser
         static void Main()
         {
             string pathCSVStateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
-            StateCensusAnalyser obj3 = new StateCensusAnalyser();
-            Console.WriteLine(obj3.LoadCSVFile(pathCSVStateCode));
+            dynamic a = MyDelegate.GetStateCensusAnalyserDelegate(1);
+            Console.WriteLine(a(pathCSVStateCode));
         }
     }
 }
