@@ -15,7 +15,7 @@ namespace CensusAnalyser
         {
             string pathCSVStateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
             StateCensusAnalyser obj3 = new StateCensusAnalyser();
-            Console.WriteLine(obj3.LoadCSVstateCodesFile(pathCSVStateCode));
+            Console.WriteLine(obj3.LoadCSVFile(pathCSVStateCode));
         }
     }
 }

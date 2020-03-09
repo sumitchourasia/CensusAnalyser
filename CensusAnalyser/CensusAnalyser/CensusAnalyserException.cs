@@ -12,7 +12,6 @@ namespace CensusAnalyser
        Incorrect_Delimiter_Exception,
        Incorrect_Header_Exception
     }
-
     /// <summary>
     /// custom exception class
     /// </summary>
@@ -20,10 +19,14 @@ namespace CensusAnalyser
     public class CensusAnalyserException : Exception
     {
         public string Msg { get; set; }
-        public CensusAnalyserException() : base()
-        {
-
-        }
+        /// <summary>
+        /// No-arg constructor
+        /// </summary>
+        public CensusAnalyserException() : base() { }
+        /// <summary>
+        /// parameterized constructor.
+        /// </summary>
+        /// <param name="Msg">The MSG.</param>
         public CensusAnalyserException(string Msg)
         {
             this.Msg = Msg;

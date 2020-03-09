@@ -18,7 +18,7 @@ namespace TestCensusAnalyser
         {
             string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv";
             StateCensusAnalyser obj = new StateCensusAnalyser();
-            var StateCensusAnalyserRecords =  obj.LoadstateCensusFile(path);
+            var StateCensusAnalyserRecords =  obj.LoadCSVFile(path);
             CSVStateCensus obj2 = new CSVStateCensus();
             var CSVStateCensusRecords = obj2.LoadCSVStateCensusFile(path);
             Assert.AreEqual(StateCensusAnalyserRecords , CSVStateCensusRecords);
@@ -32,7 +32,7 @@ namespace TestCensusAnalyser
         {
             string path = "wrong file path";
             StateCensusAnalyser obj = new StateCensusAnalyser();
-            string ActualException =obj.LoadstateCensusFile(path);
+            string ActualException =obj.LoadCSVFile(path);
             string ExpectedException = Enum_Exception.No_Such_File_Exception.ToString();
             Assert.AreEqual(ActualException,ExpectedException);
         }
@@ -45,7 +45,7 @@ namespace TestCensusAnalyser
         {
             string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\WrongFileType.txt";
             StateCensusAnalyser obj = new StateCensusAnalyser();
-            string ActualException = obj.LoadstateCensusFile(path);
+            string ActualException = obj.LoadCSVFile(path);
             string ExpectedException = Enum_Exception.File_Type_MisMatch_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
         }
@@ -56,10 +56,10 @@ namespace TestCensusAnalyser
         [TestCase]
         public void IncorrectDelimiterTest()
         {
-            string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\WrongFileType.txt";
-            string delimeter = ",";
+            string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv";
+            string delimeter = ".";
             StateCensusAnalyser obj = new StateCensusAnalyser();
-            string ActualException = obj.LoadstateCensusFile(path,delimeter);
+            string ActualException = obj.LoadCSVFile(path,delimeter);
             string ExpectedException = Enum_Exception.Incorrect_Delimiter_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
         }
@@ -70,13 +70,14 @@ namespace TestCensusAnalyser
         [TestCase]
         public void IncorrectHeaderTest()
         {
-            string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\WrongFileType.txt";
+            string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv";
             string Header1 = "St";
             string Header2 = "Poion";
             string Header3 = "Area";
             string Header4 = "DentyPrSm";
+            string Header = Header1 + Header2 + Header3 + Header4;
             StateCensusAnalyser obj = new StateCensusAnalyser();
-            string ActualException = obj.LoadstateCensusFile(path, Header1,Header2,Header3,Header4);
+            string ActualException = obj.LoadCSVFile(path,null, Header);
             string ExpectedException = Enum_Exception.Incorrect_Header_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
         }
@@ -89,7 +90,7 @@ namespace TestCensusAnalyser
         {
             string pathCSVStateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
             StateCensusAnalyser obj3 = new StateCensusAnalyser();
-            string actual = obj3.LoadCSVstateCodesFile(pathCSVStateCode);
+            string actual = obj3.LoadCSVFile(pathCSVStateCode);
             CSVStateCode codeobj = new CSVStateCode();
             string expected = codeobj.LoadCSVStateCodeFile(pathCSVStateCode);
             Assert.AreEqual(actual,expected);
@@ -103,7 +104,7 @@ namespace TestCensusAnalyser
         {
             string pathCSVStateCode = @"wrongfilepath";
             StateCensusAnalyser obj3 = new StateCensusAnalyser();
-            string actual = obj3.LoadCSVstateCodesFile(pathCSVStateCode);
+            string actual = obj3.LoadCSVFile(pathCSVStateCode);
             string expected = Enum_Exception.No_Such_File_Exception.ToString();
             Assert.AreEqual(actual, expected);
         }
@@ -116,7 +117,7 @@ namespace TestCensusAnalyser
         {
             string pathCSVStateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\WrongFileType.txt";
             StateCensusAnalyser obj3 = new StateCensusAnalyser();
-            string actual = obj3.LoadCSVstateCodesFile(pathCSVStateCode);
+            string actual = obj3.LoadCSVFile(pathCSVStateCode);
             string expected = Enum_Exception.File_Type_MisMatch_Exception.ToString();
             Assert.AreEqual(actual, expected);
         }
@@ -130,7 +131,7 @@ namespace TestCensusAnalyser
             string pathCSVStateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
             string Delimiter = ".";
             StateCensusAnalyser obj3 = new StateCensusAnalyser();
-            string actual = obj3.LoadCSVstateCodeFile(pathCSVStateCode,Delimiter);
+            string actual = obj3.LoadCSVFile(pathCSVStateCode,Delimiter);
             string expected = Enum_Exception.Incorrect_Delimiter_Exception.ToString();
             Assert.AreEqual(actual, expected);
         }
@@ -146,8 +147,9 @@ namespace TestCensusAnalyser
             string Header2 = "Poion";
             string Header3 = "Area";
             string Header4 = "DentyPrSm";
+            string Header = Header1 + Header2 + Header3 + Header4;
             StateCensusAnalyser obj = new StateCensusAnalyser();
-            string ActualException = obj.LoadstateCensusFile(pathCSVStateCode, Header1, Header2, Header3, Header4);
+            string ActualException = obj.LoadCSVFile(pathCSVStateCode, null,Header);
             string ExpectedException = Enum_Exception.Incorrect_Header_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
         }
