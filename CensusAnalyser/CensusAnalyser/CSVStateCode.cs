@@ -13,7 +13,6 @@ namespace CensusAnalyser
     /// </summary>
     public class CSVStateCode : Census
     {
-        private List<string> censusList = new List<string>();
         /// <summary>
         /// Initializes a new instance of the <see cref="CSVStateCode"/> class.
         /// </summary>
@@ -52,9 +51,10 @@ namespace CensusAnalyser
                     count++;
                     CheckDelimiter(element);
                     CheckHeader(element);
-                    censusList.Add(element);
+                    ListNode node = createNode(element);
+                    if(node != null)
+                    censusList.Add(node);
                 }
-                PrintList(censusList);
                 return count.ToString();
             }
             catch (CensusAnalyserException e)

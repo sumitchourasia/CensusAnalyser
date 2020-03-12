@@ -85,19 +85,7 @@ namespace CensusAnalyser
         /// <returns></returns>
         public delegate ICensus ConstructCensusUsingBuilder(string type, string Path, string Delimiter = null, string Header = null);
 
-        /// <summary>
-        /// Creates the census using builder.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="Path">The path.</param>
-        /// <param name="Delimiter">The delimiter.</param>
-        /// <param name="Header">The header.</param>
-        /// <returns></returns>
-        public static Delegate CreateCensusUsingBuilder(string type, string Path, string Delimiter = null, string Header = null)
-        {
-            dynamic delegateObj = BuilderDirector.ConstructCensusUsingBuilder(type, Path, Delimiter, Header);
-            return delegateObj;
-        }
+        public delegate void SerializeDelegate(ICensus censusObj);
 
         /// <summary>
         /// create and returns delegate object
@@ -107,6 +95,12 @@ namespace CensusAnalyser
         {
             CensusDelegates delegateobject = new CensusDelegates(CensusObject.LoadCSVFile);
             return delegateobject;
+        }
+
+        public static Delegate CreateSerializeDelegate(ICensus censusObj)
+        {
+            SerializeDelegate delegateobj = new SerializeDelegate(censusObj.Serialize);
+            return delegateobj;
         }
     }
 }

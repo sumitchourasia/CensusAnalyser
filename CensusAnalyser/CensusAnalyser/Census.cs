@@ -3,15 +3,20 @@ namespace CensusAnalyser
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Text;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Interface ICensus
     /// </summary>
     public interface ICensus
     {
-        public string LoadCSVFile();
-        
+         string LoadCSVFile();
+
+         public List<ListNode> GetList();
+
+         void Serialize(ICensus censusObj);
     }
 
     /// <summary>
@@ -36,7 +41,7 @@ namespace CensusAnalyser
         /// <summary>
         /// The census list
         /// </summary>
-        private List<string> censusList = new List<string>();
+        protected List<ListNode> censusList = new List<ListNode>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Census"/> class.
@@ -82,6 +87,11 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="Header">The header.</param>
         public void SetHeader(string Header) { this.Header = Header; }
+
+        public List<ListNode> GetList()
+        {
+            return censusList;
+        }
 
         /// <summary>
         /// Gets the path.
@@ -132,12 +142,59 @@ namespace CensusAnalyser
             return true;
         }
 
+        /// <summary>
+        /// Prints the list.
+        /// </summary>
+        /// <param name="list">The list.</param>
         protected void PrintList(List<string> list)
         {
             foreach(string element in list)
             {
                 Console.WriteLine(element);
             }
+        }
+
+        /// <summary>
+        /// Serializes the specified list.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        public void Serialize(ICensus censusObj)
+        {
+            string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json";
+            string ListinString = JsonConvert.SerializeObject(censusList);
+            File.WriteAllText(path ,ListinString);
+
+            Console.WriteLine("list ref is : " + censusList);
+            Console.WriteLine("serialized List");
+            Console.WriteLine(ListinString);
+        }
+
+        /// <summary>
+        /// Creates the node.
+        /// </summary>
+        /// <param name="element">The element.</param>
+        /// <returns></returns>
+        protected ListNode createNode(string element)
+        {
+            ListNode newnode;
+            ListNode node=null;
+            try
+            {
+                newnode = new ListNode();
+                string[] arr = element.Split(",");
+                newnode.StateName = arr[0];
+                newnode.Population = Convert.ToInt32(arr[1]);
+                if (arr[2] != null)
+                    newnode.AreaInSqKm = Convert.ToInt32(arr[2]);
+                if (arr[3] != null)
+                    newnode.DensityPerSqKm = Convert.ToInt32(arr[3]);
+                node = newnode;
+            }
+            catch(Exception e)
+            {
+                return node;
+            }
+            return node;
         }
     }
 }

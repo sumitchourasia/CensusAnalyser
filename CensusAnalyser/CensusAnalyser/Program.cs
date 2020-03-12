@@ -17,10 +17,21 @@ namespace CensusAnalyser
         /// <param name="args">The arguments.</param>
         static void Main()
         {
-            string PathFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
-            dynamic CensusAnalyserObject = MyDelegate.CreateCensusUsingBuilder("CSVStateCode", PathFile , ",");
-            string actual = CensusAnalyserObject();
-            Console.WriteLine(actual);
+            string PathFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv";
+
+            IBuilder builderObj = BuilderDirector.CreateBuilder();
+            BuilderDirector.ConstructPath(PathFile);
+            BuilderDirector.ConstructDelimiter(null);
+            BuilderDirector.ConstructHeader(null);
+            ICensus CensusObj = BuilderDirector.ConstructCensusUsingFactory("CSVStateCensus");
+            BuilderDirector.Construt(builderObj, CensusObj);
+            Console.WriteLine(builderObj.GetType());
+            Console.WriteLine(CensusObj.GetType());
+            dynamic CensusDelegate = MyDelegate.CreateCensusAnalyserDelegate(CensusObj);
+            Console.WriteLine(CensusDelegate());
+
+            MyDelegate.SerializeDelegate delegateobj = new MyDelegate.SerializeDelegate(CensusObj.Serialize);
+            delegateobj(CensusObj);
         }
     }
 }

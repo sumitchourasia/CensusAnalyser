@@ -14,7 +14,6 @@ namespace CensusAnalyser
     /// </summary>
     public class CSVStateCensus : Census
     {
-        private List<string> censusList = new List<string>();
         /// <summary>
         /// Initializes a new instance of the <see cref="CSVStateCensus"/> class.
         /// </summary>
@@ -51,11 +50,13 @@ namespace CensusAnalyser
                 foreach (string element in File.ReadLines(this.Path))
                 {
                     count++;
-                    CheckDelimiter(element);
+                    CheckDelimiter(element); 
                     CheckHeader(element);
-                    censusList.Add(element);
+                    ListNode node = createNode(element);
+                    if (node != null)
+                        censusList.Add(node);
                 }
-                PrintList(censusList);
+               // PrintList(censusList);
                 return count.ToString();
             }
             catch (CensusAnalyserException e)

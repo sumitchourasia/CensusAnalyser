@@ -89,6 +89,7 @@ namespace CensusAnalyser
     /// </summary>
     public class BuilderDirector
     {
+        private static ICensus _CensusObj;
         /// <summary>
         /// The builder object
         /// </summary>
@@ -165,13 +166,18 @@ namespace CensusAnalyser
         public static Delegate ConstructCensusUsingBuilder(string type , string Path , string Delimiter = null , string Header = null )
         {
             IBuilder builderObj = CreateBuilder();
-            BuilderDirector.ConstructPath(Path);
-            BuilderDirector.ConstructDelimiter(Delimiter);
-            BuilderDirector.ConstructHeader(Header);
-            ICensus censusObj = ConstructCensusUsingFactory(type);
-            Construt(builderObj, censusObj);
-            Delegate CensusAnalyserDelegate = MyDelegate.CreateCensusAnalyserDelegate(censusObj);
+            ConstructPath(Path);
+            ConstructDelimiter(Delimiter);
+            ConstructHeader(Header);
+            _CensusObj = ConstructCensusUsingFactory(type);
+            Construt(builderObj , _CensusObj);
+            Delegate CensusAnalyserDelegate = MyDelegate.CreateCensusAnalyserDelegate(_CensusObj);
             return CensusAnalyserDelegate;
+        }
+
+        public static Delegate ConstructSerializeDelegate()
+        {
+           return MyDelegate.CreateSerializeDelegate(_CensusObj);
         }
     }
 }

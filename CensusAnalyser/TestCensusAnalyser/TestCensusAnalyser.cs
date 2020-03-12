@@ -1,4 +1,4 @@
-/// <summary>
+/*/// <summary>
 /// namespace census analyser
 /// </summary
 namespace TestCensusAnalyser
@@ -36,7 +36,7 @@ namespace TestCensusAnalyser
         [TestCase]
         public void SadCaseIncorrectFilePath()
         {
-            string pathStateCensusData = "wrong file path";
+            string path = "wrong file path";
             CSVStateCensus obj = new CSVStateCensus(pathStateCensusData);
             var ActualException = obj.LoadCSVFile();
             string ExpectedException = Enum_Exception.No_Such_File_Exception.ToString();
@@ -165,3 +165,4 @@ namespace TestCensusAnalyser
         }
     }
 }
+*/
