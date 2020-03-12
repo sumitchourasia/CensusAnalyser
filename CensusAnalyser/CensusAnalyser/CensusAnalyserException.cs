@@ -13,7 +13,8 @@ namespace CensusAnalyser
        No_Such_File_Exception,
        File_Type_MisMatch_Exception,
        Incorrect_Delimiter_Exception,
-       Incorrect_Header_Exception
+       Incorrect_Header_Exception,
+       NULL_CSVException
     }
 
     /// <summary>
@@ -42,6 +43,20 @@ namespace CensusAnalyser
         public CensusAnalyserException(string Msg)
         {
             this.Msg = Msg;
+        }
+    }
+
+    /// <summary>
+    /// CSVBuilder exception class
+    /// </summary>
+    /// <seealso cref="System.Exception" />
+    public class CSVBuilderException : Exception
+    {
+        public string Msg { get; set; }
+
+        public CSVBuilderException(string msg)
+        {
+            this.Msg = msg;
         }
     }
 

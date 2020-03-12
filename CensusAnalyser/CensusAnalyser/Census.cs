@@ -23,15 +23,20 @@ namespace CensusAnalyser
         /// <summary>
         /// Path variable
         /// </summary>
-        private string Path;
+        protected string Path;
         /// <summary>
         /// Delimiter variable
         /// </summary>
-        private string Delimiter;
+        protected string Delimiter;
         /// <summary>
         /// Header variable
         /// </summary>
-        private string Header;
+        protected string Header;
+
+        /// <summary>
+        /// The census list
+        /// </summary>
+        private List<string> censusList = new List<string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Census"/> class.
@@ -96,5 +101,43 @@ namespace CensusAnalyser
         /// <returns></returns>
         public string GetHeader() { return this.Header; }
 
+        /// <summary>
+        /// Checks the delimiter.
+        /// </summary>
+        /// <param name="element">The element.</param>
+        /// <returns></returns>
+        /// <exception cref="CensusAnalyser.CensusAnalyserException"></exception>
+        protected bool CheckDelimiter(string element)
+        {
+            if (this.GetDelimiter() != null)
+            {
+                string[] arr = element.Split(this.GetDelimiter());
+                if (arr.Length < 2)
+                    throw new CensusAnalyserException(Enum_Exception.Incorrect_Delimiter_Exception.ToString());
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Checks the header.
+        /// </summary>
+        /// <param name="element">The element.</param>
+        /// <returns></returns>
+        /// <exception cref="CensusAnalyser.CensusAnalyserException"></exception>
+        protected bool CheckHeader(string element)
+        {
+            if (this.GetHeader() != null)
+                if (!element.Equals(this.GetHeader()))
+                    throw new CensusAnalyserException(Enum_Exception.Incorrect_Header_Exception.ToString());
+            return true;
+        }
+
+        protected void PrintList(List<string> list)
+        {
+            foreach(string element in list)
+            {
+                Console.WriteLine(element);
+            }
+        }
     }
 }

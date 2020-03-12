@@ -49,7 +49,7 @@ namespace CensusAnalyser
         /// <param name="Path">The path.</param>
         public void SetPath(string Path)
         {
-            this._Path = Path;
+                this._Path = Path;
         }
 
         /// <summary>
@@ -77,11 +77,9 @@ namespace CensusAnalyser
         /// <returns></returns>
         public ICensus Build( Census censusObj)
         {
-            Console.WriteLine("path"+censusObj.GetPath());
             censusObj.SetPath(_Path);
             censusObj.SetDelimiter(_Delimiter);
             censusObj.SetHeader(_Header);
-            Console.WriteLine("path "+ censusObj.GetPath());
             return censusObj;
         }
     }
@@ -166,14 +164,14 @@ namespace CensusAnalyser
         /// <returns></returns>
         public static Delegate ConstructCensusUsingBuilder(string type , string Path , string Delimiter = null , string Header = null )
         {
-            IBuilder builderObj =  CreateBuilder();
+            IBuilder builderObj = CreateBuilder();
             BuilderDirector.ConstructPath(Path);
             BuilderDirector.ConstructDelimiter(Delimiter);
             BuilderDirector.ConstructHeader(Header);
             ICensus censusObj = ConstructCensusUsingFactory(type);
-            Construt(builderObj,censusObj);
-            dynamic StateCensusAnalyserObject = MyDelegate.CreateCensusAnalyserDelegate(censusObj);
-            return StateCensusAnalyserObject;
+            Construt(builderObj, censusObj);
+            Delegate CensusAnalyserDelegate = MyDelegate.CreateCensusAnalyserDelegate(censusObj);
+            return CensusAnalyserDelegate;
         }
     }
 }

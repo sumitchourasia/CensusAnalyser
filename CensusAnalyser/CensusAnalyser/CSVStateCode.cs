@@ -13,6 +13,7 @@ namespace CensusAnalyser
     /// </summary>
     public class CSVStateCode : Census
     {
+        private List<string> censusList = new List<string>();
         /// <summary>
         /// Initializes a new instance of the <see cref="CSVStateCode"/> class.
         /// </summary>
@@ -63,17 +64,11 @@ namespace CensusAnalyser
                 foreach (string element in elements)
                 {
                     count++;
-                    if (this.GetDelimiter() != null)
-                    {
-                        string[] arr = element.Split(this.GetDelimiter());
-                        if (arr.Length < 2)
-                            throw new CensusAnalyserException(Enum_Exception.Incorrect_Delimiter_Exception.ToString());
-                    }
-                    if (this.GetHeader() != null && count==1)
-                        if (!element.Equals(this.GetHeader()))
-                            throw new CensusAnalyserException(Enum_Exception.Incorrect_Header_Exception.ToString());
-                    
+                    CheckDelimiter(element);
+                    CheckHeader(element);
+                    censusList.Add(element);
                 }
+                PrintList(censusList);
                 return count.ToString();
             }
             catch (CensusAnalyserException e)

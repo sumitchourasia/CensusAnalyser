@@ -14,28 +14,24 @@ namespace CensusAnalyser
     /// </summary>
     public class CSVStateCensus : Census
     {
+        private List<string> censusList = new List<string>();
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CSVStateCensus"/> class.
+        /// </summary>
         public CSVStateCensus()
         {
 
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CSVStateCensus"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="delimiter">The delimiter.</param>
+        /// <param name="header">The header.</param>
         public CSVStateCensus(string path, string delimiter = null, string header = null) : base(path, delimiter, header)
         {
 
-        }
-
-        /// <summary>
-        /// Gets the iterator.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns> iterator </returns>
-        public IEnumerable<string> GetIterator(string path)
-        {
-            //// Iterating array elements and returning  
-            foreach (string line in File.ReadLines(path))
-            {
-                yield return line; //// It returns elements after executing each iteration  
-            }
         }
 
         /// <summary>
@@ -52,20 +48,14 @@ namespace CensusAnalyser
                     throw new CensusAnalyserException(Enum_Exception.No_Such_File_Exception.ToString());
                 if (!Regex.IsMatch(this.GetPath(), "^[a-zA-Z][:][\a-zA-Z]+.csv$"))
                     throw new CensusAnalyserException(Enum_Exception.File_Type_MisMatch_Exception.ToString());
-                IEnumerable<string> elements = GetIterator(this.GetPath());
-                foreach (string element in elements)
+                foreach (string element in File.ReadLines(this.Path))
                 {
                     count++;
-                    if (this.GetHeader() != null && count ==1)
-                        if (!element.Equals(this.GetHeader()))
-                            throw new CensusAnalyserException(Enum_Exception.Incorrect_Header_Exception.ToString());
-                    if (this.GetDelimiter() != null)
-                    {
-                        string[] arr = element.Split(this.GetDelimiter());
-                        if (arr.Length < 2)
-                            throw new CensusAnalyserException(Enum_Exception.Incorrect_Delimiter_Exception.ToString());
-                    }
+                    CheckDelimiter(element);
+                    CheckHeader(element);
+                    censusList.Add(element);
                 }
+                PrintList(censusList);
                 return count.ToString();
             }
             catch (CensusAnalyserException e)

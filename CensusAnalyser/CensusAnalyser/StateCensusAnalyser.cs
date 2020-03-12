@@ -18,6 +18,7 @@ namespace CensusAnalyser
         /// count variable
         /// </summary>
         private int count = 0;
+        private List<string> CensusList = new List<string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StateCensusAnalyser"/> class.
@@ -46,12 +47,18 @@ namespace CensusAnalyser
         /// <returns> count of records </returns>
         public override string LoadCSVFile()
         {
+            string record;
             TextFieldParser csvParser = new TextFieldParser(this.GetPath());
             csvParser.SetDelimiters( ",");
             while (!csvParser.EndOfData)
             {
                 count++;
-                csvParser.ReadFields();
+                record = csvParser.ReadLine();
+                CensusList.Add(record);
+            }
+            foreach(var ele in CensusList)
+            {
+                Console.WriteLine(ele);
             }
             return count.ToString();
         }
@@ -98,8 +105,8 @@ namespace CensusAnalyser
         /// <returns> delgate object </returns>
         public static Delegate CreateCensusAnalyserDelegate(ICensus CensusObject)
         {
-            CensusDelegates delegateobject3 = new CensusDelegates(CensusObject.LoadCSVFile);
-            return delegateobject3;
+            CensusDelegates delegateobject = new CensusDelegates(CensusObject.LoadCSVFile);
+            return delegateobject;
         }
     }
 }
