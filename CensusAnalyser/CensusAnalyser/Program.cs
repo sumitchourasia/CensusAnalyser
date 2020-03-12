@@ -18,7 +18,7 @@ namespace CensusAnalyser
         static void Main()
         {
             string PathFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
-            dynamic CensusAnalyserObject = MyDelegate.CreateCensusUsingBuilder("CSVStateCensus", PathFile , ",");
+            dynamic CensusAnalyserObject = MyDelegate.CreateCensusUsingBuilder("CSVStateCode", PathFile , ",");
             string actual = CensusAnalyserObject();
             Console.WriteLine(actual);
         }

@@ -32,19 +32,6 @@ namespace CensusAnalyser
         {
 
         }
-        /// <summary>
-        /// Gets the iterator.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns> iterator </returns>
-        public IEnumerable<string> GetIterator(string path)
-        {
-            //// Iterating array elements and returning  
-            foreach (string line in File.ReadLines(path))
-            {
-                yield return line; //// It returns elements after executing each iteration  
-            }
-        }
 
         /// <summary>
         /// Loads the CSV state census file.
@@ -60,8 +47,7 @@ namespace CensusAnalyser
                     throw new CensusAnalyserException(Enum_Exception.No_Such_File_Exception.ToString());
                 if (!Regex.IsMatch(this.GetPath(), "^[a-zA-Z][:][\a-zA-Z]+.csv$"))
                     throw new CensusAnalyserException(Enum_Exception.File_Type_MisMatch_Exception.ToString());
-                IEnumerable<string> elements = GetIterator(this.GetPath());
-                foreach (string element in elements)
+                foreach (string element in File.ReadLines(this.Path))
                 {
                     count++;
                     CheckDelimiter(element);
