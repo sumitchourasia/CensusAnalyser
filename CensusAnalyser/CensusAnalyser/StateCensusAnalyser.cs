@@ -1,94 +1,105 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
-using System.IO;
-
+﻿/// <summary>
+/// namespace census analyser
+/// </summary
 namespace CensusAnalyser
 {
+    using Microsoft.VisualBasic.FileIO;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text.RegularExpressions;
+
     /// <summary>
-    /// contains method to load csv file and use iterator(IEnumerable)
+    /// contains method to load CSV file and use iterator(IEnumerable)
     /// </summary>
-    public class StateCensusAnalyser
+    public class StateCensusAnalyser : Census
     {
-        int count = 0;
-       
         /// <summary>
-        /// Gets the iterator.
+        /// count variable
         /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns></returns>
-        public IEnumerable<string> GetIterator(string path)
+        private int count = 0;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StateCensusAnalyser"/> class.
+        /// </summary>
+        public StateCensusAnalyser()
         {
-            //// Iterating array elements and returning  
-            foreach (string line in File.ReadLines(path))
-                yield return line; //// It returns elements after executing each iteration  
+
         }
+
+        /// <summary>
+        /// constructor that may takes 3 paramter
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="delimiter"></param>
+        /// <param name="header"></param>
+        public StateCensusAnalyser(string path, string delimiter = null, string header = null) : base(path, delimiter, header)
+        {
+
+        }
+
         /// <summary>
         /// Load the states census file.
         /// uses iterator(IEnumeration)
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns></returns>
-        public string LoadCSVFile(string path, string Delimiter = null, string header = null)
+        /// <returns> count of records </returns>
+        public override string LoadCSVFile()
         {
-            try
+            TextFieldParser csvParser = new TextFieldParser(this.GetPath());
+            csvParser.SetDelimiters( ",");
+            while (!csvParser.EndOfData)
             {
-                if (!File.Exists(path))
-                    throw new CensusAnalyserException(Enum_Exception.No_Such_File_Exception.ToString());
-                if (!Regex.IsMatch(path, "^[a-zA-Z][:][\a-zA-Z]+.csv$"))
-                    throw new CensusAnalyserException(Enum_Exception.File_Type_MisMatch_Exception.ToString());
-                IEnumerable<string> elements = GetIterator(path);
-                foreach (string element in elements)
-                {
-                    count++;
-                    if (header != null)
-                        if (!element.Equals(header))
-                            throw new CensusAnalyserException(Enum_Exception.Incorrect_Header_Exception.ToString());
-                    if (Delimiter != null)
-                    {
-                        string[] arr = element.Split(Delimiter);
-                        if (arr.Length < 2)
-                            throw new CensusAnalyserException(Enum_Exception.Incorrect_Delimiter_Exception.ToString());
-                    }
-                }
-                return count.ToString();
+                count++;
+                csvParser.ReadFields();
             }
-            catch (CensusAnalyserException e)
-            {
-                return e.Msg;
-            }
+            return count.ToString();
         }
     }
+
     /// <summary>
     /// class to create delegate
     /// </summary>
     public class MyDelegate
     {
-        public delegate String CSVStateDelegates(string path);
-        public delegate String StateCensusAnalyserDelegates(string path, string delimiter = null, string header = null);
+        /// <summary>
+        /// declare delgate
+        /// </summary>
+        /// <returns></returns>
+        public delegate String CensusDelegates();
+
+        /// <summary>
+        /// declare delegate
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="Path">The path.</param>
+        /// <param name="Delimiter">The delimiter.</param>
+        /// <param name="Header">The header.</param>
+        /// <returns></returns>
+        public delegate ICensus ConstructCensusUsingBuilder(string type, string Path, string Delimiter = null, string Header = null);
+
+        /// <summary>
+        /// Creates the census using builder.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="Path">The path.</param>
+        /// <param name="Delimiter">The delimiter.</param>
+        /// <param name="Header">The header.</param>
+        /// <returns></returns>
+        public static Delegate CreateCensusUsingBuilder(string type, string Path, string Delimiter = null, string Header = null)
+        {
+            dynamic delegateObj = BuilderDirector.ConstructCensusUsingBuilder(type, Path, Delimiter, Header);
+            return delegateObj;
+        }
+
         /// <summary>
         /// create and returns delegate object
         /// </summary>
-        /// <returns></returns>
-        public static Delegate GetStateCensusAnalyserDelegate(int choice)
+        /// <returns> delgate object </returns>
+        public static Delegate CreateCensusAnalyserDelegate(ICensus CensusObject)
         {
-            switch (choice) 
-            {
-                case 1:
-                    StateCensusAnalyser statecensusobj = new StateCensusAnalyser();
-                    StateCensusAnalyserDelegates delegateobject = new StateCensusAnalyserDelegates(statecensusobj.LoadCSVFile);
-                    return delegateobject;
-                case 2:
-                    CSVStateCensus obj2 = new CSVStateCensus();
-                    CSVStateDelegates delegateobject1 = new CSVStateDelegates(obj2.LoadCSVStateCensusFile);
-                    return delegateobject1;
-                case 3:
-                    CSVStateCode obj3 = new CSVStateCode();
-                    CSVStateDelegates delegateobject2 = new CSVStateDelegates(obj3.LoadCSVStateCodeFile);
-                    return delegateobject2;
-                default:
-                    return null;
-            }
+            CensusDelegates delegateobject3 = new CensusDelegates(CensusObject.LoadCSVFile);
+            return delegateobject3;
         }
     }
 }
