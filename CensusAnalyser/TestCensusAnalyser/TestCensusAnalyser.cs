@@ -166,7 +166,7 @@ namespace TestCensusAnalyser
 
         /// <summary>
         /// Test Case 3
-        /// test the first and last state name are as expected
+        /// test the first and last state name are as expected for CSVStateData file
         /// </summary>
         [TestCase]
         public void ListSortStateNameTest()
@@ -179,6 +179,23 @@ namespace TestCensusAnalyser
             string actual = Census.FirstAndLastItemStateNameJson(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
             string expected = "Andhra Pradesh" + "West Bengal";
             Assert.AreEqual(actual,expected);
+        }
+
+        /// <summary>
+        /// Test Case 4
+        /// test the first and last state name are as expected for CSVStateCode file
+        /// </summary>
+        [TestCase]
+        public void ListSortStateCodeTest()
+        {
+            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", pathCSVStateCode);
+            CensusAnalyserDelegate();
+            ICensus censusObj = BuilderDirector.GetCensus();
+            censusObj.SortList();
+            censusObj.Serialize(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json");
+            string actual = Census.FirstAndLastItemStateNameJson(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json");
+            string expected = "Andhra Pradesh New"+"West Bengal";
+            Assert.AreEqual(actual, expected);
         }
     }
 }
