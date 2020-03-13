@@ -154,18 +154,7 @@ namespace CensusAnalyser
         {
             List<ListNodeStateData> listStateName;
             List<ListNodeStateCode> listStateCode;
-            if (censusObj.GetType().ToString().Equals("CensusAnalyser.CSVStateCode"))
-            {
-                listStateCode = ((Census)censusObj).CensusStateCodeList;
-                foreach (ListNodeStateCode element in listStateCode)
-                {
-                    Console.Write(element.SerialNo + " ");
-                    Console.Write(element.StateName + " ");
-                    Console.Write(element.TIN + " ");
-                    Console.WriteLine(element.StateCode + " ");
-                }
-            }
-            else
+            if (censusObj.GetType().ToString().Equals("CensusAnalyser.CSVStateCensus"))
             {
                 listStateName = ((Census)censusObj).censusList;
                 foreach (ListNodeStateData element in listStateName)
@@ -176,6 +165,18 @@ namespace CensusAnalyser
                     Console.WriteLine(element.DensityPerSqKm + " ");
                 }
             }
+            else if (censusObj.GetType().ToString().Equals("CensusAnalyser.CSVStateCode"))
+            {
+                listStateCode = ((Census)censusObj).CensusStateCodeList;
+                foreach (ListNodeStateCode element in listStateCode)
+                {
+                    Console.Write(element.SerialNo + " ");
+                    Console.Write(element.StateName + " ");
+                    Console.Write(element.TIN + " ");
+                    Console.WriteLine(element.StateCode + " ");
+                }
+            }
+           
         }
 
         /// <summary>
@@ -185,9 +186,9 @@ namespace CensusAnalyser
         public void Serialize(string jsonpath)
         {
             string ListinString=null;
-            if (jsonpath.Equals(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json"))
+            if (jsonpath.Contains("StateName"))
                 ListinString = JsonConvert.SerializeObject(this.censusList);
-            else if(jsonpath.Equals(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json"))
+            else if(jsonpath.Contains("StateCode"))
                 ListinString = JsonConvert.SerializeObject(this.CensusStateCodeList);
             File.WriteAllText(jsonpath, ListinString);
         }
@@ -197,10 +198,11 @@ namespace CensusAnalyser
         /// </summary>
         public  void SortList()
         {
-            if(this.Path.Equals(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv"))
-            CensusStateCodeList.Sort();
-            else if(this.Path.Equals(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv") )  
-            censusList.Sort();
+           // if(this.Path.Equals(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv"))
+            if(this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensus"))
+                censusList.Sort();
+            else if(this.GetType().ToString().Equals("CensusAnalyser.CSVStateCode")) 
+                CensusStateCodeList.Sort();
         }
 
         /// <summary>
@@ -221,7 +223,7 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="jsonstring">The jsonstring.</param>
         /// <returns></returns>
-        public static IList<ListNodeStateData> DeserializeStateData(string jsonstring)
+        public static List<ListNodeStateData> DeserializeStateData(string jsonstring)
         {
             List<ListNodeStateData> list;
             try
@@ -242,7 +244,7 @@ namespace CensusAnalyser
         /// <returns></returns>
         public static string FirstAndLastItemStateNameJson(string path)
         {
-            IList<ListNodeStateData> list = DeserializeStateData(ReadFile(path));
+            List<ListNodeStateData> list = DeserializeStateData(ReadFile(path));
             int length = 0;
             int count = list.Count ;
             string data=null;
