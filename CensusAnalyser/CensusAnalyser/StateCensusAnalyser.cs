@@ -48,7 +48,7 @@ namespace CensusAnalyser
         public override string LoadCSVFile()
         {
             string record;
-            TextFieldParser csvParser = new TextFieldParser(this.GetPath());
+            TextFieldParser csvParser = new TextFieldParser(this.Path);
             csvParser.SetDelimiters( ",");
             while (!csvParser.EndOfData)
             {
@@ -83,20 +83,49 @@ namespace CensusAnalyser
         /// <param name="Delimiter">The delimiter.</param>
         /// <param name="Header">The header.</param>
         /// <returns></returns>
-        public delegate ICensus ConstructCensusUsingBuilder(string type, string Path, string Delimiter = null, string Header = null);
+        private delegate ICensus ConstructCensusUsingBuilder(string type, string Path, string Delimiter = null, string Header = null);
 
-        public delegate void SerializeDelegate(ICensus censusObj);
+        /// <summary>
+        /// Delegate to serialize a object
+        /// </summary>
+        /// <param name="censusObj">The census object.</param>
+        public delegate void SerializeDelegate();
 
         /// <summary>
         /// create and returns delegate object
         /// </summary>
         /// <returns> delgate object </returns>
-        public static Delegate CreateCensusAnalyserDelegate(ICensus CensusObject)
+        public static Delegate CreateCensusAnalyserLoadFileDelegate(ICensus CensusObj)
         {
-            CensusDelegates delegateobject = new CensusDelegates(CensusObject.LoadCSVFile);
+            CensusDelegates delegateobject = new CensusDelegates(CensusObj.LoadCSVFile);
             return delegateobject;
         }
 
+        /// <summary>
+        /// Constructs the census using builder.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="Path">The path.</param>
+        /// <param name="Delimiter">The delimiter.</param>
+        /// <param name="Header">The header.</param>
+        /// <returns></returns>
+        public static Delegate CreateCensusLoadFileDelegateUsingBuilder(string type, string Path, string Delimiter = null, string Header = null)
+        {
+            BuilderDirector.CreateBuilder();
+            BuilderDirector.ConstructPath(Path);
+            BuilderDirector.ConstructDelimiter(Delimiter);
+            BuilderDirector.ConstructHeader(Header);
+            ICensus _CensusObj = BuilderDirector.ConstructCensusUsingFactory(type);
+            BuilderDirector.Construt(_CensusObj);
+            Delegate CensusAnalyserDelegate = MyDelegate.CreateCensusAnalyserLoadFileDelegate(_CensusObj);
+            return CensusAnalyserDelegate;
+        }
+
+        /// <summary>
+        /// Creates the serialize delegate.
+        /// </summary>
+        /// <param name="censusObj">The census object.</param>
+        /// <returns></returns>
         public static Delegate CreateSerializeDelegate(ICensus censusObj)
         {
             SerializeDelegate delegateobj = new SerializeDelegate(censusObj.Serialize);

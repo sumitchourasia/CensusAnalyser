@@ -93,7 +93,7 @@ namespace CensusAnalyser
         /// <summary>
         /// The builder object
         /// </summary>
-        private static CensusBuilder builderObj;
+        private static CensusBuilder _BuilderObj;
 
         /// <summary>
         /// Constructs the path.
@@ -101,7 +101,7 @@ namespace CensusAnalyser
         /// <param name="Path">The path.</param>
         public static void ConstructPath(string Path)
         {
-            builderObj.SetPath(Path);
+            _BuilderObj.SetPath(Path);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace CensusAnalyser
         /// <param name="Delimiter">The delimiter.</param>
         public static void ConstructDelimiter(string Delimiter)
         {
-            builderObj.SetDelimiter(Delimiter);
+            _BuilderObj.SetDelimiter(Delimiter);
         }
 
         /// <summary>
@@ -119,7 +119,18 @@ namespace CensusAnalyser
         /// <param name="Header">The header.</param>
         public static void ConstructHeader( string Header)
         {
-            builderObj.SetHeader(Header);
+            _BuilderObj.SetHeader(Header);
+        }
+
+        /// <summary>
+        /// Gets the census.
+        /// </summary>
+        /// <returns></returns>
+        public static ICensus GetCensus()
+        {
+                if (_CensusObj == null)
+                    throw new CSVBuilderException(Enum_Exception.NULL_CSVException.ToString());
+                return _CensusObj;
         }
 
         /// <summary>
@@ -129,18 +140,17 @@ namespace CensusAnalyser
         /// <returns></returns>
         public static ICensus ConstructCensusUsingFactory(string type)
         {
-            ICensus censusObj = CensusFactory.create(type); ;
-            return censusObj;
+            _CensusObj = CensusFactory.create(type); ;
+            return _CensusObj;
         }
 
         /// <summary>
         /// Creates the builder.
         /// </summary>
         /// <returns></returns>
-        public static IBuilder CreateBuilder()
+        public static void CreateBuilder()
         {
-            builderObj = new CensusBuilder();
-            return builderObj;
+            _BuilderObj = new CensusBuilder();
         }
 
         /// <summary>
@@ -149,35 +159,9 @@ namespace CensusAnalyser
         /// <param name="buildobject">The buildobject.</param>
         /// <param name="censusobject">The censusobject.</param>
         /// <returns></returns>
-        public static ICensus Construt(IBuilder buildobject , ICensus censusobject)
+        public static void Construt(ICensus censusobject)
         {
-            buildobject.Build((Census)censusobject);
-            return censusobject;
-        }
-
-        /// <summary>
-        /// Constructs the census using builder.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="Path">The path.</param>
-        /// <param name="Delimiter">The delimiter.</param>
-        /// <param name="Header">The header.</param>
-        /// <returns></returns>
-        public static Delegate ConstructCensusUsingBuilder(string type , string Path , string Delimiter = null , string Header = null )
-        {
-            IBuilder builderObj = CreateBuilder();
-            ConstructPath(Path);
-            ConstructDelimiter(Delimiter);
-            ConstructHeader(Header);
-            _CensusObj = ConstructCensusUsingFactory(type);
-            Construt(builderObj , _CensusObj);
-            Delegate CensusAnalyserDelegate = MyDelegate.CreateCensusAnalyserDelegate(_CensusObj);
-            return CensusAnalyserDelegate;
-        }
-
-        public static Delegate ConstructSerializeDelegate()
-        {
-           return MyDelegate.CreateSerializeDelegate(_CensusObj);
+            _BuilderObj.Build((Census)censusobject);
         }
     }
 }

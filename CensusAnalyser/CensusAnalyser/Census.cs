@@ -4,7 +4,6 @@ namespace CensusAnalyser
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Text;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -12,11 +11,27 @@ namespace CensusAnalyser
     /// </summary>
     public interface ICensus
     {
-         string LoadCSVFile();
+        /// <summary>
+        /// Loads the CSV file.
+        /// </summary>
+        /// <returns></returns>
+        string LoadCSVFile();
 
-         public List<ListNode> GetList();
+        /// <summary>
+        /// Prints the list.
+        /// </summary>
+        /// <param name="censusList">The census list.</param>
+        void PrintList( ICensus censusObj);
 
-         void Serialize(ICensus censusObj);
+        /// <summary>
+        /// Sorts the list.
+        /// </summary>
+        void SortList();
+
+        /// <summary>
+        /// Serializes this instance.
+        /// </summary>
+        void Serialize();
     }
 
     /// <summary>
@@ -29,16 +44,17 @@ namespace CensusAnalyser
         /// Path variable
         /// </summary>
         protected string Path;
+
         /// <summary>
         /// Delimiter variable
         /// </summary>
         protected string Delimiter;
+
         /// <summary>
         /// Header variable
         /// </summary>
         protected string Header;
 
-        /// <summary>
         /// The census list
         /// </summary>
         protected List<ListNode> censusList = new List<ListNode>();
@@ -88,28 +104,14 @@ namespace CensusAnalyser
         /// <param name="Header">The header.</param>
         public void SetHeader(string Header) { this.Header = Header; }
 
-        public List<ListNode> GetList()
+        /// <summary>
+        /// Gets the census list.
+        /// </summary>
+        /// <returns></returns>
+        public List<ListNode> GetCensusList()
         {
-            return censusList;
+            return this.censusList;
         }
-
-        /// <summary>
-        /// Gets the path.
-        /// </summary>
-        /// <returns></returns>
-        public string GetPath() { return this.Path; }
-
-        /// <summary>
-        /// Gets the delimiter.
-        /// </summary>
-        /// <returns></returns>
-        public string GetDelimiter() { return this.Delimiter; }
-
-        /// <summary>
-        /// Gets the header.
-        /// </summary>
-        /// <returns></returns>
-        public string GetHeader() { return this.Header; }
 
         /// <summary>
         /// Checks the delimiter.
@@ -119,9 +121,9 @@ namespace CensusAnalyser
         /// <exception cref="CensusAnalyser.CensusAnalyserException"></exception>
         protected bool CheckDelimiter(string element)
         {
-            if (this.GetDelimiter() != null)
+            if (this.Delimiter != null)
             {
-                string[] arr = element.Split(this.GetDelimiter());
+                string[] arr = element.Split(this.Delimiter);
                 if (arr.Length < 2)
                     throw new CensusAnalyserException(Enum_Exception.Incorrect_Delimiter_Exception.ToString());
             }
@@ -136,8 +138,8 @@ namespace CensusAnalyser
         /// <exception cref="CensusAnalyser.CensusAnalyserException"></exception>
         protected bool CheckHeader(string element)
         {
-            if (this.GetHeader() != null)
-                if (!element.Equals(this.GetHeader()))
+            if (this.Header != null)
+                if (!element.Equals(this.Header))
                     throw new CensusAnalyserException(Enum_Exception.Incorrect_Header_Exception.ToString());
             return true;
         }
@@ -146,11 +148,15 @@ namespace CensusAnalyser
         /// Prints the list.
         /// </summary>
         /// <param name="list">The list.</param>
-        protected void PrintList(List<string> list)
+        public void PrintList(ICensus censusObj)
         {
-            foreach(string element in list)
+            List<ListNode> list = ((Census)censusObj).censusList;
+            foreach(ListNode element in list)
             {
-                Console.WriteLine(element);
+                Console.Write(element.StateName + " ");
+                Console.Write(element.Population + " ");
+                Console.Write(element.AreaInSqKm + " ");
+                Console.WriteLine(element.DensityPerSqKm + " ");
             }
         }
 
@@ -158,43 +164,70 @@ namespace CensusAnalyser
         /// Serializes the specified list.
         /// </summary>
         /// <param name="list">The list.</param>
-        public void Serialize(ICensus censusObj)
+        public void Serialize()
         {
             string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json";
-            string ListinString = JsonConvert.SerializeObject(censusList);
+            string ListinString = JsonConvert.SerializeObject(this.censusList);
             File.WriteAllText(path ,ListinString);
-
-            Console.WriteLine("list ref is : " + censusList);
-            Console.WriteLine("serialized List");
-            Console.WriteLine(ListinString);
         }
 
         /// <summary>
-        /// Creates the node.
+        /// Sorts the list.
         /// </summary>
-        /// <param name="element">The element.</param>
-        /// <returns></returns>
-        protected ListNode createNode(string element)
+        public void SortList()
         {
-            ListNode newnode;
-            ListNode node=null;
+            censusList.Sort();
+        }
+
+        /// <summary>
+        /// Reads the file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static string ReadFile(string path)
+        {
+            StreamReader streamReaderObject = new StreamReader(path);
+            string jsonstring = streamReaderObject.ReadToEnd();
+            return jsonstring;
+        }
+
+        /// <summary>
+        /// Deserializes the specified jsonstring.
+        /// </summary>
+        /// <param name="jsonstring">The jsonstring.</param>
+        /// <returns></returns>
+        public static List<ListNode> Deserialize(string jsonstring)
+        {
+            List<ListNode> list = null;
             try
             {
-                newnode = new ListNode();
-                string[] arr = element.Split(",");
-                newnode.StateName = arr[0];
-                newnode.Population = Convert.ToInt32(arr[1]);
-                if (arr[2] != null)
-                    newnode.AreaInSqKm = Convert.ToInt32(arr[2]);
-                if (arr[3] != null)
-                    newnode.DensityPerSqKm = Convert.ToInt32(arr[3]);
-                node = newnode;
+                list = JsonConvert.DeserializeObject<List<ListNode>>(jsonstring);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                return node;
+                Console.WriteLine(e.Message);
             }
-            return node;
+            return list;
+        }
+
+        /// <summary>
+        /// First and last item of json.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static string FirstAndLastItemOfJson(string path)
+        {
+            List<ListNode> list = Deserialize(ReadFile(path));
+            int length = 0;
+            int count = list.Count ;
+            string data=null;
+            foreach(ListNode item in list)
+            {
+                if (length == 0 || length == count-1)
+                    data += item.StateName;
+                length++;
+            }
+            return data;
         }
     }
 }

@@ -19,19 +19,21 @@ namespace CensusAnalyser
         {
             string PathFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv";
 
-            IBuilder builderObj = BuilderDirector.CreateBuilder();
+            BuilderDirector.CreateBuilder();
             BuilderDirector.ConstructPath(PathFile);
             BuilderDirector.ConstructDelimiter(null);
             BuilderDirector.ConstructHeader(null);
             ICensus CensusObj = BuilderDirector.ConstructCensusUsingFactory("CSVStateCensus");
-            BuilderDirector.Construt(builderObj, CensusObj);
-            Console.WriteLine(builderObj.GetType());
-            Console.WriteLine(CensusObj.GetType());
-            dynamic CensusDelegate = MyDelegate.CreateCensusAnalyserDelegate(CensusObj);
+            BuilderDirector.Construt(CensusObj);
+            dynamic CensusDelegate = MyDelegate.CreateCensusAnalyserLoadFileDelegate(CensusObj);
+            Console.WriteLine(CensusDelegate.GetType());
             Console.WriteLine(CensusDelegate());
-
-            MyDelegate.SerializeDelegate delegateobj = new MyDelegate.SerializeDelegate(CensusObj.Serialize);
-            delegateobj(CensusObj);
+            CensusObj.PrintList(CensusObj);
+            CensusObj.SortList();
+            CensusObj.PrintList(CensusObj);
+            dynamic Serializedelegate = MyDelegate.CreateSerializeDelegate(CensusObj);
+            Console.WriteLine(Serializedelegate.GetType());
+            Serializedelegate();
         }
     }
 }
