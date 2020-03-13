@@ -31,7 +31,7 @@ namespace CensusAnalyser
         /// <summary>
         /// Serializes this instance.
         /// </summary>
-        void Serialize();
+        void Serialize(string path);
     }
 
     /// <summary>
@@ -57,7 +57,9 @@ namespace CensusAnalyser
 
         /// The census list
         /// </summary>
-        protected List<ListNode> censusList = new List<ListNode>();
+        protected List<ListNodeStateData> censusList = new List<ListNodeStateData>();
+
+        protected List<ListNodeStateCode> CensusStateCodeList = new List<ListNodeStateCode>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Census"/> class.
@@ -108,7 +110,7 @@ namespace CensusAnalyser
         /// Gets the census list.
         /// </summary>
         /// <returns></returns>
-        public List<ListNode> GetCensusList()
+        public List<ListNodeStateData> GetCensusList()
         {
             return this.censusList;
         }
@@ -150,13 +152,29 @@ namespace CensusAnalyser
         /// <param name="list">The list.</param>
         public void PrintList(ICensus censusObj)
         {
-            List<ListNode> list = ((Census)censusObj).censusList;
-            foreach(ListNode element in list)
+            List<ListNodeStateData> listStateName;
+            List<ListNodeStateCode> listStateCode;
+            if (censusObj.GetType().ToString().Equals("CensusAnalyser.CSVStateCode"))
             {
-                Console.Write(element.StateName + " ");
-                Console.Write(element.Population + " ");
-                Console.Write(element.AreaInSqKm + " ");
-                Console.WriteLine(element.DensityPerSqKm + " ");
+                listStateCode = ((Census)censusObj).CensusStateCodeList;
+                foreach (ListNodeStateCode element in listStateCode)
+                {
+                    Console.Write(element.SerialNo + " ");
+                    Console.Write(element.StateName + " ");
+                    Console.Write(element.TIN + " ");
+                    Console.WriteLine(element.StateCode + " ");
+                }
+            }
+            else
+            {
+                listStateName = ((Census)censusObj).censusList;
+                foreach (ListNodeStateData element in listStateName)
+                {
+                    Console.Write(element.StateName + " ");
+                    Console.Write(element.Population + " ");
+                    Console.Write(element.AreaInSqKm + " ");
+                    Console.WriteLine(element.DensityPerSqKm + " ");
+                }
             }
         }
 
@@ -164,18 +182,24 @@ namespace CensusAnalyser
         /// Serializes the specified list.
         /// </summary>
         /// <param name="list">The list.</param>
-        public void Serialize()
+        public void Serialize(string jsonpath)
         {
-            string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json";
-            string ListinString = JsonConvert.SerializeObject(this.censusList);
-            File.WriteAllText(path ,ListinString);
+            string ListinString=null;
+            if (jsonpath.Equals(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json"))
+                ListinString = JsonConvert.SerializeObject(this.censusList);
+            else if(jsonpath.Equals(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json"))
+                ListinString = JsonConvert.SerializeObject(this.CensusStateCodeList);
+            File.WriteAllText(jsonpath, ListinString);
         }
 
         /// <summary>
         /// Sorts the list.
         /// </summary>
-        public void SortList()
+        public  void SortList()
         {
+            if(this.Path.Equals(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv"))
+            CensusStateCodeList.Sort();
+            else if(this.Path.Equals(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv") )  
             censusList.Sort();
         }
 
@@ -188,6 +212,7 @@ namespace CensusAnalyser
         {
             StreamReader streamReaderObject = new StreamReader(path);
             string jsonstring = streamReaderObject.ReadToEnd();
+            Console.WriteLine(jsonstring);
             return jsonstring;
         }
 
@@ -196,18 +221,18 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="jsonstring">The jsonstring.</param>
         /// <returns></returns>
-        public static List<ListNode> Deserialize(string jsonstring)
+        public static IList<ListNodeStateData> DeserializeStateData(string jsonstring)
         {
-            List<ListNode> list = null;
+            List<ListNodeStateData> list;
             try
             {
-                list = JsonConvert.DeserializeObject<List<ListNode>>(jsonstring);
+                list = (List<ListNodeStateData>)JsonConvert.DeserializeObject<List<ListNodeStateData>>(jsonstring);
+                return list;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                return null;
             }
-            return list;
         }
 
         /// <summary>
@@ -215,15 +240,54 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        public static string FirstAndLastItemOfJson(string path)
+        public static string FirstAndLastItemStateNameJson(string path)
         {
-            List<ListNode> list = Deserialize(ReadFile(path));
+            IList<ListNodeStateData> list = DeserializeStateData(ReadFile(path));
             int length = 0;
             int count = list.Count ;
             string data=null;
-            foreach(ListNode item in list)
+            foreach(ListNodeStateData item in list)
             {
                 if (length == 0 || length == count-1)
+                    data += item.StateName;
+                length++;
+            }
+            return data;
+        }
+
+        /// <summary>
+        /// Deserializes the specified jsonstring.
+        /// </summary>
+        /// <param name="jsonstring">The jsonstring.</param>
+        /// <returns></returns>
+        public static List<ListNodeStateCode> DeserializeStateCode(string jsonstring)
+        {
+            List<ListNodeStateCode> list;
+            try
+            {
+                list = (List<ListNodeStateCode>)JsonConvert.DeserializeObject<List<ListNodeStateCode>>(jsonstring);
+                return list;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// First and last item of json.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static string FirstAndLastItemStateCodeJson(string path)
+        {
+            List<ListNodeStateCode> list = DeserializeStateCode(ReadFile(path));
+            int length = 0;
+            int count = list.Count;
+            string data = null;
+            foreach (ListNodeStateCode item in list)
+            {
+                if (length == 0 || length == count - 1)
                     data += item.StateName;
                 length++;
             }

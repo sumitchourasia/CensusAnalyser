@@ -17,10 +17,13 @@ namespace CensusAnalyser
         /// <param name="args">The arguments.</param>
         static void Main()
         {
-            string PathFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv";
+            string PathCSVFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv";
+            string PathCSVCodeFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
+            string PathStateName = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json";
+            string PathstateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json";
 
             BuilderDirector.CreateBuilder();
-            BuilderDirector.ConstructPath(PathFile);
+            BuilderDirector.ConstructPath(PathCSVFile);
             BuilderDirector.ConstructDelimiter(null);
             BuilderDirector.ConstructHeader(null);
             ICensus CensusObj = BuilderDirector.ConstructCensusUsingFactory("CSVStateCensus");
@@ -33,7 +36,26 @@ namespace CensusAnalyser
             CensusObj.PrintList(CensusObj);
             dynamic Serializedelegate = MyDelegate.CreateSerializeDelegate(CensusObj);
             Console.WriteLine(Serializedelegate.GetType());
-            Serializedelegate();
+            Serializedelegate(PathStateName);
+            Census.FirstAndLastItemStateNameJson(PathStateName);
+
+            /// for stare code
+            BuilderDirector.CreateBuilder(); 
+            BuilderDirector.ConstructPath(PathCSVCodeFile);
+            BuilderDirector.ConstructDelimiter(null);
+            BuilderDirector.ConstructHeader(null);
+            ICensus CensusObj2 = BuilderDirector.ConstructCensusUsingFactory("CSVStateCode");
+            BuilderDirector.Construt(CensusObj2);
+            dynamic CensusDelegate2 = MyDelegate.CreateCensusAnalyserLoadFileDelegate(CensusObj2);
+            Console.WriteLine(CensusDelegate2.GetType());
+            Console.WriteLine(CensusDelegate2());
+            CensusObj2.PrintList(CensusObj2);
+            CensusObj2.SortList();
+            CensusObj2.PrintList(CensusObj2);
+            dynamic Serializedelegate2 = MyDelegate.CreateSerializeDelegate(CensusObj2);
+            Console.WriteLine(Serializedelegate2.GetType());
+            Serializedelegate2(PathstateCode);
+            Census.FirstAndLastItemStateCodeJson(PathstateCode);
         }
     }
 }

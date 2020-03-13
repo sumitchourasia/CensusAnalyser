@@ -89,7 +89,7 @@ namespace CensusAnalyser
         /// Delegate to serialize a object
         /// </summary>
         /// <param name="censusObj">The census object.</param>
-        public delegate void SerializeDelegate();
+        public delegate void SerializeDelegate(string path);
 
         /// <summary>
         /// create and returns delegate object

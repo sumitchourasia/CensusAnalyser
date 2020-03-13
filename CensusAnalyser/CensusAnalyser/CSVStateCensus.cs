@@ -40,7 +40,7 @@ namespace CensusAnalyser
         /// <returns></returns>
         public override string LoadCSVFile()
         {
-            ListNode node = null;
+            ListNodeStateData node = null;
             int count = 0;
             try
             {
@@ -53,7 +53,7 @@ namespace CensusAnalyser
                     count++;
                     CheckDelimiter(element); 
                     CheckHeader(element);
-                    node = ListNode.createNode(element);
+                    node = ListNodeStateData.createNode(element);
                     if (node != null)
                         censusList.Add(node);
                 }

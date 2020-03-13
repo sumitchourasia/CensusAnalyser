@@ -3,6 +3,7 @@
 /// </summary
 namespace CensusAnalyser
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
@@ -40,7 +41,7 @@ namespace CensusAnalyser
         /// <returns></returns>
         public override string LoadCSVFile()
         {
-            ListNode node = null;
+            ListNodeStateCode node = null;
             int count = 0;
             try
             {
@@ -53,9 +54,9 @@ namespace CensusAnalyser
                     count++;
                     CheckDelimiter(element);
                     CheckHeader(element);
-                    node = ListNode.createNode(element);
+                    node = ListNodeStateCode.createNode(element);
                     if(node != null)
-                    censusList.Add(node);
+                    CensusStateCodeList.Add(node);
                 }
                 return count.ToString();
             }
@@ -64,5 +65,7 @@ namespace CensusAnalyser
                 return e.Msg;
             }
         }
+
+        
     }
 }

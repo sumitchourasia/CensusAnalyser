@@ -175,8 +175,8 @@ namespace TestCensusAnalyser
             CensusAnalyserDelegate();
             ICensus censusObj = BuilderDirector.GetCensus();
             censusObj.SortList();
-            censusObj.Serialize();
-            string actual = Census.FirstAndLastItemOfJson(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
+            censusObj.Serialize(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
+            string actual = Census.FirstAndLastItemStateNameJson(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
             string expected = "Andhra Pradesh" + "West Bengal";
             Assert.AreEqual(actual,expected);
         }
