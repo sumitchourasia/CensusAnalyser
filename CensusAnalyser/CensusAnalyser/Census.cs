@@ -5,6 +5,7 @@ namespace CensusAnalyser
     using System.Collections.Generic;
     using System.IO;
     using Newtonsoft.Json;
+    using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 
     /// <summary>
     /// Interface ICensus
@@ -219,81 +220,45 @@ namespace CensusAnalyser
         }
 
         /// <summary>
-        /// Deserializes the specified jsonstring.
+        /// Deserializes the state code using Generics.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="jsonstring">The jsonstring.</param>
         /// <returns></returns>
-        public static List<ListNodeStateData> DeserializeStateData(string jsonstring)
+        public static T DeserializeStateCodeGenerics<T>(string jsonstring)
         {
-            List<ListNodeStateData> list;
+            dynamic dlist = null;
             try
             {
-                list = (List<ListNodeStateData>)JsonConvert.DeserializeObject<List<ListNodeStateData>>(jsonstring);
-                return list;
+                dlist =(T)JsonConvert.DeserializeObject<T>(jsonstring);
+                return dlist;
             }
             catch (Exception e)
             {
-                return null;
+                return dlist;
             }
         }
 
         /// <summary>
-        /// First and last item of json.
+        /// First and last item state code using generics.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        public static string FirstAndLastItemStateNameJson(string path)
+        public static string FirstAndLastItemStateCodeGenerics<T>(string path)
         {
-            List<ListNodeStateData> list = DeserializeStateData(ReadFile(path));
+            T list = DeserializeStateCodeGenerics<T>(ReadFile(path));
             int length = 0;
-            int count = list.Count ;
-            string data=null;
-            foreach(ListNodeStateData item in list)
-            {
-                if (length == 0 || length == count-1)
-                    data += item.StateName;
-                length++;
-            }
-            return data;
-        }
-
-        /// <summary>
-        /// Deserializes the specified jsonstring.
-        /// </summary>
-        /// <param name="jsonstring">The jsonstring.</param>
-        /// <returns></returns>
-        public static List<ListNodeStateCode> DeserializeStateCode(string jsonstring)
-        {
-            List<ListNodeStateCode> list;
-            try
-            {
-                list = (List<ListNodeStateCode>)JsonConvert.DeserializeObject<List<ListNodeStateCode>>(jsonstring);
-                return list;
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// First and last item of json.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns></returns>
-        public static string FirstAndLastItemStateCodeJson(string path)
-        {
-            List<ListNodeStateCode> list = DeserializeStateCode(ReadFile(path));
-            int length = 0;
-            int count = list.Count;
-            string data = null;
-            foreach (ListNodeStateCode item in list)
+            dynamic dlist = list;
+            int count = dlist.Count;
+            dynamic ddata = null;
+            foreach ( dynamic item in dlist)
             {
                 if (length == 0 || length == count - 1)
-                    data += item.StateName;
+                    ddata += item.StateName;
                 length++;
             }
-            return data;
+            return ddata;
         }
     }
 }

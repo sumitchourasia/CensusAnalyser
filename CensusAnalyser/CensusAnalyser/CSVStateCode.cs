@@ -65,7 +65,5 @@ namespace CensusAnalyser
                 return e.Msg;
             }
         }
-
-        
     }
 }

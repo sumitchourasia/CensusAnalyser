@@ -5,6 +5,7 @@ namespace TestCensusAnalyser
 {
     using CensusAnalyser;
     using NUnit.Framework;
+    using System.Collections.Generic;
 
     /// <summary>
     /// contains all the test cases
@@ -176,7 +177,7 @@ namespace TestCensusAnalyser
             ICensus censusObj = BuilderDirector.GetCensus();
             censusObj.SortList();
             censusObj.Serialize(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
-            string actual = Census.FirstAndLastItemStateNameJson(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
+            string actual = Census.FirstAndLastItemStateCodeGenerics<List<ListNodeStateCode>>(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
             string expected = "Andhra Pradesh" + "West Bengal";
             Assert.AreEqual(actual,expected);
         }
@@ -193,7 +194,7 @@ namespace TestCensusAnalyser
             ICensus censusObj = BuilderDirector.GetCensus();
             censusObj.SortList();
             censusObj.Serialize(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json");
-            string actual = Census.FirstAndLastItemStateNameJson(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json");
+            string actual = Census.FirstAndLastItemStateCodeGenerics<List<ListNodeStateCode>>(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json");
             string expected = "Andhra Pradesh New"+"West Bengal";
             Assert.AreEqual(actual, expected);
         }

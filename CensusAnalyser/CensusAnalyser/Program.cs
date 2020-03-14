@@ -4,6 +4,7 @@
 namespace CensusAnalyser
 {
     using System;
+    using System.Collections.Generic;
     using static CensusAnalyser.StateCensusAnalyser;
 
     /// <summary>
@@ -31,13 +32,14 @@ namespace CensusAnalyser
             dynamic CensusDelegate = MyDelegate.CreateCensusAnalyserLoadFileDelegate(CensusObj);
             Console.WriteLine(CensusDelegate.GetType());
             Console.WriteLine(CensusDelegate());
-            CensusObj.PrintList(CensusObj);
+            //CensusObj.PrintList(CensusObj);
             CensusObj.SortList();
-            CensusObj.PrintList(CensusObj);
+           // CensusObj.PrintList(CensusObj);
             dynamic Serializedelegate = MyDelegate.CreateSerializeDelegate(CensusObj);
             Console.WriteLine(Serializedelegate.GetType());
             Serializedelegate(PathStateName);
-            Census.FirstAndLastItemStateNameJson(PathStateName);
+            string data = Census.FirstAndLastItemStateCodeGenerics<List<ListNodeStateData>>(PathStateName);
+            Console.WriteLine("data is " + data);
 
             /// for stare code
             BuilderDirector.CreateBuilder(); 
@@ -49,13 +51,18 @@ namespace CensusAnalyser
             dynamic CensusDelegate2 = MyDelegate.CreateCensusAnalyserLoadFileDelegate(CensusObj2);
             Console.WriteLine(CensusDelegate2.GetType());
             Console.WriteLine(CensusDelegate2());
-            CensusObj2.PrintList(CensusObj2);
+            //CensusObj2.PrintList(CensusObj2);
             CensusObj2.SortList();
-            CensusObj2.PrintList(CensusObj2);
+           // CensusObj2.PrintList(CensusObj2);
             dynamic Serializedelegate2 = MyDelegate.CreateSerializeDelegate(CensusObj2);
             Console.WriteLine(Serializedelegate2.GetType());
             Serializedelegate2(PathstateCode);
-            Census.FirstAndLastItemStateCodeJson(PathstateCode);
+
+            //generics
+           string data2 = Census.FirstAndLastItemStateCodeGenerics<List<ListNodeStateCode>>(PathstateCode);
+            Console.WriteLine("data2 is "+data2);
         }
+
+      
     }
 }
