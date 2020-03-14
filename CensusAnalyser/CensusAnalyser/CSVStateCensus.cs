@@ -55,9 +55,11 @@ namespace CensusAnalyser
                     CheckHeader(element);
                     node = ListNodeStateData.createNode(element);
                     if (node != null)
+                    {
+                        CensusDataDictionary.Add(count,node);
                         censusList.Add(node);
+                    }
                 }
-               
                 return count.ToString();
             }
             catch (CensusAnalyserException e)
