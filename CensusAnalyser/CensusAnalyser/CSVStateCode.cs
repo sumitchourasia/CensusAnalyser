@@ -55,8 +55,10 @@ namespace CensusAnalyser
                     CheckDelimiter(element);
                     CheckHeader(element);
                     node = ListNodeStateCode.createNode(element);
-                    if(node != null)
-                    CensusStateCodeList.Add(node);
+                    if (node != null)
+                        CensusCodeDictionary.Add(count, node);
+                    else
+                        count--;
                 }
                 return count.ToString();
             }

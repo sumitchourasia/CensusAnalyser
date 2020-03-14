@@ -82,7 +82,12 @@ namespace CensusAnalyser
         /// The census data dictionary
         /// </summary>
         protected Dictionary<int, ListNodeStateCode> CensusCodeDictionary = new Dictionary<int, ListNodeStateCode>();
-        
+
+        /// <summary>
+        /// The census code dictionary
+        /// </summary>
+        protected Dictionary<int, ListNodeStateCode> CensusCodeDictionary2 = new Dictionary<int, ListNodeStateCode>();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Census"/> class.
         /// </summary>
@@ -166,7 +171,7 @@ namespace CensusAnalyser
         public void PrintDictionary()
         {
             Dictionary<int , ListNodeStateData> DictionaryStateData;
-            Dictionary<int, ListNodeStateCode> DictionaryStateCode;
+            Dictionary<int , ListNodeStateCode> DictionaryStateCode;
             if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensus"))
             {
                 DictionaryStateData = ((Census)this).CensusDataDictionary;
@@ -213,10 +218,23 @@ namespace CensusAnalyser
         public void SortDictionary()
         {
             int count = 0;
-            foreach (KeyValuePair<int, ListNodeStateData> keyvalue in CensusDataDictionary.OrderBy(key => key.Value.StateName))
+            if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensus"))
             {
-                count++;
-                CensusDataDictionary2.Add(count , keyvalue.Value);
+                foreach (KeyValuePair<int, ListNodeStateData> keyvalue in CensusDataDictionary.OrderBy(key => key.Value.StateName))
+                {
+                    count++;
+                    CensusDataDictionary2.Add(count, keyvalue.Value);
+                }
+            }
+            else if(this.GetType().ToString().Equals("CensusAnalyser.CSVStateCode"))
+            {
+                count = 0;
+                foreach (KeyValuePair<int, ListNodeStateCode> keyvalue in CensusCodeDictionary.OrderBy(key => key.Value.StateCode))
+                {
+                    count++;
+                    Console.WriteLine(keyvalue.Key);
+                    CensusCodeDictionary2.Add(count, keyvalue.Value);
+                }
             }
         }
 
