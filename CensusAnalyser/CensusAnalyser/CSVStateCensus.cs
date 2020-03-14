@@ -3,9 +3,6 @@
 /// </summary
 namespace CensusAnalyser
 {
-    using Microsoft.VisualBasic.FileIO;
-    using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Text.RegularExpressions;
 
@@ -55,10 +52,7 @@ namespace CensusAnalyser
                     CheckHeader(element);
                     node = ListNodeStateData.createNode(element);
                     if (node != null)
-                    {
                         CensusDataDictionary.Add(count,node);
-                        censusList.Add(node);
-                    }
                 }
                 return count.ToString();
             }

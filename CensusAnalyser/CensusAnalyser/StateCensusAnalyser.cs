@@ -18,7 +18,7 @@ namespace CensusAnalyser
         /// count variable
         /// </summary>
         private int count = 0;
-        private List<string> CensusList = new List<string>();
+       
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StateCensusAnalyser"/> class.
@@ -55,10 +55,6 @@ namespace CensusAnalyser
                 count++;
                 record = csvParser.ReadLine();
                 CensusList.Add(record);
-            }
-            foreach(var ele in CensusList)
-            {
-                Console.WriteLine(ele);
             }
             return count.ToString();
         }
@@ -128,7 +124,7 @@ namespace CensusAnalyser
         /// <returns></returns>
         public static Delegate CreateSerializeDelegate(ICensus censusObj)
         {
-            SerializeDelegate delegateobj = new SerializeDelegate(censusObj.Serialize);
+            SerializeDelegate delegateobj = new SerializeDelegate(censusObj.SerializeDictionary);
             return delegateobj;
         }
     }

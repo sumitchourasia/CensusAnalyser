@@ -168,6 +168,7 @@ namespace TestCensusAnalyser
         /// <summary>
         /// Test Case 3
         /// test the first and last state name are as expected for CSVStateData file
+        /// using dictionary
         /// </summary>
         [TestCase]
         public void ListSortStateNameTest()
@@ -175,28 +176,11 @@ namespace TestCensusAnalyser
             dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCensus", pathStateCensusData);
             CensusAnalyserDelegate();
             ICensus censusObj = BuilderDirector.GetCensus();
-            censusObj.SortList();
-            censusObj.Serialize(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
-            string actual = Census.FirstAndLastItemStateCodeGenerics<List<ListNodeStateCode>>(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
+            censusObj.SortDictionary();
+            censusObj.SerializeDictionary(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
+            string actual = Census.FirstAndLastItemStateCodeGenerics<Dictionary<int, ListNodeStateData>>(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
             string expected = "Andhra Pradesh" + "West Bengal";
             Assert.AreEqual(actual,expected);
-        }
-
-        /// <summary>
-        /// Test Case 4
-        /// test the first and last state name are as expected for CSVStateCode file
-        /// </summary>
-        [TestCase]
-        public void ListSortStateCodeTest()
-        {
-            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", pathCSVStateCode);
-            CensusAnalyserDelegate();
-            ICensus censusObj = BuilderDirector.GetCensus();
-            censusObj.SortList();
-            censusObj.Serialize(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json");
-            string actual = Census.FirstAndLastItemStateCodeGenerics<List<ListNodeStateCode>>(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json");
-            string expected = "Andhra Pradesh New"+"West Bengal";
-            Assert.AreEqual(actual, expected);
         }
     }
 }
