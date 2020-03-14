@@ -240,7 +240,7 @@ namespace CensusAnalyser
         }
 
         /// <summary>
-        /// First and last item state code using generics.
+        ///  First and last item state code using generics.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="path">The path.</param>
@@ -260,5 +260,7 @@ namespace CensusAnalyser
             }
             return ddata;
         }
+
+
     }
 }
