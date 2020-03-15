@@ -13,8 +13,10 @@ namespace TestCensusAnalyser
     [TestFixture]
     public class Tests
     {
-        public static string pathCSVStateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
-        public static string pathStateCensusData = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv";
+        string pathCSVStateCodeFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
+        string pathStateCensusDataFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv";
+        string JsonPathStateData = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json";
+        string JsonPathStateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json";
 
         /// <summary>
         /// test case 1.1
@@ -23,9 +25,9 @@ namespace TestCensusAnalyser
         [TestCase]
         public void HappyCaseRecordMatch()
         {
-            StateCensusAnalyser obj = new StateCensusAnalyser(pathStateCensusData);
+            StateCensusAnalyser obj = new StateCensusAnalyser(pathStateCensusDataFile);
             var StateCensusAnalyserRecords = obj.LoadCSVFile();
-            CSVStateCensus obj2 = new CSVStateCensus(pathStateCensusData);
+            CSVStateCensusDAOIMPL obj2 = new CSVStateCensusDAOIMPL(pathStateCensusDataFile);
             var CSVStateCensusRecords = obj2.LoadCSVFile();
             Assert.AreEqual(StateCensusAnalyserRecords, CSVStateCensusRecords);
         }
@@ -38,7 +40,7 @@ namespace TestCensusAnalyser
         public void SadCaseIncorrectFilePath()
         {
             string path = "wrong file path";
-            CSVStateCensus obj = new CSVStateCensus(path);
+            CSVStateCensusDAOIMPL obj = new CSVStateCensusDAOIMPL(path);
             var ActualException = obj.LoadCSVFile();
             string ExpectedException = Enum_Exception.No_Such_File_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
@@ -52,7 +54,7 @@ namespace TestCensusAnalyser
         public void IncorrectFileTypeTest()
         {
             string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\WrongFileType.txt";
-            CSVStateCensus obj = new CSVStateCensus(path);
+            CSVStateCensusDAOIMPL obj = new CSVStateCensusDAOIMPL(path);
             string ActualException = obj.LoadCSVFile();
             string ExpectedException = Enum_Exception.File_Type_MisMatch_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
@@ -66,7 +68,7 @@ namespace TestCensusAnalyser
         public void IncorrectDelimiterTest()
         {
             string delimeter = ".";
-            CSVStateCensus obj = new CSVStateCensus(pathStateCensusData, delimeter);
+            CSVStateCensusDAOIMPL obj = new CSVStateCensusDAOIMPL(pathStateCensusDataFile, delimeter);
             string ActualException = obj.LoadCSVFile();
             string ExpectedException = Enum_Exception.Incorrect_Delimiter_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
@@ -84,7 +86,7 @@ namespace TestCensusAnalyser
             string Header3 = "Area";
             string Header4 = "DentyPrSm";
             string Header = Header1 + Header2 + Header3 + Header4;
-            CSVStateCensus obj = new CSVStateCensus(pathStateCensusData, null, Header);
+            CSVStateCensusDAOIMPL obj = new CSVStateCensusDAOIMPL(pathStateCensusDataFile, null, Header);
             string ActualException = obj.LoadCSVFile();
             string ExpectedException = Enum_Exception.Incorrect_Header_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
@@ -97,10 +99,10 @@ namespace TestCensusAnalyser
         [TestCase]
         public void HappyCaseRecordsMatchCSVStateCode()
         {
-            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", pathCSVStateCode);
+            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", pathCSVStateCodeFile);
             string actual = CensusAnalyserDelegate();
 
-            dynamic StateCensusAnalyserObject = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("StateCensusAnalyser", pathCSVStateCode);
+            dynamic StateCensusAnalyserObject = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("StateCensusAnalyser", pathCSVStateCodeFile);
             string expected = StateCensusAnalyserObject();
             Assert.AreEqual(actual, expected);
         }
@@ -141,7 +143,7 @@ namespace TestCensusAnalyser
         public void IncorrectCSVStateCodeFileCheckDelimiterTest()
         {
             string Delimiter = ".";
-            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", pathCSVStateCode, Delimiter);
+            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", pathCSVStateCodeFile, Delimiter);
             string actual = CensusAnalyserDelegate();
             string expected = Enum_Exception.Incorrect_Delimiter_Exception.ToString();
             Assert.AreEqual(actual, expected);
@@ -159,7 +161,7 @@ namespace TestCensusAnalyser
             string Header3 = "Area";
             string Header4 = "DentyPrSm";
             string Header = Header1 + Header2 + Header3 + Header4;
-            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", pathCSVStateCode, null, Header);
+            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", pathCSVStateCodeFile, null, Header);
             string ActualException = CensusAnalyserDelegate();
             string ExpectedException = Enum_Exception.Incorrect_Header_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
@@ -170,15 +172,15 @@ namespace TestCensusAnalyser
         /// test the first and last state name are as expected for CSVStateData file
         /// using dictionary
         /// </summary>
-        [TestCase]
+        [TestCase] 
         public void ListSortStateNameTest()
         {
-            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCensus", pathStateCensusData);
+            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCensus", pathStateCensusDataFile);
             CensusAnalyserDelegate();
-            ICensus censusObj = BuilderDirector.GetCensus();
+            ICensusDAO censusObj = BuilderDirector.GetCensus();
             censusObj.SortDictionary();
-            censusObj.SerializeDictionary(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
-            string actual = Census.FirstAndLastItemStateCodeGenerics<Dictionary<int, NodeStateCensusData>>(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
+            censusObj.SerializeDictionary(JsonPathStateData); 
+            string actual = censusObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCensusDataDAO>>(JsonPathStateData);
             string expected = "Andhra Pradesh" + "West Bengal";
             Assert.AreEqual(actual,expected);
         }
@@ -191,12 +193,12 @@ namespace TestCensusAnalyser
         [TestCase]
         public void ListSortStateCodeTest()
         {
-            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", pathCSVStateCode);
+            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", pathCSVStateCodeFile);
             CensusAnalyserDelegate();
-            ICensus censusObj = BuilderDirector.GetCensus();
+            ICensusDAO censusObj = BuilderDirector.GetCensus();
             censusObj.SortDictionary();
-            censusObj.SerializeDictionary(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCodeData.json");
-            string actual = Census.FirstAndLastItemStateCodeGenerics<Dictionary<int, NodeStateCodeData>>(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCodeData.json");
+            censusObj.SerializeDictionary(JsonPathStateCode);
+            string actual = censusObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCodeDataDAO>>(JsonPathStateCode);
             string expected = "Andhra Pradesh New" + "West Bengal";
             Assert.AreEqual(actual, expected);
         }

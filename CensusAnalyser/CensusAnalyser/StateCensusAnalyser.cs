@@ -10,7 +10,7 @@ namespace CensusAnalyser
     /// <summary>
     /// contains method to load CSV file and use iterator(IEnumerable)
     /// </summary>
-    public class StateCensusAnalyser : Census
+    public class StateCensusAnalyser : CensusDAO
     {
         /// <summary>
         /// count variable
@@ -87,7 +87,7 @@ namespace CensusAnalyser
         /// <param name="Delimiter">The delimiter.</param>
         /// <param name="Header">The header.</param>
         /// <returns></returns>
-        private delegate ICensus ConstructCensusUsingBuilder(string type, string Path, string Delimiter = null, string Header = null);
+        private delegate ICensusDAO ConstructCensusUsingBuilder(string type, string Path, string Delimiter = null, string Header = null);
 
         /// <summary>
         /// Delegate to serialize a object
@@ -99,7 +99,7 @@ namespace CensusAnalyser
         /// create and returns delegate object
         /// </summary>
         /// <returns> delgate object </returns>
-        public static Delegate CreateCensusAnalyserLoadFileDelegate(ICensus CensusObj)
+        public static Delegate CreateCensusAnalyserLoadFileDelegate(ICensusDAO CensusObj)
         {
             CensusDelegates delegateobject = new CensusDelegates(CensusObj.LoadCSVFile);
             return delegateobject;
@@ -119,7 +119,7 @@ namespace CensusAnalyser
             BuilderDirector.ConstructPath(Path);
             BuilderDirector.ConstructDelimiter(Delimiter);
             BuilderDirector.ConstructHeader(Header);
-            ICensus _CensusObj = BuilderDirector.ConstructCensusUsingFactory(type);
+            ICensusDAO _CensusObj = BuilderDirector.ConstructCensusUsingFactory(type);
             BuilderDirector.Construt(_CensusObj);
             Delegate CensusAnalyserDelegate = MyDelegate.CreateCensusAnalyserLoadFileDelegate(_CensusObj);
             return CensusAnalyserDelegate;
@@ -130,7 +130,7 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="censusObj">The census object.</param>
         /// <returns></returns>
-        public static Delegate CreateSerializeDelegate(ICensus censusObj)
+        public static Delegate CreateSerializeDelegate(ICensusDAO censusObj)
         {
             SerializeDelegate delegateobj = new SerializeDelegate(censusObj.SerializeDictionary);
             return delegateobj;

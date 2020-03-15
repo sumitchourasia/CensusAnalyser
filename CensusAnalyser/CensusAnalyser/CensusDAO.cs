@@ -10,7 +10,7 @@ namespace CensusAnalyser
     /// <summary>
     /// Interface ICensus
     /// </summary>
-    public interface ICensus
+    public interface ICensusDAO
     {
         /// <summary>
         /// Loads the CSV file.
@@ -33,13 +33,21 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="jsonpath">The jsonpath.</param>
         void SerializeDictionary(string jsonpath);
+
+        /// <summary>
+        /// First and last item state code using generics.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        string FirstAndLastItemStateCodeGenerics<T>(string path);
     }
 
     /// <summary>
     /// abstract class 
     /// </summary>
-    /// <seealso cref="CensusAnalyser.ICensus" />
-    public abstract class Census : ICensus 
+    /// <seealso cref="CensusAnalyser.ICensusDAO" />
+    public abstract class CensusDAO : ICensusDAO
     {
         /// <summary>
         /// Path variable
@@ -59,17 +67,17 @@ namespace CensusAnalyser
         /// <summary>
         /// The census code dictionary
         /// </summary>
-        protected Dictionary<int , NodeStateCensusData> CensusDataDictionary = new Dictionary<int , NodeStateCensusData >();
+        protected Dictionary<int , StateCensusDataDAO> CensusDataDictionary = new Dictionary<int , StateCensusDataDAO>();
 
         /// <summary>
         /// The census data dictionary
         /// </summary>
-        protected Dictionary<int, NodeStateCodeData> CensusCodeDictionary = new Dictionary<int, NodeStateCodeData>();
+        protected Dictionary<int, StateCodeDataDAO> CensusCodeDictionary = new Dictionary<int, StateCodeDataDAO>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Census"/> class.
+        /// Initializes a new instance of the <see cref="CensusDAO"/> class.
         /// </summary>
-        public Census()
+        public CensusDAO()
         {
 
         }
@@ -81,12 +89,12 @@ namespace CensusAnalyser
         public abstract string LoadCSVFile();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Census"/> class.
+        /// Initializes a new instance of the <see cref="CensusDAO"/> class.
         /// </summary>
         /// <param name="Path">The path.</param>
         /// <param name="Delimiter">The delimiter.</param>
         /// <param name="Header">The header.</param>
-        public Census(string Path, string Delimiter, string Header)
+        public CensusDAO(string Path, string Delimiter, string Header)
         {
             this.Path = Path;
             this.Delimiter = Delimiter;
@@ -148,30 +156,34 @@ namespace CensusAnalyser
         /// <param name="censusObj"> censusObj.</param>
         public void PrintDictionary()
         {
-            Dictionary<int , NodeStateCensusData> DictionaryStateData;
-            Dictionary<int , NodeStateCodeData> DictionaryStateCode;
-            if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensus"))
+            Dictionary<int , StateCensusDataDAO> DictionaryStateData;
+            Dictionary<int , StateCodeDataDAO> DictionaryStateCode;
+            if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensusDAOIMPL"))
             {
-                DictionaryStateData = ((Census)this).CensusDataDictionary;
-                foreach (KeyValuePair<int,NodeStateCensusData> keyValue in DictionaryStateData) 
+                DictionaryStateData = ((CensusDAO)this).CensusDataDictionary;
+                foreach (KeyValuePair<int,StateCensusDataDAO> keyValue in DictionaryStateData) 
                 {
-                    NodeStateCensusData element = keyValue.Value;
-                    Console.Write(element.StateName + " ");
-                    Console.Write(element.Population + " ");
-                    Console.Write(element.AreaInSqKm + " ");
-                    Console.WriteLine(element.DensityPerSqKm + " ");
+                    StateCensusDataDAO element = keyValue.Value;
+                    Console.WriteLine("key : " + keyValue.Key);
+                    Console.WriteLine("Value : ");
+                    Console.WriteLine("\tStateName : "+element.StateName);
+                    Console.WriteLine("\tPopulation : " + element.Population);
+                    Console.WriteLine("\tAreaInSqKm : " + element.AreaInSqKm);
+                    Console.WriteLine("\tDensityPerSqKm : " + element.DensityPerSqKm + " ");
                 }
             }
-            else if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCode"))
+            else if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCodeDAOIMPL"))
             {
-                DictionaryStateCode = ((Census)this).CensusCodeDictionary;
-                foreach (KeyValuePair<int, NodeStateCodeData> keyValue in DictionaryStateCode)
+                DictionaryStateCode = ((CensusDAO)this).CensusCodeDictionary;
+                foreach (KeyValuePair<int, StateCodeDataDAO> keyValue in DictionaryStateCode)
                 {
-                    NodeStateCodeData element = keyValue.Value;
-                    Console.Write(element.SerialNo + " ");
-                    Console.Write(element.StateName + " ");
-                    Console.Write(element.TIN + " ");
-                    Console.Write(element.StateCode + " ");
+                    StateCodeDataDAO element = keyValue.Value;
+                    Console.WriteLine("key : "+keyValue.Key);
+                    Console.WriteLine("Value : ");
+                    Console.WriteLine("\tSerialNo :  " + element.SerialNo);
+                    Console.WriteLine("\tStateName : " + element.StateName);
+                    Console.WriteLine("\tIN :       " + element.TIN);
+                    Console.WriteLine("\tStateCode : " + element.StateCode);
                 }
             }
         }
@@ -197,28 +209,28 @@ namespace CensusAnalyser
         {    /// <summary>
              /// The census code dictionary
              /// </summary>
-            Dictionary<int, NodeStateCensusData> CensusDataDictionary2 = new Dictionary<int, NodeStateCensusData>();
+            Dictionary<int, StateCensusDataDAO> CensusDataDictionary2 = new Dictionary<int, StateCensusDataDAO>();
 
              /// <summary>
              /// The census code dictionary
              /// </summary>
-           Dictionary<int, NodeStateCodeData> CensusCodeDictionary2 = new Dictionary<int, NodeStateCodeData>();
+           Dictionary<int, StateCodeDataDAO> CensusCodeDictionary2 = new Dictionary<int, StateCodeDataDAO>();
 
            int count = 0;
 
-            if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensus"))
+            if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensusDAOIMPL"))
             {
-                foreach (KeyValuePair<int, NodeStateCensusData> keyvalue in CensusDataDictionary.OrderBy(key => key.Value.StateName))
+                foreach (KeyValuePair<int, StateCensusDataDAO> keyvalue in CensusDataDictionary.OrderBy(key => key.Value.StateName))
                 {
                     count++;
                     CensusDataDictionary2.Add(count, keyvalue.Value);
                 }
                 CensusDataDictionary = CensusDataDictionary2;
             }
-            else if(this.GetType().ToString().Equals("CensusAnalyser.CSVStateCode"))
+            else if(this.GetType().ToString().Equals("CensusAnalyser.CSVStateCodeDAOIMPL"))
             {
                 count = 0;
-                foreach (KeyValuePair<int, NodeStateCodeData> keyvalue in CensusCodeDictionary.OrderBy(key => key.Value.StateCode))
+                foreach (KeyValuePair<int, StateCodeDataDAO> keyvalue in CensusCodeDictionary.OrderBy(key => key.Value.StateCode))
                 {
                     count++;
                     CensusCodeDictionary2.Add(count, keyvalue.Value);
@@ -265,7 +277,7 @@ namespace CensusAnalyser
         /// <typeparam name="T"></typeparam>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        public static string FirstAndLastItemStateCodeGenerics<T>(string path)
+        public string FirstAndLastItemStateCodeGenerics<T>(string path)
         {
             T list = DeserializeStateCodeGenerics<T>(ReadFile(path));
             int length = 0;

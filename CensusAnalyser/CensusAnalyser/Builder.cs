@@ -32,7 +32,7 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="censusObj">The census object.</param>
         /// <returns></returns>
-        ICensus Build(Census censusObj);
+        ICensusDAO Build(CensusDAO censusObj);
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ namespace CensusAnalyser
     /// <seealso cref="CensusAnalyser.IBuilder" />
     public class CensusBuilder  : IBuilder
     {
-        private Census _CensusObj;
+        private CensusDAO _CensusObj;
         private string _Path;
         private string _Delimiter;
         private string _Header;
@@ -58,7 +58,7 @@ namespace CensusAnalyser
         /// Initializes a new instance of the <see cref="CensusBuilder"/> class.
         /// </summary>
         /// <param name="CensusObj">The census object.</param>
-        public CensusBuilder(Census CensusObj)
+        public CensusBuilder(CensusDAO CensusObj)
         {
             this._CensusObj = CensusObj;
         }
@@ -95,7 +95,7 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="censusObj">The census object.</param>
         /// <returns></returns>
-        public ICensus Build( Census censusObj)
+        public ICensusDAO Build( CensusDAO censusObj)
         {
             censusObj.SetPath(_Path);
             censusObj.SetDelimiter(_Delimiter);
@@ -109,7 +109,7 @@ namespace CensusAnalyser
     /// </summary>
     public class BuilderDirector
     {
-        private static ICensus _CensusObj;
+        private static ICensusDAO _CensusObj;
 
         /// <summary>
         /// The builder object
@@ -147,7 +147,7 @@ namespace CensusAnalyser
         /// Gets the census.
         /// </summary>
         /// <returns></returns>
-        public static ICensus GetCensus()
+        public static ICensusDAO GetCensus()
         {
                 if (_CensusObj == null)
                     throw new CSVBuilderException(Enum_Exception.NULL_CSVException.ToString());
@@ -159,7 +159,7 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        public static ICensus ConstructCensusUsingFactory(string type)
+        public static ICensusDAO ConstructCensusUsingFactory(string type)
         {
             _CensusObj = CensusFactory.create(type); ;
             return _CensusObj;
@@ -180,9 +180,9 @@ namespace CensusAnalyser
         /// <param name="buildobject">The buildobject.</param>
         /// <param name="censusobject">The censusobject.</param>
         /// <returns></returns>
-        public static void Construt(ICensus censusobject)
+        public static void Construt(ICensusDAO censusobject)
         {
-            _BuilderObj.Build((Census)censusobject);
+            _BuilderObj.Build((CensusDAO)censusobject);
         }
     }
 }

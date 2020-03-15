@@ -6,8 +6,7 @@ namespace CensusAnalyser
     /// <summary>
     /// Class StateCensusData Implements IComparable<>
     /// </summary>
-    /// <seealso cref="System.IComparable{CensusAnalyser.ListNode}" />
-    public class NodeStateCensusData 
+    public class StateCensusDataDAO
     {
         /// <summary>
         /// statename
@@ -32,7 +31,7 @@ namespace CensusAnalyser
         /// <summary>
         /// Initializes a new instance of the <see cref="ListNode"/> class.
         /// </summary>
-        public NodeStateCensusData()
+        public StateCensusDataDAO()
         {
 
         }
@@ -42,14 +41,14 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="element">The element.</param>
         /// <returns></returns>
-        public static NodeStateCensusData createNode(string element)
+        public static StateCensusDataDAO createNode(string element)
         {
-            NodeStateCensusData newnode = null;
+            StateCensusDataDAO newnode = null;
             try
             {
                 if (element.Equals("State,Population,AreaInSqKm,DensityPerSqKm"))
                     return null;
-                newnode = new NodeStateCensusData();
+                newnode = new StateCensusDataDAO();
                 string[] arr = element.Split(",");
                 newnode.StateName = arr[0];
                 newnode.Population = Convert.ToInt32(arr[1]);
@@ -69,8 +68,7 @@ namespace CensusAnalyser
     /// <summary>
     /// Modal class for CSVStateCode file
     /// </summary>
-    /// <seealso cref="System.IComparable{CensusAnalyser.StateCode}" />
-    public class NodeStateCodeData 
+    public class StateCodeDataDAO 
     {
         public int SerialNo;
         public string StateName;
@@ -80,7 +78,7 @@ namespace CensusAnalyser
         /// <summary>
         /// Initializes a new instance of the <see cref="ListNodeStateCode"/> class.
         /// </summary>
-        public NodeStateCodeData()
+        public StateCodeDataDAO()
         {
 
         }
@@ -90,14 +88,14 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="element">The element.</param>
         /// <returns></returns>
-        public static NodeStateCodeData createNode(string element)
+        public static StateCodeDataDAO createNode(string element)
         {
-            NodeStateCodeData newnode = null;
+            StateCodeDataDAO newnode = null;
             try
             {
                 if (element.Equals("SrNo,State,Name,TIN,StateCode,"))
                     return null;
-                newnode = new NodeStateCodeData();
+                newnode = new StateCodeDataDAO();
                 string[] arr = element.Split(",");
                 newnode.SerialNo = Convert.ToInt32(arr[0]); 
                 newnode.StateName = arr[1];
