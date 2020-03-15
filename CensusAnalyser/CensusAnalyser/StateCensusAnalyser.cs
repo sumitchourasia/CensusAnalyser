@@ -6,8 +6,6 @@ namespace CensusAnalyser
     using Microsoft.VisualBasic.FileIO;
     using System;
     using System.Collections.Generic;
-    using System.IO;
-    using System.Text.RegularExpressions;
 
     /// <summary>
     /// contains method to load CSV file and use iterator(IEnumerable)
@@ -18,7 +16,11 @@ namespace CensusAnalyser
         /// count variable
         /// </summary>
         private int count = 0;
-       
+
+        /// <summary>
+        /// The census code dictionary
+        /// </summary>
+        Dictionary<int, string> StateCensusAnalyserDictionary = new Dictionary<int, string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StateCensusAnalyser"/> class.
@@ -50,13 +52,19 @@ namespace CensusAnalyser
             string record;
             TextFieldParser csvParser = new TextFieldParser(this.Path);
             csvParser.SetDelimiters( ",");
+            int RecordNo = 0;
             while (!csvParser.EndOfData)
             {
                 count++;
                 record = csvParser.ReadLine();
-                CensusList.Add(record);
+                if (count != 1)
+                {
+                    RecordNo = count - 1;
+                    StateCensusAnalyserDictionary.Add(RecordNo, record);
+                }
             }
-            return count.ToString();
+            Console.WriteLine(" state census analyser : "+StateCensusAnalyserDictionary.Count);
+            return StateCensusAnalyserDictionary.Count.ToString();
         }
     }
 

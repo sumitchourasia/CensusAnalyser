@@ -52,8 +52,18 @@ namespace CensusAnalyser
     /// <seealso cref="System.Exception" />
     public class CSVBuilderException : Exception
     {
+        /// <summary>
+        /// Gets or sets the MSG.
+        /// </summary>
+        /// <value>
+        /// The MSG.
+        /// </value>
         public string Msg { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CSVBuilderException"/> class.
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
         public CSVBuilderException(string msg)
         {
             this.Msg = msg;

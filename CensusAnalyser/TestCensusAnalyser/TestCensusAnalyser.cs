@@ -178,7 +178,7 @@ namespace TestCensusAnalyser
             ICensus censusObj = BuilderDirector.GetCensus();
             censusObj.SortDictionary();
             censusObj.SerializeDictionary(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
-            string actual = Census.FirstAndLastItemStateCodeGenerics<Dictionary<int, ListNodeStateData>>(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
+            string actual = Census.FirstAndLastItemStateCodeGenerics<Dictionary<int, NodeStateCensusData>>(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json");
             string expected = "Andhra Pradesh" + "West Bengal";
             Assert.AreEqual(actual,expected);
         }
@@ -195,9 +195,9 @@ namespace TestCensusAnalyser
             CensusAnalyserDelegate();
             ICensus censusObj = BuilderDirector.GetCensus();
             censusObj.SortDictionary();
-            censusObj.SerializeDictionary(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json");
-            string actual = Census.FirstAndLastItemStateCodeGenerics<Dictionary<int, ListNodeStateCode>>(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json");
-            string expected = "Andaman and Nicobar Islands" + "West Bengal";
+            censusObj.SerializeDictionary(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCodeData.json");
+            string actual = Census.FirstAndLastItemStateCodeGenerics<Dictionary<int, NodeStateCodeData>>(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCodeData.json");
+            string expected = "Andhra Pradesh New" + "West Bengal";
             Assert.AreEqual(actual, expected);
         }
     }

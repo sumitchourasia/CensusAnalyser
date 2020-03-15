@@ -9,10 +9,30 @@ namespace CensusAnalyser
     /// </summary>
     public interface IBuilder
     {
-         void SetPath(string Path);
-         void SetDelimiter(string Delimiter);
-         void SetHeader(string Header);
-         ICensus Build(Census censusObj);
+        /// <summary>
+        /// Sets the path.
+        /// </summary>
+        /// <param name="Path">The path.</param>
+        void SetPath(string Path);
+
+        /// <summary>
+        /// Sets the delimiter.
+        /// </summary>
+        /// <param name="Delimiter">The delimiter.</param>
+        void SetDelimiter(string Delimiter);
+
+        /// <summary>
+        /// Sets the header.
+        /// </summary>
+        /// <param name="Header">The header.</param>
+        void SetHeader(string Header);
+
+        /// <summary>
+        /// Builds the specified census object.
+        /// </summary>
+        /// <param name="censusObj">The census object.</param>
+        /// <returns></returns>
+        ICensus Build(Census censusObj);
     }
 
     /// <summary>
@@ -90,6 +110,7 @@ namespace CensusAnalyser
     public class BuilderDirector
     {
         private static ICensus _CensusObj;
+
         /// <summary>
         /// The builder object
         /// </summary>

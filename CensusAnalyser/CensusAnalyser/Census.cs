@@ -33,8 +33,6 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="jsonpath">The jsonpath.</param>
         void SerializeDictionary(string jsonpath);
-
-       
     }
 
     /// <summary>
@@ -59,34 +57,14 @@ namespace CensusAnalyser
         protected string Header;
 
         /// <summary>
-        /// The census list
-        /// </summary>
-        protected List<string> CensusList = new List<string>();
-
-        /// <summary>
-        /// The census list
-        /// </summary>
-        protected List<ListNodeStateCode> CensusStateCodeList = new List<ListNodeStateCode>();
-        
-        /// <summary>
         /// The census code dictionary
         /// </summary>
-        protected Dictionary<int , ListNodeStateData> CensusDataDictionary = new Dictionary<int , ListNodeStateData >();
-
-        /// <summary>
-        /// The census code dictionary
-        /// </summary>
-        protected Dictionary<int, ListNodeStateData> CensusDataDictionary2 = new Dictionary<int, ListNodeStateData>();
+        protected Dictionary<int , NodeStateCensusData> CensusDataDictionary = new Dictionary<int , NodeStateCensusData >();
 
         /// <summary>
         /// The census data dictionary
         /// </summary>
-        protected Dictionary<int, ListNodeStateCode> CensusCodeDictionary = new Dictionary<int, ListNodeStateCode>();
-
-        /// <summary>
-        /// The census code dictionary
-        /// </summary>
-        protected Dictionary<int, ListNodeStateCode> CensusCodeDictionary2 = new Dictionary<int, ListNodeStateCode>();
+        protected Dictionary<int, NodeStateCodeData> CensusCodeDictionary = new Dictionary<int, NodeStateCodeData>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Census"/> class.
@@ -95,6 +73,12 @@ namespace CensusAnalyser
         {
 
         }
+
+        /// <summary>
+        /// Loads the CSV file.
+        /// </summary>
+        /// <returns> count of record </returns>
+        public abstract string LoadCSVFile();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Census"/> class.
@@ -108,12 +92,6 @@ namespace CensusAnalyser
             this.Delimiter = Delimiter;
             this.Header = Header;
         }
-
-        /// <summary>
-        /// Loads the CSV file.
-        /// </summary>
-        /// <returns> count of record </returns>
-        public abstract string LoadCSVFile();
 
         /// <summary>
         /// Sets the path.
@@ -170,14 +148,14 @@ namespace CensusAnalyser
         /// <param name="censusObj"> censusObj.</param>
         public void PrintDictionary()
         {
-            Dictionary<int , ListNodeStateData> DictionaryStateData;
-            Dictionary<int , ListNodeStateCode> DictionaryStateCode;
+            Dictionary<int , NodeStateCensusData> DictionaryStateData;
+            Dictionary<int , NodeStateCodeData> DictionaryStateCode;
             if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensus"))
             {
                 DictionaryStateData = ((Census)this).CensusDataDictionary;
-                foreach (KeyValuePair<int,ListNodeStateData> keyValue in DictionaryStateData) 
+                foreach (KeyValuePair<int,NodeStateCensusData> keyValue in DictionaryStateData) 
                 {
-                    ListNodeStateData element = keyValue.Value;
+                    NodeStateCensusData element = keyValue.Value;
                     Console.Write(element.StateName + " ");
                     Console.Write(element.Population + " ");
                     Console.Write(element.AreaInSqKm + " ");
@@ -187,9 +165,9 @@ namespace CensusAnalyser
             else if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCode"))
             {
                 DictionaryStateCode = ((Census)this).CensusCodeDictionary;
-                foreach (KeyValuePair<int, ListNodeStateCode> keyValue in DictionaryStateCode)
+                foreach (KeyValuePair<int, NodeStateCodeData> keyValue in DictionaryStateCode)
                 {
-                    ListNodeStateCode element = keyValue.Value;
+                    NodeStateCodeData element = keyValue.Value;
                     Console.Write(element.SerialNo + " ");
                     Console.Write(element.StateName + " ");
                     Console.Write(element.TIN + " ");
@@ -204,37 +182,48 @@ namespace CensusAnalyser
         /// <param name="list">The list.</param>
         public void SerializeDictionary(string jsonpath)
         {
-            string ListinString = null; 
+            string DictionaryinString = null; 
             if (jsonpath.Contains("StateName"))
-                ListinString = JsonConvert.SerializeObject(this.CensusDataDictionary2);
+                DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionary);
             else if (jsonpath.Contains("StateCode"))
-                ListinString = JsonConvert.SerializeObject(this.CensusCodeDictionary);
-            File.WriteAllText(jsonpath, ListinString);
+                DictionaryinString = JsonConvert.SerializeObject(this.CensusCodeDictionary);
+            File.WriteAllText(jsonpath, DictionaryinString);
         }
 
         /// <summary>
         /// Sorts the dictionary.
         /// </summary>
         public void SortDictionary()
-        {
-            int count = 0;
+        {    /// <summary>
+             /// The census code dictionary
+             /// </summary>
+            Dictionary<int, NodeStateCensusData> CensusDataDictionary2 = new Dictionary<int, NodeStateCensusData>();
+
+             /// <summary>
+             /// The census code dictionary
+             /// </summary>
+           Dictionary<int, NodeStateCodeData> CensusCodeDictionary2 = new Dictionary<int, NodeStateCodeData>();
+
+           int count = 0;
+
             if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensus"))
             {
-                foreach (KeyValuePair<int, ListNodeStateData> keyvalue in CensusDataDictionary.OrderBy(key => key.Value.StateName))
+                foreach (KeyValuePair<int, NodeStateCensusData> keyvalue in CensusDataDictionary.OrderBy(key => key.Value.StateName))
                 {
                     count++;
                     CensusDataDictionary2.Add(count, keyvalue.Value);
                 }
+                CensusDataDictionary = CensusDataDictionary2;
             }
             else if(this.GetType().ToString().Equals("CensusAnalyser.CSVStateCode"))
             {
                 count = 0;
-                foreach (KeyValuePair<int, ListNodeStateCode> keyvalue in CensusCodeDictionary.OrderBy(key => key.Value.StateCode))
+                foreach (KeyValuePair<int, NodeStateCodeData> keyvalue in CensusCodeDictionary.OrderBy(key => key.Value.StateCode))
                 {
                     count++;
-                    Console.WriteLine(keyvalue.Key);
                     CensusCodeDictionary2.Add(count, keyvalue.Value);
                 }
+                CensusCodeDictionary = CensusCodeDictionary2;
             }
         }
 
@@ -264,7 +253,7 @@ namespace CensusAnalyser
                 dlist =(T)JsonConvert.DeserializeObject<T>(jsonstring);
                 return dlist;
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 return dlist;
             }

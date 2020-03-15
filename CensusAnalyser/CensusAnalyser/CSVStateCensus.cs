@@ -37,7 +37,7 @@ namespace CensusAnalyser
         /// <returns></returns>
         public override string LoadCSVFile()
         {
-            ListNodeStateData node = null;
+            NodeStateCensusData node = null;
             int count = 0;
             try
             {
@@ -50,11 +50,11 @@ namespace CensusAnalyser
                     count++;
                     CheckDelimiter(element); 
                     CheckHeader(element);
-                    node = ListNodeStateData.createNode(element);
+                    node = NodeStateCensusData.createNode(element);
                     if (node != null)
                         CensusDataDictionary.Add(count,node);
                 }
-                return count.ToString();
+                return CensusDataDictionary.Count.ToString();
             }
             catch (CensusAnalyserException e)
             {

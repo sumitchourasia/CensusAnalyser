@@ -1,10 +1,6 @@
 ﻿
 namespace CensusAnalyser
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     /// <summary>
     /// CensusFactory class to create and return ICensus Object
     /// </summary>
@@ -31,5 +27,4 @@ namespace CensusAnalyser
             return CensusObj;
         }
     }
-
 }

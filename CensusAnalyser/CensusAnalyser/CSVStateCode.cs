@@ -3,10 +3,7 @@
 /// </summary
 namespace CensusAnalyser
 {
-    using Newtonsoft.Json;
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Text.RegularExpressions;
 
@@ -41,7 +38,7 @@ namespace CensusAnalyser
         /// <returns></returns>
         public override string LoadCSVFile()
         {
-            ListNodeStateCode node = null;
+            NodeStateCodeData node = null;
             int count = 0;
             try
             {
@@ -51,21 +48,22 @@ namespace CensusAnalyser
                     throw new CensusAnalyserException(Enum_Exception.File_Type_MisMatch_Exception.ToString());
                 foreach (string element in File.ReadLines(this.Path))
                 {
-                    count++;
-                    CheckDelimiter(element);
-                    CheckHeader(element);
-                    node = ListNodeStateCode.createNode(element);
+                    count++; 
+                    CheckDelimiter(element); 
+                    CheckHeader(element); 
+                    node = NodeStateCodeData.createNode(element);
                     if (node != null)
-                        CensusCodeDictionary.Add(count, node);
-                    else
-                        count--;
+                    {
+                        int RecordNo = count-1;
+                        CensusCodeDictionary.Add(RecordNo, node);
+                    }
                 }
-                return count.ToString();
+                return CensusCodeDictionary.Count.ToString(); 
             }
-            catch (CensusAnalyserException e)
-            {
-                return e.Msg;
-            }
+            catch (CensusAnalyserException e) 
+            {  
+                return e.Msg; 
+            } 
         }
     }
 }
