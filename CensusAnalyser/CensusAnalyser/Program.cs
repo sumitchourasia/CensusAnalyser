@@ -22,6 +22,7 @@ namespace CensusAnalyser
             string JsonPathStateData = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json";
             string JsonPathStateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json";
             string JsonPathMostPopulous = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\MostPopulous.json";
+            string JsonPathPopulationDensity = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\PopulationDensity.json";
 
           /*  ////without using delegate
             BuilderDirector.CreateBuilder();
@@ -58,6 +59,11 @@ namespace CensusAnalyser
             CensusObj2.SortDictionaryMostPopulous();
             CensusObj2.SerializeDictionary(JsonPathMostPopulous);
             CensusObj2.PrintDictionary("Population");
+
+            ////sort based on population density 
+            Console.WriteLine("\n\n\n based on population \n\n\n");
+            CensusObj2.SortDictionaryPopulationDensity();
+            CensusObj2.SerializeDictionary(JsonPathPopulationDensity);
 
             ////using delegate for CSVStateCode FIle sort based on statecode
             dynamic delegateCodeobj = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", PathCSVCodeFile);

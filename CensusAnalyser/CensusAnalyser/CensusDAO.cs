@@ -37,6 +37,11 @@ namespace CensusAnalyser
         int SortDictionaryMostPopulous();
 
         /// <summary>
+        /// Sorts the dictionary population density.
+        /// </summary>
+        void SortDictionaryPopulationDensity();
+
+        /// <summary>
         /// Serializes the dictionary.
         /// </summary>
         /// <param name="jsonpath">The jsonpath.</param>
@@ -86,6 +91,11 @@ namespace CensusAnalyser
         /// The census code dictionary
         /// </summary>
         protected Dictionary<int, StateCensusDataDAO> CensusDataDictionaryMostPopulous = new Dictionary<int, StateCensusDataDAO>();
+
+        /// <summary>
+        /// The census code dictionary
+        /// </summary>
+        protected Dictionary<int, StateCensusDataDAO> CensusDataDictionaryPopulationDensity = new Dictionary<int, StateCensusDataDAO>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CensusDAO"/> class.
@@ -278,6 +288,29 @@ namespace CensusAnalyser
         }
 
         /// <summary>
+        /// Sorts the dictionary based on population density.
+        /// </summary>
+        /// <returns></returns>
+        public void SortDictionaryPopulationDensity()
+        {
+            /// <summary>
+            /// The census code dictionary
+            /// </summary>
+            Dictionary<int, StateCensusDataDAO> CensusDataDictionaryPopulationDensity2 = new Dictionary<int, StateCensusDataDAO>();
+
+            int count = 0;
+            if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensusDAOIMPL"))
+            {
+                foreach (KeyValuePair<int, StateCensusDataDAO> keyvalue in CensusDataDictionaryMostPopulous.OrderByDescending(key => key.Value.DensityPerSqKm))
+                {
+                    count++;
+                    CensusDataDictionaryPopulationDensity2.Add(count, keyvalue.Value);
+                }
+                CensusDataDictionaryPopulationDensity = CensusDataDictionaryPopulationDensity2;
+            }
+        }
+
+        /// <summary>
         /// Serializes the specified list.
         /// </summary>
         /// <param name="list">The list.</param>
@@ -291,6 +324,10 @@ namespace CensusAnalyser
             else if (jsonpath.Contains("MostPopulous"))
             {
                 DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryMostPopulous);
+            }
+            else if (jsonpath.Contains("PopulationDensity"))
+            {
+                DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryPopulationDensity);
             }
             File.WriteAllText(jsonpath, DictionaryinString);
         }

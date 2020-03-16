@@ -55,6 +55,7 @@ namespace CensusAnalyser
                     {
                         CensusDataDictionary.Add(count, node);
                         CensusDataDictionaryMostPopulous.Add(count, node);
+                        CensusDataDictionaryPopulationDensity.Add(count , node);
                     }
                 }
                 return CensusDataDictionary.Count.ToString();
