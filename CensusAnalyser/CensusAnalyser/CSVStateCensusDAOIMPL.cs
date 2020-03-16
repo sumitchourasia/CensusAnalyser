@@ -52,7 +52,10 @@ namespace CensusAnalyser
                     CheckHeader(element);
                     node = StateCensusDataDAO.createNode(element);
                     if (node != null)
-                        CensusDataDictionary.Add(count,node);
+                    {
+                        CensusDataDictionary.Add(count, node);
+                        CensusDataDictionaryMostPopulous.Add(count, node);
+                    }
                 }
                 return CensusDataDictionary.Count.ToString();
             }

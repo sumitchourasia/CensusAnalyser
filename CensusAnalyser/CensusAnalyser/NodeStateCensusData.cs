@@ -1,4 +1,7 @@
 ﻿
+/// <summary>
+/// namespace CensusAnalyser
+/// </summary>
 namespace CensusAnalyser
 {
     using System;

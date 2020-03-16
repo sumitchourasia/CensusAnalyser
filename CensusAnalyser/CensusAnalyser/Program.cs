@@ -21,8 +21,9 @@ namespace CensusAnalyser
             string PathCSVCodeFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
             string JsonPathStateData = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json";
             string JsonPathStateCode = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.json";
+            string JsonPathMostPopulous = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\MostPopulous.json";
 
-            ////without using delegate
+          /*  ////without using delegate
             BuilderDirector.CreateBuilder();
             BuilderDirector.ConstructPath(PathCSVDataFile);
             BuilderDirector.ConstructDelimiter(null);
@@ -35,22 +36,35 @@ namespace CensusAnalyser
             CensusObj.PrintDictionary();
             string data = CensusObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCensusDataDAO>>(JsonPathStateData);
             Console.WriteLine("data :" + data);
+            CensusObj.SortDictionaryMostPopulous();
+            CensusObj.SerializeDictionary(JsonPathMostPopulous);
+            CensusObj.PrintDictionary();
+*/
 
-          /*  ////using delegate for CSVStateData file
+            ////using delegate for CSVStateData file sort based on StateName
             dynamic delegateDataobj = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCensus", PathCSVDataFile);
             delegateDataobj();
             ICensusDAO CensusObj2 = BuilderDirector.GetCensus();
             CensusObj2.SortDictionary();
-            dynamic serializedelgateobj = MyDelegate.CreateSerializeDelegate(CensusObj2);
+            Console.WriteLine("\n\n\n based on StateName \n\n\n");
+            CensusObj2.PrintDictionary();
+            dynamic serializedelgateobj = MyDelegate.CreateSerializeDelegate(CensusObj2); 
             serializedelgateobj(JsonPathStateData);
             string data2 = CensusObj2.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCensusDataDAO>>(JsonPathStateData);
             Console.WriteLine("state census data file first and last statename data :" + data2);
-*/
-            ////using delegate for CSVStateCode FIle
+
+            //// sort based on population
+            Console.WriteLine("\n\n\n based on population \n\n\n");
+            CensusObj2.SortDictionaryMostPopulous();
+            CensusObj2.SerializeDictionary(JsonPathMostPopulous);
+            CensusObj2.PrintDictionary("Population");
+
+            ////using delegate for CSVStateCode FIle sort based on statecode
             dynamic delegateCodeobj = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", PathCSVCodeFile);
             delegateCodeobj();
             ICensusDAO CensusObj3 = BuilderDirector.GetCensus();
             CensusObj3.SortDictionary();
+            Console.WriteLine("\n\n\n based on StateCode \n\n\n");
             CensusObj3.PrintDictionary();
             dynamic serializedelgateobj3 = MyDelegate.CreateSerializeDelegate(CensusObj3);
             serializedelgateobj3(JsonPathStateCode);

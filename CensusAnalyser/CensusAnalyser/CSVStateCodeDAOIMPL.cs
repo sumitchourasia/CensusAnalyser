@@ -3,7 +3,6 @@
 /// </summary
 namespace CensusAnalyser
 {
-    using System;
     using System.IO;
     using System.Text.RegularExpressions;
 

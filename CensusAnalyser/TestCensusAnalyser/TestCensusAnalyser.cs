@@ -1,3 +1,4 @@
+
 /// <summary>
 /// namespace census analyser
 /// </summary
@@ -168,7 +169,7 @@ namespace TestCensusAnalyser
         }
 
         /// <summary>
-        /// Test Case 3
+        /// Test Case for usecase 3
         /// test the first and last state name are as expected for CSVStateData file
         /// using dictionary
         /// </summary>
@@ -186,7 +187,7 @@ namespace TestCensusAnalyser
         }
 
         /// <summary>
-        /// Test Case 4
+        /// Test Case for usecase 4
         /// test the first and last state name are as expected for CSVStateCode file
         /// using dictionary
         /// </summary>
@@ -201,6 +202,21 @@ namespace TestCensusAnalyser
             string actual = censusObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCodeDataDAO>>(JsonPathStateCode);
             string expected = "Andhra Pradesh New" + "West Bengal";
             Assert.AreEqual(actual, expected);
+        }
+
+        /// <summary>
+        /// test case for usecase 5
+        /// test the total no of states sorted based on most population. 
+        /// </summary>
+        [TestCase]
+        public void TotalStateSortedBasedOnMostPopulous()
+        {
+            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCensus", pathStateCensusDataFile);
+            CensusAnalyserDelegate();
+            ICensusDAO censusObj = BuilderDirector.GetCensus();
+            int Actual_NumberOfTotalStatesSorted = censusObj.SortDictionaryMostPopulous();
+            int expected = 29;
+            Assert.AreEqual(expected, Actual_NumberOfTotalStatesSorted);
         }
     }
 }
