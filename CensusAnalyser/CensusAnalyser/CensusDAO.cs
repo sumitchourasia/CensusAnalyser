@@ -42,6 +42,11 @@ namespace CensusAnalyser
         void SortDictionaryPopulationDensity();
 
         /// <summary>
+        /// Sorts the dictionary in descending order.
+        /// </summary>
+        void SortDictionaryMostArea();
+
+        /// <summary>
         /// Serializes the dictionary.
         /// </summary>
         /// <param name="jsonpath">The jsonpath.</param>
@@ -96,6 +101,11 @@ namespace CensusAnalyser
         /// The census code dictionary
         /// </summary>
         protected Dictionary<int, StateCensusDataDAO> CensusDataDictionaryPopulationDensity = new Dictionary<int, StateCensusDataDAO>();
+
+        /// <summary>
+        /// The census code dictionary
+        /// </summary>
+        Dictionary<int, StateCensusDataDAO> CensusDataDictionaryArea = new Dictionary<int, StateCensusDataDAO>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CensusDAO"/> class.
@@ -310,6 +320,26 @@ namespace CensusAnalyser
             }
         }
 
+        public void SortDictionaryMostArea()
+        {
+            /// <summary>
+            /// The census code dictionary
+            /// </summary>
+            Dictionary<int, StateCensusDataDAO> CensusDataDictionaryArea2 = new Dictionary<int, StateCensusDataDAO>();
+
+            int count = 0;
+            if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensusDAOIMPL"))
+            {
+                foreach (KeyValuePair<int, StateCensusDataDAO> keyvalue in CensusDataDictionaryMostPopulous.OrderByDescending(key => key.Value.AreaInSqKm))
+                {
+                    count++;
+                    CensusDataDictionaryArea2.Add(count, keyvalue.Value);
+                }
+                CensusDataDictionaryArea = CensusDataDictionaryArea2;
+            }
+
+        }
+
         /// <summary>
         /// Serializes the specified list.
         /// </summary>
@@ -328,6 +358,10 @@ namespace CensusAnalyser
             else if (jsonpath.Contains("PopulationDensity"))
             {
                 DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryPopulationDensity);
+            }
+            else if (jsonpath.Contains("MostArea"))
+            {
+                DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryArea);
             }
             File.WriteAllText(jsonpath, DictionaryinString);
         }
@@ -385,5 +419,7 @@ namespace CensusAnalyser
             }
             return ddata;
         }
+
+       
     }
 }
