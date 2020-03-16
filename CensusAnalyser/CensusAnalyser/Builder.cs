@@ -41,9 +41,24 @@ namespace CensusAnalyser
     /// <seealso cref="CensusAnalyser.IBuilder" />
     public class CensusBuilder  : IBuilder
     {
+        /// <summary>
+        /// The census object
+        /// </summary>
         private CensusDAO _CensusObj;
+
+        /// <summary>
+        /// The path
+        /// </summary>
         private string _Path;
+
+        /// <summary>
+        /// The delimiter
+        /// </summary>
         private string _Delimiter;
+
+        /// <summary>
+        /// The header
+        /// </summary>
         private string _Header;
 
         /// <summary>
@@ -109,6 +124,9 @@ namespace CensusAnalyser
     /// </summary>
     public class BuilderDirector
     {
+        /// <summary>
+        /// The census object
+        /// </summary>
         private static ICensusDAO _CensusObj;
 
         /// <summary>

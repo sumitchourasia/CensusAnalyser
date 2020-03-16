@@ -70,9 +70,24 @@ namespace CensusAnalyser
     /// </summary>
     public class StateCodeDataDAO 
     {
+        /// <summary>
+        /// The serial no
+        /// </summary>
         public int SerialNo;
+
+        /// <summary>
+        /// The state name
+        /// </summary>
         public string StateName;
+
+        /// <summary>
+        /// The tin
+        /// </summary>
         public int TIN;
+
+        /// <summary>
+        /// The state code
+        /// </summary>
         public string StateCode;
 
         /// <summary>

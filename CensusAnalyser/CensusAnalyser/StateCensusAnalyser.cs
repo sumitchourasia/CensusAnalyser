@@ -43,7 +43,6 @@ namespace CensusAnalyser
 
         /// <summary>
         /// Load the states census file.
-        /// uses iterator(IEnumeration)
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns> count of records </returns>

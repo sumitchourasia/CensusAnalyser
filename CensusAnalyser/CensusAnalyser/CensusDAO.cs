@@ -52,25 +52,25 @@ namespace CensusAnalyser
         /// <summary>
         /// Path variable
         /// </summary>
-        protected string Path;
+        protected string Path; 
 
         /// <summary>
         /// Delimiter variable
         /// </summary>
-        protected string Delimiter;
+        protected string Delimiter; 
 
         /// <summary>
         /// Header variable
         /// </summary>
-        protected string Header;
+        protected string Header; 
 
         /// <summary>
-        /// The census code dictionary
+        /// The census code dictionary 
         /// </summary>
         protected Dictionary<int , StateCensusDataDAO> CensusDataDictionary = new Dictionary<int , StateCensusDataDAO>();
 
         /// <summary>
-        /// The census data dictionary
+        /// The census data dictionary 
         /// </summary>
         protected Dictionary<int, StateCodeDataDAO> CensusCodeDictionary = new Dictionary<int, StateCodeDataDAO>();
 
