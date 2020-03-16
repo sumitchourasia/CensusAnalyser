@@ -15,7 +15,7 @@ namespace CensusAnalyser
         /// <summary>
         /// count variable
         /// </summary>
-        private int count = 0;
+        private int count = 0; 
 
         /// <summary>
         /// The census code dictionary

@@ -37,15 +37,15 @@ namespace CensusAnalyser
         /// <returns></returns>
         public override string LoadCSVFile()
         {
-            StateCensusDataDAO node = null;
-            int count = 0;
+            StateCensusDataDAO node = null; 
+            int count = 0; 
             try
             {
                 if (!File.Exists(this.Path))
                     throw new CensusAnalyserException(Enum_Exception.No_Such_File_Exception.ToString());
                 if (!Regex.IsMatch(this.Path, "^[a-zA-Z][:][\a-zA-Z]+.csv$"))
                     throw new CensusAnalyserException(Enum_Exception.File_Type_MisMatch_Exception.ToString());
-
+                ////using stream
                 using (StreamReader sr = new StreamReader(Path))
                 {
                     string element;
@@ -57,15 +57,16 @@ namespace CensusAnalyser
                         CheckDelimiter(element);
                         CheckHeader(element);
                         node = StateCensusDataDAO.createNode(element);
-                        if (node != null)
+                        if (node != null) 
                         {
                             CensusDataDictionary.Add(count, node);
                             CensusDataDictionaryMostPopulous.Add(count, node);
                             CensusDataDictionaryPopulationDensity.Add(count, node);
+                            CensusDataDictionaryArea.Add(count,node);
                         }
                     }
                 }
-                return CensusDataDictionary.Count.ToString();
+                return CensusDataDictionary.Count.ToString(); 
             }
             catch (CensusAnalyserException e)
             {

@@ -105,7 +105,7 @@ namespace CensusAnalyser
         /// <summary>
         /// The census code dictionary
         /// </summary>
-        Dictionary<int, StateCensusDataDAO> CensusDataDictionaryArea = new Dictionary<int, StateCensusDataDAO>();
+        protected Dictionary<int, StateCensusDataDAO> CensusDataDictionaryArea = new Dictionary<int, StateCensusDataDAO>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CensusDAO"/> class.
@@ -333,7 +333,7 @@ namespace CensusAnalyser
             int count = 0;
             if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensusDAOIMPL"))
             {
-                foreach (KeyValuePair<int, StateCensusDataDAO> keyvalue in CensusDataDictionaryMostPopulous.OrderByDescending(key => key.Value.AreaInSqKm))
+                foreach (KeyValuePair<int, StateCensusDataDAO> keyvalue in CensusDataDictionaryArea.OrderByDescending(key => key.Value.AreaInSqKm))
                 {
                     count++;
                     CensusDataDictionaryArea2.Add(count, keyvalue.Value);
@@ -349,7 +349,7 @@ namespace CensusAnalyser
         /// <param name="list">The list.</param>
         public void SerializeDictionary(string jsonpath)
         {
-            string DictionaryinString = null;
+            string DictionaryinString = null; 
             if (jsonpath.Contains("StateName"))
                 DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionary);
             else if (jsonpath.Contains("StateCode"))
@@ -389,7 +389,7 @@ namespace CensusAnalyser
         /// <returns></returns>
         public static T DeserializeStateCodeGenerics<T>(string jsonstring)
         {
-            dynamic dlist = null;
+            dynamic dlist = null; 
             try
             {
                 dlist =(T)JsonConvert.DeserializeObject<T>(jsonstring);
@@ -422,7 +422,5 @@ namespace CensusAnalyser
             }
             return ddata;
         }
-
-       
     }
 }

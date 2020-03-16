@@ -57,9 +57,7 @@ namespace CensusAnalyser
                         CheckHeader(element);
                         node = StateCodeDataDAO.createNode(element);
                         if (node != null)
-                        {
                             CensusCodeDictionary.Add(count, node);
-                        }
                     }
                 }
                 return CensusCodeDictionary.Count.ToString(); 
