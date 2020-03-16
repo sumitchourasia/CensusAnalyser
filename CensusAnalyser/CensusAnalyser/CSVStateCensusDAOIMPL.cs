@@ -45,17 +45,24 @@ namespace CensusAnalyser
                     throw new CensusAnalyserException(Enum_Exception.No_Such_File_Exception.ToString());
                 if (!Regex.IsMatch(this.Path, "^[a-zA-Z][:][\a-zA-Z]+.csv$"))
                     throw new CensusAnalyserException(Enum_Exception.File_Type_MisMatch_Exception.ToString());
-                foreach (string element in File.ReadLines(this.Path))
+
+                using (StreamReader sr = new StreamReader(Path))
                 {
-                    count++;
-                    CheckDelimiter(element); 
-                    CheckHeader(element);
-                    node = StateCensusDataDAO.createNode(element);
-                    if (node != null)
-                    {
-                        CensusDataDictionary.Add(count, node);
-                        CensusDataDictionaryMostPopulous.Add(count, node);
-                        CensusDataDictionaryPopulationDensity.Add(count , node);
+                    string element;
+                    // Read and display lines from the file until the end of 
+                    // the file is reached.
+                    while ((element = sr.ReadLine()) != null)
+                    { 
+                        count++;
+                        CheckDelimiter(element);
+                        CheckHeader(element);
+                        node = StateCensusDataDAO.createNode(element);
+                        if (node != null)
+                        {
+                            CensusDataDictionary.Add(count, node);
+                            CensusDataDictionaryMostPopulous.Add(count, node);
+                            CensusDataDictionaryPopulationDensity.Add(count, node);
+                        }
                     }
                 }
                 return CensusDataDictionary.Count.ToString();

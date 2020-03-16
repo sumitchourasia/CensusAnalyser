@@ -320,6 +320,9 @@ namespace CensusAnalyser
             }
         }
 
+        /// <summary>
+        /// Sorts the dictionary in descending order.
+        /// </summary>
         public void SortDictionaryMostArea()
         {
             /// <summary>
