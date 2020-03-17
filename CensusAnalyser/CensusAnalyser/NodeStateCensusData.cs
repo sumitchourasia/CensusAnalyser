@@ -44,7 +44,7 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="element">The element.</param>
         /// <returns></returns>
-        public static StateCensusDataDAO createNode(string element)
+        public static StateCensusDataDAO createNode(string element) 
         {
             StateCensusDataDAO newnode = null;
             try
@@ -96,12 +96,12 @@ namespace CensusAnalyser
         /// <summary>
         /// Initializes a new instance of the <see cref="ListNodeStateCode"/> class.
         /// </summary>
-        public StateCodeDataDAO()
+        public StateCodeDataDAO() 
         {
 
         }
 
-        /// <summary>
+        /// <summary> 
         /// Creates the node.
         /// </summary>
         /// <param name="element">The element.</param>
@@ -110,9 +110,9 @@ namespace CensusAnalyser
         {
             StateCodeDataDAO newnode = null;
             try
-            {
+            { 
                 if (element.Equals("SrNo,State,Name,TIN,StateCode,"))
-                    return null;
+                    return null; 
                 newnode = new StateCodeDataDAO();
                 string[] arr = element.Split(",");
                 newnode.SerialNo = Convert.ToInt32(arr[0]); 
@@ -127,4 +127,95 @@ namespace CensusAnalyser
             }
         }
     }
+
+    /// <summary>
+    /// usCensusDataDao class for fields
+    /// </summary>
+    public class USCensusDataDAO
+    {
+        /// <summary>
+        /// StateId
+        /// </summary>
+        public string StateId;
+
+        /// <summary>
+        /// State
+        /// </summary>
+        public string State;
+
+        /// <summary>
+        /// Population
+        /// </summary>
+        public int Population;
+
+        /// <summary>
+        /// HousingUnits
+        /// </summary>
+        public int HousingUnits;
+
+        /// <summary>
+        /// TotalArea
+        /// </summary>
+        public double TotalArea;
+
+        /// <summary>
+        /// WaterArea
+        /// </summary>
+        public double WaterArea;
+
+        /// <summary>
+        /// LandArea
+        /// </summary>
+        public double LandArea;
+
+        /// <summary>
+        /// PopulationDensity
+        /// </summary>
+        public double PopulationDensity;
+
+        /// <summary>
+        /// HousingDensity
+        /// </summary>
+        public double HousingDensity;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public USCensusDataDAO()
+        {
+
+        }
+
+        /// <summary> 
+        /// Creates the node.
+        /// </summary>
+        /// <param name="element">The element.</param>
+        /// <returns></returns>
+        public static USCensusDataDAO createNode(string element)
+        {
+            USCensusDataDAO newnode = null; 
+          try
+          {
+           if (element.Equals("State Id,State,Population,Housing units,Total area,Water area,Land area,Population Density,Housing Density"))
+                    return null;   
+                newnode = new USCensusDataDAO();
+                string[] arr = element.Split(",");
+                newnode.StateId = arr[0];
+                newnode.State = arr[1];
+                newnode.Population = Convert.ToInt32(arr[2]);
+                newnode.HousingUnits =Convert.ToInt32(arr[3]);
+                newnode.TotalArea = Convert.ToDouble(arr[4]);
+                newnode.WaterArea = Convert.ToDouble(arr[5]);
+                newnode.LandArea = Convert.ToDouble(arr[6]);
+                newnode.PopulationDensity = Convert.ToDouble(arr[7]);
+                newnode.HousingDensity = Convert.ToDouble(arr[8]);
+                return newnode;
+            }
+            catch (Exception)
+            {
+                return newnode;
+            }
+        }
+    }
+   
 }

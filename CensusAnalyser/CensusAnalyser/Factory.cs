@@ -6,21 +6,17 @@ namespace CensusAnalyser
     /// </summary>
     public class CensusFactory 
     {
-        public static ICensusDAO create(string type)
+        public static ICensus create(string type)
         {
-            ICensusDAO CensusObj;
+            ICensus CensusObj;
             if (type.Equals("StateCensusAnalyser"))
-            {
                 CensusObj = new StateCensusAnalyser();
-            }
             else if (type.Equals("CSVStateCensus"))
-            {
-                CensusObj = new CSVStateCensusDAOIMPL();
-            }
+                CensusObj = new CSVStateCensus();
             else if (type.Equals("CSVStateCode"))
-            {
-                CensusObj = new CSVStateCodeDAOIMPL();
-            }
+                CensusObj = new CSVStateCode();
+            else if (type.Equals("USCensus"))
+                CensusObj = new USCensus();
             else
                 CensusObj = null;
 

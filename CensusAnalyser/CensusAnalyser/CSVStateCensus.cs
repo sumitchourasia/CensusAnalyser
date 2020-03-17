@@ -5,27 +5,33 @@ namespace CensusAnalyser
 {
     using System.IO;
     using System.Text.RegularExpressions;
+    using System.Collections.Generic;
 
     /// <summary>
     /// contains a method to load csv file 
     /// </summary>
-    public class CSVStateCensusDAOIMPL : CensusDAO
+    public class CSVStateCensus : IndianCensus
     {
+        public static Dictionary<int, StateCensusDataDAO> CensusDataDictionary = new Dictionary<int, StateCensusDataDAO>();
+        public static Dictionary<int, StateCensusDataDAO> CensusDataDictionaryMostPopulous = new Dictionary<int, StateCensusDataDAO>();
+        public static Dictionary<int, StateCensusDataDAO> CensusDataDictionaryPopulationDensity = new Dictionary<int, StateCensusDataDAO>();
+        public static Dictionary<int, StateCensusDataDAO> CensusDataDictionaryArea = new Dictionary<int, StateCensusDataDAO>();
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="CSVStateCensusDAOIMPL"/> class.
+        /// Initializes a new instance of the <see cref="CSVStateCensus"/> class.
         /// </summary>
-        public CSVStateCensusDAOIMPL()
+        public CSVStateCensus()
         {
 
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CSVStateCensusDAOIMPL"/> class.
+        /// Initializes a new instance of the <see cref="CSVStateCensus"/> class.
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="delimiter">The delimiter.</param>
         /// <param name="header">The header.</param>
-        public CSVStateCensusDAOIMPL(string path, string delimiter = null, string header = null) : base(path, delimiter, header)
+        public CSVStateCensus(string path, string delimiter = null, string header = null) : base(path, delimiter, header)
         {
 
         }

@@ -34,7 +34,7 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="censusObj">The census object.</param>
         /// <returns></returns>
-        ICensusDAO Build(CensusDAO censusObj);
+        ICensus Build(ICensus censusObj);
     }
 
     /// <summary>
@@ -112,8 +112,8 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="censusObj">The census object.</param>
         /// <returns></returns>
-        public ICensusDAO Build( CensusDAO censusObj)
-        {
+        public ICensus Build(ICensus censusObj)
+        { 
             censusObj.SetPath(_Path);
             censusObj.SetDelimiter(_Delimiter);
             censusObj.SetHeader(_Header);
@@ -129,7 +129,7 @@ namespace CensusAnalyser
         /// <summary>
         /// The census object
         /// </summary>
-        private static ICensusDAO _CensusObj;
+        private static ICensus _CensusObj;
 
         /// <summary>
         /// The builder object
@@ -167,7 +167,7 @@ namespace CensusAnalyser
         /// Gets the census.
         /// </summary>
         /// <returns></returns>
-        public static ICensusDAO GetCensus()
+        public static ICensus GetCensus() 
         {
                 if (_CensusObj == null)
                     throw new CSVBuilderException(Enum_Exception.NULL_CSVException.ToString());
@@ -179,7 +179,7 @@ namespace CensusAnalyser
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        public static ICensusDAO ConstructCensusUsingFactory(string type)
+        public static ICensus ConstructCensusUsingFactory(string type)
         {
             _CensusObj = CensusFactory.create(type); ;
             return _CensusObj;
@@ -200,9 +200,9 @@ namespace CensusAnalyser
         /// <param name="buildobject">The buildobject.</param>
         /// <param name="censusobject">The censusobject.</param>
         /// <returns></returns>
-        public static void Construt(ICensusDAO censusobject)
+        public static void Construt(ICensus censusobject)
         {
-            _BuilderObj.Build((CensusDAO)censusobject);
+            _BuilderObj.Build(censusobject);
         }
     }
 }

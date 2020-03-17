@@ -13,18 +13,13 @@ namespace CensusAnalyser
     /// <summary>
     /// Interface ICensus
     /// </summary>
-    public interface ICensusDAO
+    public interface ICensusDAO 
     {
-        /// <summary>
-        /// Loads the CSV file.
-        /// </summary>
-        /// <returns></returns>
-        string LoadCSVFile();
 
         /// <summary>
         /// Prints the dictionary.
         /// </summary>
-        void PrintDictionary(string SortBasedOn="StateName");
+        void PrintDictionary(ICensus censusObj, string SortBasedOn="StateName");
 
         /// <summary>
         /// Sorts the dictionary.
@@ -65,138 +60,67 @@ namespace CensusAnalyser
     /// abstract class 
     /// </summary>
     /// <seealso cref="CensusAnalyser.ICensusDAO" />
-    public abstract class CensusDAO : ICensusDAO
+    public class CensusDAO : ICensusDAO
     {
-        /// <summary>
-        /// Path variable
-        /// </summary>
-        protected string Path; 
-
-        /// <summary>
-        /// Delimiter variable
-        /// </summary>
-        protected string Delimiter; 
-
-        /// <summary>
-        /// Header variable
-        /// </summary>
-        protected string Header; 
+        ICensus censusObj = null;
 
         /// <summary>
         /// The census code dictionary 
         /// </summary>
-        protected Dictionary<int , StateCensusDataDAO> CensusDataDictionary = new Dictionary<int , StateCensusDataDAO>();
+         Dictionary<int , StateCensusDataDAO> CensusDataDictionary = CSVStateCensus.CensusDataDictionary;
 
         /// <summary>
         /// The census data dictionary 
         /// </summary>
-        protected Dictionary<int, StateCodeDataDAO> CensusCodeDictionary = new Dictionary<int, StateCodeDataDAO>();
+         Dictionary<int, StateCodeDataDAO> CensusCodeDictionary = CSVStateCode.CensusCodeDictionary;
+
+        /// <summary>
+        /// The census code dictionary 
+        /// </summary>
+         Dictionary<int, StateCensusDataDAO> CensusDataDictionaryMostPopulous = CSVStateCensus.CensusDataDictionaryMostPopulous;
 
         /// <summary>
         /// The census code dictionary
         /// </summary>
-        protected Dictionary<int, StateCensusDataDAO> CensusDataDictionaryMostPopulous = new Dictionary<int, StateCensusDataDAO>();
+         Dictionary<int, StateCensusDataDAO> CensusDataDictionaryPopulationDensity = CSVStateCensus.CensusDataDictionaryPopulationDensity;
 
         /// <summary>
         /// The census code dictionary
         /// </summary>
-        protected Dictionary<int, StateCensusDataDAO> CensusDataDictionaryPopulationDensity = new Dictionary<int, StateCensusDataDAO>();
+         Dictionary<int, StateCensusDataDAO> CensusDataDictionaryArea = CSVStateCensus.CensusDataDictionaryArea;
 
-        /// <summary>
-        /// The census code dictionary
-        /// </summary>
-        protected Dictionary<int, StateCensusDataDAO> CensusDataDictionaryArea = new Dictionary<int, StateCensusDataDAO>();
+        Dictionary<int, USCensusDataDAO> USCensusDictionary = USCensus.USCensusDictionary;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CensusDAO"/> class.
         /// </summary>
-        public CensusDAO()
+        public CensusDAO(ICensus censusObj)
         {
-
-        }
-
-        /// <summary>
-        /// Loads the CSV file.
-        /// </summary>
-        /// <returns> count of record </returns>
-        public abstract string LoadCSVFile();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CensusDAO"/> class.
-        /// </summary>
-        /// <param name="Path">The path.</param>
-        /// <param name="Delimiter">The delimiter.</param>
-        /// <param name="Header">The header.</param>
-        public CensusDAO(string Path, string Delimiter, string Header)
-        {
-            this.Path = Path;
-            this.Delimiter = Delimiter;
-            this.Header = Header;
-        }
-
-        /// <summary>
-        /// Sets the path.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        public void SetPath(string path){ this.Path = path; }
-
-        /// <summary>
-        /// Sets the delimiter.
-        /// </summary>
-        /// <param name="Delimiter">The delimiter.</param>
-        public void SetDelimiter(string Delimiter) { this.Delimiter = Delimiter; }
-
-        /// <summary>
-        /// Sets the header.
-        /// </summary>
-        /// <param name="Header">The header.</param>
-        public void SetHeader(string Header) { this.Header = Header; }
-
-        /// <summary>
-        /// Checks the delimiter.
-        /// </summary>
-        /// <param name="element">The element.</param>
-        /// <returns></returns>
-        /// <exception cref="CensusAnalyser.CensusAnalyserException"></exception>
-        protected bool CheckDelimiter(string element)
-        {
-            if (this.Delimiter != null)
-            {
-                string[] arr = element.Split(this.Delimiter);
-                if (arr.Length < 2)
-                    throw new CensusAnalyserException(Enum_Exception.Incorrect_Delimiter_Exception.ToString());
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Checks the header.
-        /// </summary>
-        /// <param name="element">The element.</param>
-        /// <returns></returns>
-        /// <exception cref="CensusAnalyser.CensusAnalyserException"></exception>
-        protected bool CheckHeader(string element)
-        {
-            if (this.Header != null)
-                if (!element.Equals(this.Header))
-                    throw new CensusAnalyserException(Enum_Exception.Incorrect_Header_Exception.ToString());
-            return true;
+            this.censusObj = censusObj;
         }
 
         /// <summary>
         /// Prints the Dictionary.
         /// </summary>
         /// <param name="censusObj"> censusObj.</param>
-        public void PrintDictionary(String SortbasedOn="StateName")
+        public void PrintDictionary(ICensus censusObj ,String SortbasedOn="StateName")
         {
             Dictionary<int , StateCensusDataDAO> DictionaryStateData;
             Dictionary<int , StateCodeDataDAO> DictionaryStateCode;
-            if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensusDAOIMPL"))
+            Dictionary<int, USCensusDataDAO> DictionaryUSCensus;
+            if (censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCensus".ToLower()))
             {
-                if (SortbasedOn.Equals("StateName"))
-                {
-                    DictionaryStateData = ((CensusDAO)this).CensusDataDictionary;
-                    foreach (KeyValuePair<int, StateCensusDataDAO> keyValue in CensusDataDictionary)
+                    if (SortbasedOn.Equals("StateName"))
+                        DictionaryStateData = CensusDataDictionary;
+                    else if (SortbasedOn.Equals("Population"))
+                        DictionaryStateData = CensusDataDictionaryMostPopulous;
+                    else if (SortbasedOn.Equals("Density"))
+                        DictionaryStateData =CensusDataDictionaryPopulationDensity;
+                    else if (SortbasedOn.Equals("Area"))
+                        DictionaryStateData = CensusDataDictionaryArea;
+                    else
+                        DictionaryStateData = null;
+                    foreach (KeyValuePair<int, StateCensusDataDAO> keyValue in DictionaryStateData)
                     {
                         StateCensusDataDAO element = keyValue.Value;
                         Console.WriteLine("key : " + keyValue.Key);
@@ -206,25 +130,10 @@ namespace CensusAnalyser
                         Console.WriteLine("\tAreaInSqKm : " + element.AreaInSqKm);
                         Console.WriteLine("\tDensityPerSqKm : " + element.DensityPerSqKm + " ");
                     }
-                }
-                else if (SortbasedOn.Equals("Population"))
-                {
-                    DictionaryStateData = ((CensusDAO)this).CensusDataDictionaryMostPopulous;
-                    foreach (KeyValuePair<int, StateCensusDataDAO> keyValue in CensusDataDictionaryMostPopulous)
-                    {
-                        StateCensusDataDAO element = keyValue.Value;
-                        Console.WriteLine("key : " + keyValue.Key);
-                        Console.WriteLine("Value : ");
-                        Console.WriteLine("\tStateName : " + element.StateName);
-                        Console.WriteLine("\tPopulation : " + element.Population);
-                        Console.WriteLine("\tAreaInSqKm : " + element.AreaInSqKm);
-                        Console.WriteLine("\tDensityPerSqKm : " + element.DensityPerSqKm + " ");
-                    }
-                }
             }
-            else if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCodeDAOIMPL"))
+            else if (censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCode".ToLower()))
             {
-                DictionaryStateCode = ((CensusDAO)this).CensusCodeDictionary;
+                DictionaryStateCode = CensusCodeDictionary;
                 foreach (KeyValuePair<int, StateCodeDataDAO> keyValue in DictionaryStateCode)
                 {
                     StateCodeDataDAO element = keyValue.Value;
@@ -233,13 +142,32 @@ namespace CensusAnalyser
                     Console.WriteLine("\tSerialNo :  " + element.SerialNo);
                     Console.WriteLine("\tStateName : " + element.StateName);
                     Console.WriteLine("\tIN :       " + element.TIN);
-                    Console.WriteLine("\tStateCode : " + element.StateCode);
+                    Console.WriteLine("\tStateCode : " + element.StateCode); 
+                }
+            }
+            else if ( censusObj.GetType().ToString().Equals("CensusAnalyser.USCensus"))
+            {
+                DictionaryUSCensus = USCensusDictionary;
+                foreach (KeyValuePair<int, USCensusDataDAO> keyValue in DictionaryUSCensus)
+                {
+                    USCensusDataDAO element = keyValue.Value;
+                    Console.WriteLine("key : " + keyValue.Key);
+                    Console.WriteLine("Value : ");
+                    Console.WriteLine("\tStateId :  " + element.StateId);
+                    Console.WriteLine("\tStateName : " + element.State);
+                    Console.WriteLine("\tPopulation : " + element.Population);
+                    Console.WriteLine("\tHousingUnits : " + element.HousingUnits);
+                    Console.WriteLine("\tTotalArea :  " + element.TotalArea);
+                    Console.WriteLine("\tWaterArea : " + element.WaterArea);
+                    Console.WriteLine("\tLandArea : " + element.LandArea);
+                    Console.WriteLine("\tPopulationDensity : " + element.PopulationDensity);
+                    Console.WriteLine("\tHousingDensity : " + element.HousingDensity);
                 }
             }
         }
 
-        /// <summary>
-        /// Sorts the dictionary.
+        /// <summary> 
+        /// Sorts the dictionary. 
         /// </summary>
         public void SortDictionary()
         {    /// <summary>
@@ -252,9 +180,9 @@ namespace CensusAnalyser
              /// </summary>
            Dictionary<int, StateCodeDataDAO> CensusCodeDictionary2 = new Dictionary<int, StateCodeDataDAO>();
 
-           int count = 0;
+           int count = 0;   
 
-            if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensusDAOIMPL")) 
+            if (censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCensus".ToLower())) 
             {
                 foreach (KeyValuePair<int, StateCensusDataDAO> keyvalue in CensusDataDictionary.OrderBy(key => key.Value.StateName))
                 {
@@ -263,7 +191,7 @@ namespace CensusAnalyser
                 }
                 CensusDataDictionary = CensusDataDictionary2;
             }
-            else if(this.GetType().ToString().Equals("CensusAnalyser.CSVStateCodeDAOIMPL"))
+            else if(censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCode".ToLower()))
             {
                 count = 0;
                 foreach (KeyValuePair<int, StateCodeDataDAO> keyvalue in CensusCodeDictionary.OrderBy(key => key.Value.StateCode))
@@ -285,7 +213,7 @@ namespace CensusAnalyser
             /// </summary>
             Dictionary<int, StateCensusDataDAO> CensusDataDictionaryMostPopulous2 = new Dictionary<int, StateCensusDataDAO>();
             int count = 0; 
-            if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensusDAOIMPL"))
+            if (censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCensus".ToLower()))
             {
                 foreach (KeyValuePair<int, StateCensusDataDAO> keyvalue in CensusDataDictionaryMostPopulous.OrderByDescending(key => key.Value.Population))
                 {
@@ -309,7 +237,7 @@ namespace CensusAnalyser
             Dictionary<int, StateCensusDataDAO> CensusDataDictionaryPopulationDensity2 = new Dictionary<int, StateCensusDataDAO>();
 
             int count = 0;
-            if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensusDAOIMPL"))
+            if (censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCensus".ToLower()))
             {
                 foreach (KeyValuePair<int, StateCensusDataDAO> keyvalue in CensusDataDictionaryMostPopulous.OrderByDescending(key => key.Value.DensityPerSqKm))
                 {
@@ -331,7 +259,7 @@ namespace CensusAnalyser
             Dictionary<int, StateCensusDataDAO> CensusDataDictionaryArea2 = new Dictionary<int, StateCensusDataDAO>();
 
             int count = 0;
-            if (this.GetType().ToString().Equals("CensusAnalyser.CSVStateCensusDAOIMPL"))
+            if (censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCensus".ToLower())) 
             {
                 foreach (KeyValuePair<int, StateCensusDataDAO> keyvalue in CensusDataDictionaryArea.OrderByDescending(key => key.Value.AreaInSqKm))
                 {
@@ -340,7 +268,6 @@ namespace CensusAnalyser
                 }
                 CensusDataDictionaryArea = CensusDataDictionaryArea2;
             }
-
         }
 
         /// <summary>
@@ -349,27 +276,23 @@ namespace CensusAnalyser
         /// <param name="list">The list.</param>
         public void SerializeDictionary(string jsonpath)
         {
-            string DictionaryinString = null; 
+            string DictionaryinString = null;
             if (jsonpath.Contains("StateName"))
                 DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionary);
             else if (jsonpath.Contains("StateCode"))
                 DictionaryinString = JsonConvert.SerializeObject(this.CensusCodeDictionary);
             else if (jsonpath.Contains("MostPopulous"))
-            {
                 DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryMostPopulous);
-            }
             else if (jsonpath.Contains("PopulationDensity"))
-            {
                 DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryPopulationDensity);
-            }
             else if (jsonpath.Contains("MostArea"))
-            {
                 DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryArea);
-            }
+            else
+                DictionaryinString = null;
             File.WriteAllText(jsonpath, DictionaryinString);
         }
 
-        /// <summary>
+        /// <summary> 
         /// Reads the file.
         /// </summary>
         /// <param name="path">The path.</param>

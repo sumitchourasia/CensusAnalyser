@@ -28,7 +28,7 @@ namespace TestCensusAnalyser
         {
             StateCensusAnalyser obj = new StateCensusAnalyser(pathStateCensusDataFile);
             var StateCensusAnalyserRecords = obj.LoadCSVFile();
-            CSVStateCensusDAOIMPL obj2 = new CSVStateCensusDAOIMPL(pathStateCensusDataFile);
+            CSVStateCensus obj2 = new CSVStateCensus(pathStateCensusDataFile);
             var CSVStateCensusRecords = obj2.LoadCSVFile();
             Assert.AreEqual(StateCensusAnalyserRecords, CSVStateCensusRecords);
         }
@@ -41,7 +41,7 @@ namespace TestCensusAnalyser
         public void SadCaseIncorrectFilePath()
         {
             string path = "wrong file path";
-            CSVStateCensusDAOIMPL obj = new CSVStateCensusDAOIMPL(path);
+            CSVStateCensus obj = new CSVStateCensus(path);
             var ActualException = obj.LoadCSVFile();
             string ExpectedException = Enum_Exception.No_Such_File_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
@@ -55,7 +55,7 @@ namespace TestCensusAnalyser
         public void IncorrectFileTypeTest()
         {
             string path = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\WrongFileType.txt";
-            CSVStateCensusDAOIMPL obj = new CSVStateCensusDAOIMPL(path);
+            CSVStateCensus obj = new CSVStateCensus(path);
             string ActualException = obj.LoadCSVFile();
             string ExpectedException = Enum_Exception.File_Type_MisMatch_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
@@ -69,7 +69,7 @@ namespace TestCensusAnalyser
         public void IncorrectDelimiterTest()
         {
             string delimeter = ".";
-            CSVStateCensusDAOIMPL obj = new CSVStateCensusDAOIMPL(pathStateCensusDataFile, delimeter);
+            CSVStateCensus obj = new CSVStateCensus(pathStateCensusDataFile, delimeter);
             string ActualException = obj.LoadCSVFile();
             string ExpectedException = Enum_Exception.Incorrect_Delimiter_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
@@ -87,7 +87,7 @@ namespace TestCensusAnalyser
             string Header3 = "Area";
             string Header4 = "DentyPrSm";
             string Header = Header1 + Header2 + Header3 + Header4;
-            CSVStateCensusDAOIMPL obj = new CSVStateCensusDAOIMPL(pathStateCensusDataFile, null, Header);
+            CSVStateCensus obj = new CSVStateCensus(pathStateCensusDataFile, null, Header);
             string ActualException = obj.LoadCSVFile();
             string ExpectedException = Enum_Exception.Incorrect_Header_Exception.ToString();
             Assert.AreEqual(ActualException, ExpectedException);
@@ -174,14 +174,15 @@ namespace TestCensusAnalyser
         /// using dictionary
         /// </summary>
         [TestCase] 
-        public void ListSortStateNameTest()
+        public void SortStateNameTest() 
         {
             dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCensus", pathStateCensusDataFile);
             CensusAnalyserDelegate();
-            ICensusDAO censusObj = BuilderDirector.GetCensus();
-            censusObj.SortDictionary();
-            censusObj.SerializeDictionary(JsonPathStateData); 
-            string actual = censusObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCensusDataDAO>>(JsonPathStateData);
+            ICensus censusObj = BuilderDirector.GetCensus();
+            ICensusDAO censusdaoObj = new CensusDAO(censusObj);
+            censusdaoObj.SortDictionary();
+            censusdaoObj.SerializeDictionary(JsonPathStateData); 
+            string actual = censusdaoObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCensusDataDAO>>(JsonPathStateData);
             string expected = "Andhra Pradesh" + "West Bengal";
             Assert.AreEqual(actual,expected);
         }
@@ -192,14 +193,15 @@ namespace TestCensusAnalyser
         /// using dictionary
         /// </summary>
         [TestCase]
-        public void ListSortStateCodeTest()
+        public void SortStateCodeTest()
         {
             dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", pathCSVStateCodeFile);
             CensusAnalyserDelegate();
-            ICensusDAO censusObj = BuilderDirector.GetCensus();
-            censusObj.SortDictionary();
-            censusObj.SerializeDictionary(JsonPathStateCode);
-            string actual = censusObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCodeDataDAO>>(JsonPathStateCode);
+            ICensus censusObj = BuilderDirector.GetCensus();
+            ICensusDAO censusdaoObj = new CensusDAO(censusObj);
+            censusdaoObj.SortDictionary();
+            censusdaoObj.SerializeDictionary(JsonPathStateCode);
+            string actual = censusdaoObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCodeDataDAO>>(JsonPathStateCode);
             string expected = "Andhra Pradesh New" + "West Bengal";
             Assert.AreEqual(actual, expected);
         }
@@ -213,8 +215,9 @@ namespace TestCensusAnalyser
         {
             dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCensus", pathStateCensusDataFile);
             CensusAnalyserDelegate();
-            ICensusDAO censusObj = BuilderDirector.GetCensus();
-            int Actual_NumberOfTotalStatesSorted = censusObj.SortDictionaryMostPopulous();
+            ICensus censusObj = BuilderDirector.GetCensus();
+            ICensusDAO censusdaoObj = new CensusDAO(censusObj);
+            int Actual_NumberOfTotalStatesSorted = censusdaoObj.SortDictionaryMostPopulous();
             int expected = 29;
             Assert.AreEqual(expected, Actual_NumberOfTotalStatesSorted);
         }
