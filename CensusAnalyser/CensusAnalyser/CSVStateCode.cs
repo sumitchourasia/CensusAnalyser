@@ -63,6 +63,7 @@ namespace CensusAnalyser
                         else
                             count--;
                     }
+                    sr.Close();
                 }
                 return CensusCodeDictionary.Count.ToString(); 
             }

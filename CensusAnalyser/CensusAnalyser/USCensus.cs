@@ -72,6 +72,7 @@ namespace CensusAnalyser
                         else
                             count--;
                     }
+                    sr.Close();
                 }
                 return USCensusDictionary.Count.ToString();
             }

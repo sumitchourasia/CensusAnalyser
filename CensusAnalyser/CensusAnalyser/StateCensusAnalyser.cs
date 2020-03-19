@@ -63,6 +63,7 @@ namespace CensusAnalyser
                 }
             }
             Console.WriteLine(" state census analyser : "+StateCensusAnalyserDictionary.Count);
+            csvParser.Close();
             return StateCensusAnalyserDictionary.Count.ToString();
         }
     }

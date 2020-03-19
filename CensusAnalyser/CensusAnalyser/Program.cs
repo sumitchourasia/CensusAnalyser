@@ -60,9 +60,6 @@ namespace CensusAnalyser
             string data2 = CensusdaoObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCensusDataDAO>>(JsonPathStateData);
             Console.WriteLine("state census data file first and last statename data :" + data2);
 
-
-
-
             //// sort based on population
             Console.WriteLine("\n\n\n based on population \n\n\n");
             CensusdaoObj.SortDictionaryMostPopulous();

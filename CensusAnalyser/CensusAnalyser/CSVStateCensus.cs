@@ -71,6 +71,7 @@ namespace CensusAnalyser
                             CensusDataDictionaryArea.Add(count,node);
                         }
                     }
+                    sr.Close();
                 }
                 return CensusDataDictionary.Count.ToString(); 
             }
