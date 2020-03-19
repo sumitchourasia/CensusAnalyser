@@ -60,14 +60,6 @@ namespace CensusAnalyser
         public static Dictionary<int, IndianCensusCSVDTO> IndianCensusDictionary = new Dictionary<int, IndianCensusCSVDTO>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CensusDAO"/> class.
-        /// </summary>
-        public CensusDAO(ICensus censusObj)
-        {
-            this.censusObj = censusObj;
-        }
-
-        /// <summary>
         /// Prints the Dictionary.
         /// </summary>
         /// <param name="censusObj"> censusObj.</param>
@@ -281,7 +273,7 @@ namespace CensusAnalyser
             foreach ( dynamic item in dlist)
             {
                 if (length == 0 || length == count - 1)
-                    ddata += item.Value.StateName;
+                    ddata += item.Value.GetStateName();
                 length++;
             }
             return ddata;

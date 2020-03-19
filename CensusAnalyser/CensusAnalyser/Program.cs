@@ -48,20 +48,21 @@ namespace CensusAnalyser
             dynamic delegateDataobj = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCensus", PathCSVDataFile);
             delegateDataobj(); 
             ICensus CensusObj2 = BuilderDirector.GetCensus();
-            ///adapter
-            IAdaptorCensus adpaterObj = new AdaptorIndianCensusImpl();
-            adpaterObj.ConvertCensus(CensusObj2);
-            ///censusdao
-            ICensusDAO CensusdaoObj = new CensusDAO(CensusObj2);
+
+            ////adapter
+            BuilderDirector.ConvertCensusUsingAdapter(CensusObj2);
+            //// censusDao
+            ICensusDAO CensusdaoObj = BuilderDirector.CreateCensusDAO();
+            ///censusdao 
             CensusdaoObj.SortDictionary(CensusObj2 ,"StateName");
             Console.WriteLine("\n\n\n indian census data based on StateName \n\n\n"); 
             CensusdaoObj.PrintDictionary(CensusObj2, "StateName");
             dynamic serializedelgateobj = MyDelegate.CreateSerializeDelegate(CensusdaoObj);
-            serializedelgateobj(JsonPathStateData);
+            serializedelgateobj(JsonPathStateData);  
             CensusdaoObj.SerializeDictionary(JsonPathStateData);
-            string data2 = CensusdaoObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCensusAdapterDTO>>(JsonPathStateData);
+         //   string data2 = CensusdaoObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCensusAdapterDTO>>(JsonPathStateData);
           //  Console.WriteLine("state census data file first and last statename data :" + data2);
- 
+ /*
             //// sort based on population
             Console.WriteLine("\n\n\n based on population \n\n\n");
             CensusdaoObj.SortDictionary(CensusObj2,"Population");
@@ -102,15 +103,13 @@ namespace CensusAnalyser
             dynamic USCensusLoadDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("USCensus", PathUSCensusDataFile);
             USCensusLoadDelegate();
             ICensus USCensusObj = BuilderDirector.GetCensus();  
-            
-            IAdaptorCensus adapterObj = new USCensusAdapterIMPL();
-            adapterObj.ConvertCensus(USCensusObj);
+           
 
             ICensusDAO USCensusdaoObj = new CensusDAO(USCensusObj);
             USCensusdaoObj.SortDictionary(USCensusObj);
             USCensusdaoObj.PrintDictionary(USCensusObj);
             USCensusdaoObj.SerializeDictionary(JsonPathUSCensusMostPopulation);
-         
+         */
         }
     }
 }

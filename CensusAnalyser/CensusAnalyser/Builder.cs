@@ -204,5 +204,24 @@ namespace CensusAnalyser
         {
             _BuilderObj.Build(censusobject);
         }
+
+        /// <summary>
+        /// Creates the census DAO.
+        /// </summary>
+        /// <returns></returns>
+        public static ICensusDAO CreateCensusDAO()
+        {
+            return new CensusDAO(); 
+        }
+
+        public static void ConvertCensusUsingAdapter(ICensus CensusObj )
+        {
+            IAdaptorCensus AdapterObj = null;
+            if (CensusObj.GetType().ToString().Equals("CensusAnalyser.CSVStateCensus") || CensusObj.GetType().ToString().Equals("CensusAnalyser.CSVStateCode"))
+                 AdapterObj = AdaptorIndianCensusImpl.CreateIndiaCensusAdaptor(CensusObj);
+            if (CensusObj.GetType().ToString().Equals("CensusAnalyser.USCensus"))
+                AdapterObj = USCensusAdapterIMPL.CreateUSCensusIMPLAdapter(CensusObj);
+            AdapterObj.ConvertCensus();
+        }
     }
 }
