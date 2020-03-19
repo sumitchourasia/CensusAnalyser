@@ -41,6 +41,7 @@ namespace CensusAnalyser
         /// </summary>
         void SortDictionaryMostArea();
 
+        void SortUSCensus();
         /// <summary>
         /// Serializes the dictionary.
         /// </summary>
@@ -93,8 +94,8 @@ namespace CensusAnalyser
         /// </summary>
          Dictionary<int, StateCensusDataDAO> CensusDataDictionaryArea = CSVStateCensus.CensusDataDictionaryArea;
 
-        Dictionary<int, USCensusDataDAO> USCensusDictionary = USCensus.USCensusDictionary;
-
+      
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="CensusDAO"/> class.
         /// </summary>
@@ -151,7 +152,7 @@ namespace CensusAnalyser
             }
             else if ( censusObj.GetType().ToString().Equals("CensusAnalyser.USCensus"))
             {
-                DictionaryUSCensus = USCensusDictionary;
+                DictionaryUSCensus = USCensus.USCensusDictionary;
                 foreach (KeyValuePair<int, USCensusDataDAO> keyValue in DictionaryUSCensus)
                 {
                     USCensusDataDAO element = keyValue.Value;
@@ -293,8 +294,8 @@ namespace CensusAnalyser
                 DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryPopulationDensity);
             else if (jsonpath.Contains("MostArea"))
                 DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryArea);
-            else if (jsonpath.Contains("Merged"))
-                DictionaryinString = JsonConvert.SerializeObject(AdaptorIndianCensusImpl.IndianCensusMergedDictionary);
+            else if (jsonpath.Contains("USCensusPopulation"))
+                DictionaryinString = JsonConvert.SerializeObject(USCensus.USCensusDictionary);
             else
                 DictionaryinString = null;
             File.WriteAllText(jsonpath, DictionaryinString);
@@ -352,6 +353,23 @@ namespace CensusAnalyser
                 length++;
             }
             return ddata;
+        }
+
+        /// <summary>
+        /// Sorts the us census.
+        /// </summary>
+        public void SortUSCensus()
+        {
+            Dictionary<int, USCensusDataDAO> uscensusDictionary2= new Dictionary<int,USCensusDataDAO>();
+           int count = 0;
+            if (censusObj.GetType().ToString().Equals("CensusAnalyser.USCensus"))
+            {
+                foreach (KeyValuePair<int, USCensusDataDAO> keyvalueUS in USCensus.USCensusDictionary.OrderByDescending(key => key.Value.Population))
+                {
+                    uscensusDictionary2.Add(++count, keyvalueUS.Value);
+                }
+            }
+            USCensus.USCensusDictionary = uscensusDictionary2;
         }
     }
 }

@@ -38,7 +38,7 @@ namespace CensusAnalyser
         public static Delegate CreateCensusAnalyserLoadFileDelegate(ICensus CensusObj)
         {
             CensusDelegates delegateobject = new CensusDelegates(CensusObj.LoadCSVFile);
-            return delegateobject;
+            return delegateobject; 
         }
 
         /// <summary>

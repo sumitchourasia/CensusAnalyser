@@ -185,7 +185,7 @@ namespace CensusAnalyser
             return _CensusObj;
         }
 
-        /// <summary>
+        /// <summary> 
         /// Creates the builder.
         /// </summary>
         /// <returns></returns>

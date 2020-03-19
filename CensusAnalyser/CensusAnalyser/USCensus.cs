@@ -58,8 +58,6 @@ namespace CensusAnalyser
             {
                 if (!File.Exists(this.Path))
                     throw new CensusAnalyserException(Enum_Exception.No_Such_File_Exception.ToString());
-                if (!Regex.IsMatch(this.Path, "^[a-zA-Z][:][\a-zA-Z]+.csv$"))
-                    throw new CensusAnalyserException(Enum_Exception.File_Type_MisMatch_Exception.ToString());
                 using (StreamReader sr = new StreamReader(Path))
                 {
                     string element;

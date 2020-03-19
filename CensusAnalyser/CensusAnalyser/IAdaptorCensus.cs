@@ -84,8 +84,6 @@ namespace CensusAnalyser
     /// </summary>
     public class USCensusAdapter : IAdaptorCensus
     {
-        public static Dictionary<int, USCensusDataDAO> USCensusAdapterDictionary = USCensus.USCensusDictionary;
-
         /// <summary>
         /// unimplemeted method
         /// </summary>
@@ -101,7 +99,7 @@ namespace CensusAnalyser
         /// <returns>Dictionary<int, USCensusDataDAO></returns>
         public Dictionary<int, USCensusDataDAO> ConvertUSCensus()
         {
-            return USCensusAdapterDictionary;
+            return USCensus.USCensusDictionary ;
         }
     }
 }
