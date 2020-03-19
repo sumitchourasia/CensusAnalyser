@@ -64,6 +64,10 @@ namespace CensusAnalyser
     {
         ICensus censusObj = null;
 
+        public static Dictionary<int, StateCensusDataDAO> CensusDataDictionarysorted = null;
+
+        public static Dictionary<int, StateCodeDataDAO> CensusCodeDictionarysorted = null;
+
         /// <summary>
         /// The census code dictionary 
         /// </summary>
@@ -190,6 +194,7 @@ namespace CensusAnalyser
                     CensusDataDictionary2.Add(count, keyvalue.Value);
                 }
                 CensusDataDictionary = CensusDataDictionary2;
+                CensusDataDictionarysorted = CensusDataDictionary2;
             }
             else if(censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCode".ToLower()))
             {
@@ -200,6 +205,7 @@ namespace CensusAnalyser
                     CensusCodeDictionary2.Add(count, keyvalue.Value);
                 }
                 CensusCodeDictionary = CensusCodeDictionary2;
+                CensusCodeDictionarysorted = CensusCodeDictionary2;
             }
         }
 
@@ -287,6 +293,8 @@ namespace CensusAnalyser
                 DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryPopulationDensity);
             else if (jsonpath.Contains("MostArea"))
                 DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryArea);
+            else if (jsonpath.Contains("Merged"))
+                DictionaryinString = JsonConvert.SerializeObject(AdaptorIndianCensusImpl.IndianCensusMergedDictionary);
             else
                 DictionaryinString = null;
             File.WriteAllText(jsonpath, DictionaryinString);
@@ -295,7 +303,7 @@ namespace CensusAnalyser
         /// <summary> 
         /// Reads the file.
         /// </summary>
-        /// <param name="path">The path.</param>
+        /// <param name="path">The path.</param> 
         /// <returns></returns>
         public static string ReadFile(string path)
         {

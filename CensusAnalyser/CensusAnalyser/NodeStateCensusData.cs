@@ -5,6 +5,7 @@
 namespace CensusAnalyser
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Class StateCensusData Implements IComparable<>
@@ -156,7 +157,7 @@ namespace CensusAnalyser
         /// <summary>
         /// TotalArea
         /// </summary>
-        public double TotalArea;
+        public double TotalArea; 
 
         /// <summary>
         /// WaterArea
@@ -218,4 +219,76 @@ namespace CensusAnalyser
         }
     }
    
+
+    public class MergedIndianCensusDataModalDao
+    {
+        /// <summary>
+        /// The serial no
+        /// </summary>
+        public int SerialNo;
+
+        /// <summary>
+        /// statename
+        /// </summary>
+        public string StateName;
+
+        /// <summary>
+        /// population
+        /// </summary>
+        public int Population;
+
+        /// <summary>
+        /// area in sq km
+        /// </summary>
+        public int AreaInSqKm;
+
+        /// <summary>
+        /// density per sq km
+        /// </summary>
+        public int DensityPerSqKm;
+       
+        /// <summary>
+        /// The tin
+        /// </summary>
+        public int TIN;
+
+        /// <summary>
+        /// The state code
+        /// </summary>
+        public string StateCode;
+
+
+        /// <summary> 
+        /// Creates the node.
+        /// </summary>
+        /// <param name="element">The element.</param>
+        /// <returns></returns>
+        public static MergedIndianCensusDataModalDao createNode(StateCensusDataDAO StateCensusDataDictionary  , StateCodeDataDAO StateCensusCodeDictionary)
+        {
+            MergedIndianCensusDataModalDao newnode = null;
+            try 
+            {
+                newnode = new MergedIndianCensusDataModalDao();
+
+                if (StateCensusCodeDictionary != null)
+                {
+                    newnode.SerialNo = StateCensusCodeDictionary.SerialNo;
+                    newnode.StateName = StateCensusCodeDictionary.StateName;
+                    newnode.TIN = StateCensusCodeDictionary.TIN;
+                    newnode.StateCode = StateCensusCodeDictionary.StateCode;
+                }
+                if (StateCensusDataDictionary != null)
+                {
+                    newnode.Population = StateCensusDataDictionary.Population;
+                    newnode.AreaInSqKm = StateCensusDataDictionary.AreaInSqKm;
+                    newnode.DensityPerSqKm = StateCensusDataDictionary.DensityPerSqKm;
+                }
+                return newnode;
+            }
+            catch (Exception)
+            {
+                return newnode;
+            }
+        }
+    }
 }

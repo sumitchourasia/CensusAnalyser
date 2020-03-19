@@ -25,7 +25,7 @@ namespace CensusAnalyser
             string JsonPathMostPopulous = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\MostPopulous.json";
             string JsonPathPopulationDensity = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\PopulationDensity.json";
             string JsonPathMostArea = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\MostArea.json";
-            
+
 
             /* ////without using delegate
              BuilderDirector.CreateBuilder();
@@ -95,28 +95,31 @@ namespace CensusAnalyser
              string data3 = CensusdaoObj2.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCodeDataDAO>>(JsonPathStateCode);
              Console.WriteLine("state code file first and last state name data :" + data3);*/
 
-          /*  dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", PathCSVCodeFile);
+            dynamic delegateDataobj = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCensus", PathCSVDataFile);
+            delegateDataobj();
+            ICensus CensusObj2 = BuilderDirector.GetCensus();
+            ICensusDAO CensusdaoObj = new CensusDAO(CensusObj2);
+            CensusdaoObj.SortDictionary();
+
+            dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", PathCSVCodeFile);
             CensusAnalyserDelegate();
             ICensus censusObj = BuilderDirector.GetCensus();
             ICensusDAO censusdaoObj = new CensusDAO(censusObj);
             censusdaoObj.SortDictionary();
-            censusdaoObj.SerializeDictionary(JsonPathStateCode);
-            string actual = censusdaoObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCodeDataDAO>>(JsonPathStateCode);
-            string expected = "Andhra Pradesh New" + "West Bengal";
-            Console.WriteLine(actual);*/ 
 
+            IAdaptorCensus adapterObj = new AdaptorIndianCensusImpl();
+            adapterObj.ConvertIndianCensus();
+            censusdaoObj.SerializeDictionary(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\Merged.json");
 
-            dynamic delegateDataobj = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("USCensus", PathUSCensusDataFile);
-            delegateDataobj();
-            ICensus CensusObj2 = BuilderDirector.GetCensus();
-            ICensusDAO CensusdaoObj = new CensusDAO(CensusObj2);
+            /* dynamic delegateDataobj = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("USCensus", PathUSCensusDataFile);
+             delegateDataobj();
+             ICensus CensusObj2 = BuilderDirector.GetCensus();
+             ICensusDAO CensusdaoObj = new CensusDAO(CensusObj2);
+            // CensusdaoObj.PrintDictionary(CensusObj2);
+             Console.WriteLine(CensusObj2.GetType());
+             Console.WriteLine(CensusdaoObj.GetType());
+ */
 
-            CensusdaoObj.PrintDictionary(CensusObj2);
-
-            Console.WriteLine(CensusObj2.GetType());
-            Console.WriteLine(CensusdaoObj.GetType());
-
-           
         }
     }
 }

@@ -20,8 +20,8 @@ namespace CensusAnalyser
         {
 
         }
-
-        /// <summary>
+             
+        /// <summary>             
         /// Initializes a new instance of the <see cref="CSVStateCode"/> class.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -60,6 +60,8 @@ namespace CensusAnalyser
                         node = StateCodeDataDAO.createNode(element);
                         if (node != null)
                             CensusCodeDictionary.Add(count, node);
+                        else
+                            count--;
                     }
                 }
                 return CensusCodeDictionary.Count.ToString(); 
