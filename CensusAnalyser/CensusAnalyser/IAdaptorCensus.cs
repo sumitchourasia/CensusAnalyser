@@ -8,9 +8,7 @@ namespace CensusAnalyser
     /// </summary>
     public interface IAdaptorCensus
     {
-        Dictionary<int, MergedIndianCensusDataModalDao> ConvertIndianCensus();
-        Dictionary<int, USCensusDataDAO> ConvertUSCensus();
-      //  void ConvertUSCensus();
+        void ConvertCensus(ICensus CensusObj);
     }
 
     /// <summary>
@@ -19,9 +17,9 @@ namespace CensusAnalyser
     /// <seealso cref="CensusAnalyser.IAdaptorCensus" />
     public class AdaptorIndianCensusImpl : IAdaptorCensus
     {
-
-        public static Dictionary<int, MergedIndianCensusDataModalDao> IndianCensusMergedDictionary = new Dictionary<int, MergedIndianCensusDataModalDao>();
-
+        public static Dictionary<int, StateCensusAdapterDTO> StateCensusAdapterDictionary = new Dictionary<int, StateCensusAdapterDTO>();
+        public static Dictionary<int, StateCodeAdapterDTO> StateCodeAdaptorDictionary = new Dictionary<int, StateCodeAdapterDTO>();
+      
         /// <summary>
         /// No-Arg Constructor
         /// </summary>
@@ -30,76 +28,75 @@ namespace CensusAnalyser
         }
 
         /// <summary>
-        /// Method to covert india census data so as to be able to be operated upon by CensusDAO
-        /// </summary>
-        /// <returns> Dictionary<int, MergedIndianCensusDataModalDao></returns>
-        public Dictionary<int, MergedIndianCensusDataModalDao> ConvertIndianCensus()
-        {
-            bool flag = false;
-            MergedIndianCensusDataModalDao newnode = null;
-            Dictionary<int, StateCodeDataDAO> stateCodeData = CensusDAO.CensusCodeDictionarysorted ;
-            Dictionary<int, StateCensusDataDAO> stateCensusData = CensusDAO.CensusDataDictionarysorted;
-            int count = 0;
-                foreach (var keyvalueCode in stateCodeData)
-                {
-                    flag = false;
-                        foreach (KeyValuePair<int, StateCensusDataDAO> keyandvalueState in stateCensusData)
-                        {
-                            if (keyandvalueState.Value.StateName.Equals(keyvalueCode.Value.StateName))
-                            {
-                                newnode = MergedIndianCensusDataModalDao.createNode(keyandvalueState.Value, keyvalueCode.Value);
-                            //Console.WriteLine(++count + " - " + newnode.StateName);
-                            IndianCensusMergedDictionary.Add(++count, newnode);
-                                flag = true;
-                                break;
-                            }
-                        }
-                    if (flag==false)
-                    {
-                        newnode = MergedIndianCensusDataModalDao.createNode(null, keyvalueCode.Value);
-                        // Console.WriteLine(++count + " - " + newnode.StateName);
-                        IndianCensusMergedDictionary.Add(++count, newnode);
-                    }
-                }
-                foreach(KeyValuePair<int,MergedIndianCensusDataModalDao> keyandvalue in IndianCensusMergedDictionary)
-                {
-                    Console.WriteLine(keyandvalue.Value.StateName);
-                }
-            return IndianCensusMergedDictionary;
-        }
-
-
-        /// <summary>
-        /// unimplemented method
+        /// Converts the census.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<int, USCensusDataDAO> ConvertUSCensus()
+       public void ConvertCensus(ICensus CensusObj)
         {
-            throw new NotImplementedException();
+            int count = 0;
+            if (CensusObj.GetType().ToString().Equals("CensusAnalyser.CSVStateCensus"))
+            {
+                StateCensusAdapterDTO newstatecensusObj = null;
+                foreach (KeyValuePair<int, StateCensusDataDAO> keyvalueState in CSVStateCensus.CensusDataDictionary)
+                {
+                    newstatecensusObj = new StateCensusAdapterDTO();
+                    newstatecensusObj.SetStateName(keyvalueState.Value.StateName);
+                    newstatecensusObj.SetPopulation(keyvalueState.Value.Population);
+                    newstatecensusObj.SetArea(keyvalueState.Value.AreaInSqKm);
+                    newstatecensusObj.SetDensity(keyvalueState.Value.DensityPerSqKm);
+                    StateCensusAdapterDictionary.Add(++count, newstatecensusObj);
+                }
+            }
+            else if(CensusObj.GetType().ToString().Equals("CensusAnalyser.CSVStateCode"))
+            {
+                StateCodeAdapterDTO newdtoObj = null;// 
+                foreach (KeyValuePair<int, StateCodeDataDAO> keyvalueState in CSVStateCode.CensusCodeDictionary)
+                {
+                    newdtoObj = new StateCodeAdapterDTO();
+                    newdtoObj.SetStateName(keyvalueState.Value.StateName);
+                    newdtoObj.SetSerialNumber(keyvalueState.Value.SerialNo);
+                    newdtoObj.SetStateCode(keyvalueState.Value.StateCode);
+                    newdtoObj.SetTIN(keyvalueState.Value.TIN);
+                    StateCodeAdaptorDictionary.Add(++count, newdtoObj);
+                }
+            }
         }
     }
-
+     
     /// <summary>
     /// method to convert the USCensus data to readable form by CensusDAO
     /// </summary>
-    public class USCensusAdapter : IAdaptorCensus
+    public class USCensusAdapterIMPL : IAdaptorCensus
     {
-        /// <summary>
-        /// unimplemeted method
-        /// </summary>
-        /// <returns></returns>
-        public Dictionary<int, MergedIndianCensusDataModalDao> ConvertIndianCensus()
-        {
-            throw new NotImplementedException();
-        }
+
+        public static Dictionary<int, USCensusAdapterDTO> USCensusAdapterDictionary = new Dictionary<int, USCensusAdapterDTO>();
 
         /// <summary>
-        /// convert USCensus Data 
+        /// Converts the census.
         /// </summary>
-        /// <returns>Dictionary<int, USCensusDataDAO></returns>
-        public Dictionary<int, USCensusDataDAO> ConvertUSCensus()
+        /// <returns></returns>
+        public void ConvertCensus(ICensus CensusObj)
         {
-            return USCensus.USCensusDictionary ;
+            if (CensusObj.GetType().ToString().Equals("CensusAnalyser.USCensus"))
+            {
+                USCensusAdapterDTO newstatecensusObj = null;
+                int count = 0;
+                foreach (KeyValuePair<int, USCensusDataDAO> keyvalueState in USCensus.USCensusDictionary)
+                { 
+                    newstatecensusObj = new USCensusAdapterDTO(); 
+                    newstatecensusObj.SetStateName(keyvalueState.Value.State);
+                    newstatecensusObj.SetPopulation(keyvalueState.Value.Population);
+                    newstatecensusObj.SetStateCode(keyvalueState.Value.StateId);
+                    newstatecensusObj.SetHousingUnit(keyvalueState.Value.HousingUnits);
+                    newstatecensusObj.SetHousingDensity(keyvalueState.Value.HousingDensity);
+                    newstatecensusObj.SetPopulationDensity(keyvalueState.Value.PopulationDensity); 
+                    newstatecensusObj.SetTotalArea(keyvalueState.Value.TotalArea);
+                    newstatecensusObj.SetWaterArea(keyvalueState.Value.WaterArea);
+                    newstatecensusObj.SetLandArea(keyvalueState.Value.LandArea);
+                    ////Add into dictionary
+                    USCensusAdapterDictionary.Add(++count, newstatecensusObj);
+                }
+            }
         }
     }
 }

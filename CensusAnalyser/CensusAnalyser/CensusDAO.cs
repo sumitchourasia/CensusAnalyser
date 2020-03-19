@@ -15,6 +15,11 @@ namespace CensusAnalyser
     /// </summary>
     public interface ICensusDAO 
     {
+        /// <summary>
+        /// Creates the indian census.
+        /// </summary>
+        /// <returns>  Dictionary<int, IndianCensusCSVDTO></returns>
+        Dictionary<int, IndianCensusCSVDTO> CreateIndianCensus();
 
         /// <summary>
         /// Prints the dictionary.
@@ -24,24 +29,8 @@ namespace CensusAnalyser
         /// <summary>
         /// Sorts the dictionary.
         /// </summary>
-        void SortDictionary();
+        int SortDictionary( ICensus CensusObj , String SortBasedOn="StateName");
 
-        /// <summary>
-        /// Sorts the dictionary most populous.
-        /// </summary>
-        int SortDictionaryMostPopulous();
-
-        /// <summary>
-        /// Sorts the dictionary population density.
-        /// </summary>
-        void SortDictionaryPopulationDensity();
-
-        /// <summary>
-        /// Sorts the dictionary in descending order.
-        /// </summary>
-        void SortDictionaryMostArea();
-
-        void SortUSCensus();
         /// <summary>
         /// Serializes the dictionary.
         /// </summary>
@@ -65,37 +54,11 @@ namespace CensusAnalyser
     {
         ICensus censusObj = null;
 
-        public static Dictionary<int, StateCensusDataDAO> CensusDataDictionarysorted = null;
-
-        public static Dictionary<int, StateCodeDataDAO> CensusCodeDictionarysorted = null;
-
         /// <summary>
-        /// The census code dictionary 
+        /// IndianCensusDictionary 
         /// </summary>
-         Dictionary<int , StateCensusDataDAO> CensusDataDictionary = CSVStateCensus.CensusDataDictionary;
+        public static Dictionary<int, IndianCensusCSVDTO> IndianCensusDictionary = new Dictionary<int, IndianCensusCSVDTO>();
 
-        /// <summary>
-        /// The census data dictionary 
-        /// </summary>
-         Dictionary<int, StateCodeDataDAO> CensusCodeDictionary = CSVStateCode.CensusCodeDictionary;
-
-        /// <summary>
-        /// The census code dictionary 
-        /// </summary>
-         Dictionary<int, StateCensusDataDAO> CensusDataDictionaryMostPopulous = CSVStateCensus.CensusDataDictionaryMostPopulous;
-
-        /// <summary>
-        /// The census code dictionary
-        /// </summary>
-         Dictionary<int, StateCensusDataDAO> CensusDataDictionaryPopulationDensity = CSVStateCensus.CensusDataDictionaryPopulationDensity;
-
-        /// <summary>
-        /// The census code dictionary
-        /// </summary>
-         Dictionary<int, StateCensusDataDAO> CensusDataDictionaryArea = CSVStateCensus.CensusDataDictionaryArea;
-
-      
-        
         /// <summary>
         /// Initializes a new instance of the <see cref="CensusDAO"/> class.
         /// </summary>
@@ -108,65 +71,56 @@ namespace CensusAnalyser
         /// Prints the Dictionary.
         /// </summary>
         /// <param name="censusObj"> censusObj.</param>
-        public void PrintDictionary(ICensus censusObj ,String SortbasedOn="StateName")
-        {
-            Dictionary<int , StateCensusDataDAO> DictionaryStateData;
-            Dictionary<int , StateCodeDataDAO> DictionaryStateCode;
-            Dictionary<int, USCensusDataDAO> DictionaryUSCensus;
-            if (censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCensus".ToLower()))
+        public void PrintDictionary(ICensus CensusObj ,String SortbasedOn="StateName")
+        { 
+            Dictionary<int , StateCensusAdapterDTO> DictionaryStateData;
+            Dictionary<int , StateCodeAdapterDTO> DictionaryStateCode;
+
+            if (CensusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCensus".ToLower()))
             {
-                    if (SortbasedOn.Equals("StateName"))
-                        DictionaryStateData = CensusDataDictionary;
-                    else if (SortbasedOn.Equals("Population"))
-                        DictionaryStateData = CensusDataDictionaryMostPopulous;
-                    else if (SortbasedOn.Equals("Density"))
-                        DictionaryStateData =CensusDataDictionaryPopulationDensity;
-                    else if (SortbasedOn.Equals("Area"))
-                        DictionaryStateData = CensusDataDictionaryArea;
-                    else
-                        DictionaryStateData = null;
-                    foreach (KeyValuePair<int, StateCensusDataDAO> keyValue in DictionaryStateData)
-                    {
-                        StateCensusDataDAO element = keyValue.Value;
-                        Console.WriteLine("key : " + keyValue.Key);
-                        Console.WriteLine("Value : ");
-                        Console.WriteLine("\tStateName : " + element.StateName);
-                        Console.WriteLine("\tPopulation : " + element.Population);
-                        Console.WriteLine("\tAreaInSqKm : " + element.AreaInSqKm);
-                        Console.WriteLine("\tDensityPerSqKm : " + element.DensityPerSqKm + " ");
-                    }
-            }
-            else if (censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCode".ToLower()))
-            {
-                DictionaryStateCode = CensusCodeDictionary;
-                foreach (KeyValuePair<int, StateCodeDataDAO> keyValue in DictionaryStateCode)
+                DictionaryStateData = AdaptorIndianCensusImpl.StateCensusAdapterDictionary;
+               
+                foreach (KeyValuePair<int, StateCensusAdapterDTO> keyValue in DictionaryStateData)
                 {
-                    StateCodeDataDAO element = keyValue.Value;
+                    StateCensusAdapterDTO element = keyValue.Value;
                     Console.WriteLine("key : " + keyValue.Key);
                     Console.WriteLine("Value : ");
-                    Console.WriteLine("\tSerialNo :  " + element.SerialNo);
-                    Console.WriteLine("\tStateName : " + element.StateName);
-                    Console.WriteLine("\tIN :       " + element.TIN);
-                    Console.WriteLine("\tStateCode : " + element.StateCode); 
+                    Console.WriteLine("\tStateName : " + element.GetStateName());
+                    Console.WriteLine("\tPopulation : " + element.GetPopulation());
+                    Console.WriteLine("\tAreaInSqKm : " + element.GetArea());
+                    Console.WriteLine("\tDensityPerSqKm : " + element.GetDensity());
                 }
             }
-            else if ( censusObj.GetType().ToString().Equals("CensusAnalyser.USCensus"))
+            else if (CensusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCode".ToLower()))
             {
-                DictionaryUSCensus = USCensus.USCensusDictionary;
-                foreach (KeyValuePair<int, USCensusDataDAO> keyValue in DictionaryUSCensus)
+                DictionaryStateCode = AdaptorIndianCensusImpl.StateCodeAdaptorDictionary;
+                foreach (KeyValuePair<int, StateCodeAdapterDTO> keyValue in DictionaryStateCode)
                 {
-                    USCensusDataDAO element = keyValue.Value;
+                    StateCodeAdapterDTO element = keyValue.Value;
                     Console.WriteLine("key : " + keyValue.Key);
                     Console.WriteLine("Value : ");
-                    Console.WriteLine("\tStateId :  " + element.StateId);
-                    Console.WriteLine("\tStateName : " + element.State);
-                    Console.WriteLine("\tPopulation : " + element.Population);
-                    Console.WriteLine("\tHousingUnits : " + element.HousingUnits);
-                    Console.WriteLine("\tTotalArea :  " + element.TotalArea);
-                    Console.WriteLine("\tWaterArea : " + element.WaterArea);
-                    Console.WriteLine("\tLandArea : " + element.LandArea);
-                    Console.WriteLine("\tPopulationDensity : " + element.PopulationDensity);
-                    Console.WriteLine("\tHousingDensity : " + element.HousingDensity);
+                    Console.WriteLine("\tSerialNo :  " + element.GetSerialNumber());
+                    Console.WriteLine("\tStateName : " + element.GetStateName());
+                    Console.WriteLine("\tIN :       " + element.GetTIN());
+                    Console.WriteLine("\tStateCode : " + element.GetStateCode()); 
+                }
+            }
+            else if (CensusObj.GetType().ToString().Equals("CensusAnalyser.USCensus"))
+            {
+                foreach (KeyValuePair<int, USCensusAdapterDTO> keyValue in USCensusAdapterIMPL.USCensusAdapterDictionary)
+                {
+                    USCensusAdapterDTO element = keyValue.Value;
+                    Console.WriteLine("key : " + keyValue.Key);
+                    Console.WriteLine("Value : ");
+                    Console.WriteLine("\tStateId :  " + element.GetStateCode());
+                    Console.WriteLine("\tStateName : " + element.GetStateName());
+                    Console.WriteLine("\tPopulation : " + element.GetPopulation());
+                    Console.WriteLine("\tHousingUnits : " + element.GetHousingUnit());
+                    Console.WriteLine("\tTotalArea :  " + element.GetTotalArea());
+                    Console.WriteLine("\tWaterArea : " + element.GetWaterArea());
+                    Console.WriteLine("\tLandArea : " + element.GetLandArea());
+                    Console.WriteLine("\tPopulationDensity : " + element.GetPopulationDensity());
+                    Console.WriteLine("\tHousingDensity : " + element.GetHousingDensity());
                 }
             }
         }
@@ -174,107 +128,87 @@ namespace CensusAnalyser
         /// <summary> 
         /// Sorts the dictionary. 
         /// </summary>
-        public void SortDictionary()
+        public int SortDictionary(ICensus CensusObj, string SortBasedOn="StateName")
         {    /// <summary>
              /// The census code dictionary
              /// </summary>
-           Dictionary<int, StateCensusDataDAO> CensusDataDictionary2 = new Dictionary<int, StateCensusDataDAO>();
-
-             /// <summary>
-             /// The census code dictionary
-             /// </summary>
-           Dictionary<int, StateCodeDataDAO> CensusCodeDictionary2 = new Dictionary<int, StateCodeDataDAO>();
+           Dictionary<int, StateCensusAdapterDTO> CensusDataDictionaryTemp = new Dictionary<int, StateCensusAdapterDTO>();
 
            int count = 0;   
 
-            if (censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCensus".ToLower())) 
+            if (CensusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCensus".ToLower())) 
             {
-                foreach (KeyValuePair<int, StateCensusDataDAO> keyvalue in CensusDataDictionary.OrderBy(key => key.Value.StateName))
+                ////begining of switch
+                switch (SortBasedOn)
                 {
-                    count++;
-                    CensusDataDictionary2.Add(count, keyvalue.Value);
+                    case "StateName":
+                            foreach (KeyValuePair<int, StateCensusAdapterDTO> keyvalue in AdaptorIndianCensusImpl.StateCensusAdapterDictionary.OrderBy(key => key.Value.GetStateName()))
+                            {
+                                count++;
+                                CensusDataDictionaryTemp.Add(count, keyvalue.Value);
+                            }
+                            AdaptorIndianCensusImpl.StateCensusAdapterDictionary = CensusDataDictionaryTemp;
+                            return AdaptorIndianCensusImpl.StateCensusAdapterDictionary.Count;
+                    case "Population":
+                            count = 0;
+                            foreach (KeyValuePair<int, StateCensusAdapterDTO> keyvalue in AdaptorIndianCensusImpl.StateCensusAdapterDictionary.OrderByDescending(key => key.Value.GetPopulation()))
+                            {
+                                count++;
+                                CensusDataDictionaryTemp.Add(count, keyvalue.Value);
+                            }
+                            AdaptorIndianCensusImpl.StateCensusAdapterDictionary = CensusDataDictionaryTemp;
+                            return AdaptorIndianCensusImpl.StateCensusAdapterDictionary.Count;
+                    case "Density":
+                            count = 0;
+                            foreach (KeyValuePair<int, StateCensusAdapterDTO> keyvalue in AdaptorIndianCensusImpl.StateCensusAdapterDictionary.OrderByDescending(key => key.Value.GetDensity()))
+                            {
+                                CensusDataDictionaryTemp.Add(++count, keyvalue.Value);
+                            }
+                            AdaptorIndianCensusImpl.StateCensusAdapterDictionary = CensusDataDictionaryTemp;
+                            return AdaptorIndianCensusImpl.StateCensusAdapterDictionary.Count;
+                    case  "Area":
+                            count = 0;
+                            foreach (KeyValuePair<int, StateCensusAdapterDTO> keyvalue in AdaptorIndianCensusImpl.StateCensusAdapterDictionary.OrderByDescending(key => key.Value.GetArea()))
+                            {
+                                count++;
+                                CensusDataDictionaryTemp.Add(count, keyvalue.Value);
+                            }
+                            AdaptorIndianCensusImpl.StateCensusAdapterDictionary = CensusDataDictionaryTemp;
+                            return AdaptorIndianCensusImpl.StateCensusAdapterDictionary.Count;
                 }
-                CensusDataDictionary = CensusDataDictionary2;
-                CensusDataDictionarysorted = CensusDataDictionary2;
+                //end of switch
             }
-            else if(censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCode".ToLower()))
+            else if (CensusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCode".ToLower()))
             {
                 count = 0;
-                foreach (KeyValuePair<int, StateCodeDataDAO> keyvalue in CensusCodeDictionary.OrderBy(key => key.Value.StateCode))
+                /// <summary>
+                /// The census code dictionary
+                /// </summary>
+                Dictionary<int, StateCodeAdapterDTO> CensusCodeDictionaryTemp = new Dictionary<int, StateCodeAdapterDTO>();
+                foreach (KeyValuePair<int, StateCodeAdapterDTO> keyvalue in AdaptorIndianCensusImpl.StateCodeAdaptorDictionary.OrderBy(key => key.Value.GetStateCode()))
                 {
                     count++;
-                    CensusCodeDictionary2.Add(count, keyvalue.Value);
+                    CensusCodeDictionaryTemp.Add(count, keyvalue.Value);
                 }
-                CensusCodeDictionary = CensusCodeDictionary2;
-                CensusCodeDictionarysorted = CensusCodeDictionary2;
+                AdaptorIndianCensusImpl.StateCodeAdaptorDictionary = CensusCodeDictionaryTemp;
+                return AdaptorIndianCensusImpl.StateCodeAdaptorDictionary.Count;
             }
-        }
-
-        /// <summary>
-        /// Sorts the dictionary based on decensding order of population.
-        /// </summary>
-        public int SortDictionaryMostPopulous() 
-        {
-            /// <summary>
-            /// The census code dictionary
-            /// </summary>
-            Dictionary<int, StateCensusDataDAO> CensusDataDictionaryMostPopulous2 = new Dictionary<int, StateCensusDataDAO>();
-            int count = 0; 
-            if (censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCensus".ToLower()))
+            else if (CensusObj.GetType().ToString().Equals("CensusAnalyser.USCensus"))
             {
-                foreach (KeyValuePair<int, StateCensusDataDAO> keyvalue in CensusDataDictionaryMostPopulous.OrderByDescending(key => key.Value.Population))
+                count = 0;
+                /// <summary>
+                /// The us census adapter dictionary2
+                /// </summary>
+                Dictionary<int, USCensusAdapterDTO> USCensusAdapterDictionarytemp = new Dictionary<int, USCensusAdapterDTO>();
+                
+                foreach (KeyValuePair<int, USCensusAdapterDTO> keyvalueUS in USCensusAdapterIMPL.USCensusAdapterDictionary.OrderByDescending(key => key.Value.GetPopulation()))
                 {
-                    count++; 
-                    CensusDataDictionaryMostPopulous2.Add(count, keyvalue.Value); 
+                    USCensusAdapterDictionarytemp.Add(++count, keyvalueUS.Value);
                 }
-                CensusDataDictionaryMostPopulous = CensusDataDictionaryMostPopulous2; 
+                USCensusAdapterIMPL.USCensusAdapterDictionary = USCensusAdapterDictionarytemp;
+                return USCensusAdapterIMPL.USCensusAdapterDictionary.Count;
             }
-            return count;
-        }
-
-        /// <summary>
-        /// Sorts the dictionary based on population density.
-        /// </summary>
-        /// <returns></returns>
-        public void SortDictionaryPopulationDensity()
-        {
-            /// <summary>
-            /// The census code dictionary
-            /// </summary>
-            Dictionary<int, StateCensusDataDAO> CensusDataDictionaryPopulationDensity2 = new Dictionary<int, StateCensusDataDAO>();
-
-            int count = 0;
-            if (censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCensus".ToLower()))
-            {
-                foreach (KeyValuePair<int, StateCensusDataDAO> keyvalue in CensusDataDictionaryMostPopulous.OrderByDescending(key => key.Value.DensityPerSqKm))
-                {
-                    count++;
-                    CensusDataDictionaryPopulationDensity2.Add(count, keyvalue.Value);
-                }
-                CensusDataDictionaryPopulationDensity = CensusDataDictionaryPopulationDensity2;
-            }
-        }
-
-        /// <summary>
-        /// Sorts the dictionary in descending order.
-        /// </summary>
-        public void SortDictionaryMostArea()
-        {
-            /// <summary>
-            /// The census code dictionary
-            /// </summary>
-            Dictionary<int, StateCensusDataDAO> CensusDataDictionaryArea2 = new Dictionary<int, StateCensusDataDAO>();
-
-            int count = 0;
-            if (censusObj.GetType().ToString().ToLower().Equals("CensusAnalyser.CSVStateCensus".ToLower())) 
-            {
-                foreach (KeyValuePair<int, StateCensusDataDAO> keyvalue in CensusDataDictionaryArea.OrderByDescending(key => key.Value.AreaInSqKm))
-                {
-                    count++;
-                    CensusDataDictionaryArea2.Add(count, keyvalue.Value);
-                }
-                CensusDataDictionaryArea = CensusDataDictionaryArea2;
-            }
+            return 0;
         }
 
         /// <summary>
@@ -284,20 +218,18 @@ namespace CensusAnalyser
         public void SerializeDictionary(string jsonpath)
         {
             string DictionaryinString = null;
-            if (jsonpath.Contains("StateName"))
-                DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionary);
+
+            if (jsonpath.Contains("StateName") || jsonpath.Contains("MostPopulous") || jsonpath.Contains("PopulationDensity") || jsonpath.Contains("MostArea"))
+                DictionaryinString = JsonConvert.SerializeObject(AdaptorIndianCensusImpl.StateCensusAdapterDictionary);
             else if (jsonpath.Contains("StateCode"))
-                DictionaryinString = JsonConvert.SerializeObject(this.CensusCodeDictionary);
-            else if (jsonpath.Contains("MostPopulous"))
-                DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryMostPopulous);
-            else if (jsonpath.Contains("PopulationDensity"))
-                DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryPopulationDensity);
-            else if (jsonpath.Contains("MostArea"))
-                DictionaryinString = JsonConvert.SerializeObject(this.CensusDataDictionaryArea);
+                DictionaryinString = JsonConvert.SerializeObject(AdaptorIndianCensusImpl.StateCodeAdaptorDictionary);
+            else if(jsonpath.Contains("Merged"))
+                DictionaryinString = JsonConvert.SerializeObject(IndianCensusDictionary);
             else if (jsonpath.Contains("USCensusPopulation"))
-                DictionaryinString = JsonConvert.SerializeObject(USCensus.USCensusDictionary);
+                DictionaryinString = JsonConvert.SerializeObject(USCensusAdapterIMPL.USCensusAdapterDictionary);
             else
                 DictionaryinString = null;
+
             File.WriteAllText(jsonpath, DictionaryinString);
         }
 
@@ -356,20 +288,42 @@ namespace CensusAnalyser
         }
 
         /// <summary>
-        /// Sorts the us census.
+        /// Method to covert india census data so as to be able to be operated upon by CensusDAO
         /// </summary>
-        public void SortUSCensus()
+        /// <returns> Dictionary<int, MergedIndianCensusDataModalDao></returns>
+        public Dictionary<int, IndianCensusCSVDTO> CreateIndianCensus() 
         {
-            Dictionary<int, USCensusDataDAO> uscensusDictionary2= new Dictionary<int,USCensusDataDAO>();
-           int count = 0;
-            if (censusObj.GetType().ToString().Equals("CensusAnalyser.USCensus"))
+            bool flag = false;
+            IndianCensusCSVDTO newnode = null;
+            Dictionary<int, StateCensusAdapterDTO> stateCensusData = AdaptorIndianCensusImpl.StateCensusAdapterDictionary;
+            Dictionary<int, StateCodeAdapterDTO> stateCodeData = AdaptorIndianCensusImpl.StateCodeAdaptorDictionary;
+            int count = 0; 
+            foreach (KeyValuePair<int,StateCodeAdapterDTO> keyvalueCode in stateCodeData)
             {
-                foreach (KeyValuePair<int, USCensusDataDAO> keyvalueUS in USCensus.USCensusDictionary.OrderByDescending(key => key.Value.Population))
+                flag = false;
+                foreach (KeyValuePair<int, StateCensusAdapterDTO> keyandvalueState in stateCensusData)
                 {
-                    uscensusDictionary2.Add(++count, keyvalueUS.Value);
+                    if (keyandvalueState.Value.GetStateName().Equals(keyvalueCode.Value.StateName))
+                    {
+                        newnode = IndianCensusCSVDTO.createNode(keyandvalueState.Value, keyvalueCode.Value);
+                        //Console.WriteLine(++count + " - " + newnode.StateName);
+                        IndianCensusDictionary.Add(++count, newnode);
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag == false)
+                {
+                    newnode = IndianCensusCSVDTO.createNode(null, keyvalueCode.Value);
+                    // Console.WriteLine(++count + " - " + newnode.StateName);
+                    IndianCensusDictionary.Add(++count, newnode);
                 }
             }
-            USCensus.USCensusDictionary = uscensusDictionary2;
+            foreach (KeyValuePair<int, IndianCensusCSVDTO> keyandvalue in IndianCensusDictionary)
+            {
+                Console.WriteLine(keyandvalue.Value.StateName); 
+            }
+            return IndianCensusDictionary;
         }
     }
 }

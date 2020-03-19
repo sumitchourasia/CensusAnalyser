@@ -5,7 +5,6 @@
 namespace CensusAnalyser
 {
     using System;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Class StateCensusData Implements IComparable<>
@@ -67,6 +66,55 @@ namespace CensusAnalyser
                 return newnode;
             }
         }
+    }
+
+    public class StateCodeAdapterDTO
+    {
+        public int SerialNumber;
+        public string StateCode;
+        public string StateName;
+        public int TIN;
+
+        public void SetStateName(string StateName)
+        {
+            this.StateName = StateName;
+        }
+
+        public void SetSerialNumber(int SerialNumber)
+        {
+            this.SerialNumber = SerialNumber;
+        }
+
+        public void SetStateCode(string StateCode)
+        {
+            this.StateCode = StateCode;
+        }
+
+        public void SetTIN(int TIN)
+        {
+            this.TIN = TIN;
+        }
+
+        public string GetStateName()
+        {
+            return this.StateName;
+        }
+
+        public int GetSerialNumber()
+        {
+            return this.SerialNumber;
+        }
+
+        public string GetStateCode()
+        {
+            return this.StateCode;
+        }
+
+        public int GetTIN()
+        {
+            return this.TIN;
+        }
+
     }
 
     /// <summary>
@@ -218,9 +266,11 @@ namespace CensusAnalyser
             }
         }
     }
-   
 
-    public class MergedIndianCensusDataModalDao
+    /// <summary>
+    /// DTO modal class for Indian Census Data
+    /// </summary>
+    public class IndianCensusCSVDTO
     {
         /// <summary>
         /// The serial no
@@ -257,31 +307,30 @@ namespace CensusAnalyser
         /// </summary>
         public string StateCode;
 
-
         /// <summary> 
         /// Creates the node.
         /// </summary>
         /// <param name="element">The element.</param>
         /// <returns></returns>
-        public static MergedIndianCensusDataModalDao createNode(StateCensusDataDAO StateCensusDataDictionary  , StateCodeDataDAO StateCensusCodeDictionary)
+        public static IndianCensusCSVDTO createNode(StateCensusAdapterDTO StateCensusDataDictionary  , StateCodeAdapterDTO StateCensusCodeDictionary)
         {
-            MergedIndianCensusDataModalDao newnode = null;
+            IndianCensusCSVDTO newnode = null;
             try 
             {
-                newnode = new MergedIndianCensusDataModalDao();
+                newnode = new IndianCensusCSVDTO();
 
-                if (StateCensusCodeDictionary != null)
+                if (StateCensusCodeDictionary != null) 
                 {
-                    newnode.SerialNo = StateCensusCodeDictionary.SerialNo;
+                    newnode.SerialNo = StateCensusCodeDictionary.SerialNumber;
                     newnode.StateName = StateCensusCodeDictionary.StateName;
                     newnode.TIN = StateCensusCodeDictionary.TIN;
                     newnode.StateCode = StateCensusCodeDictionary.StateCode;
                 }
                 if (StateCensusDataDictionary != null)
                 {
-                    newnode.Population = StateCensusDataDictionary.Population;
-                    newnode.AreaInSqKm = StateCensusDataDictionary.AreaInSqKm;
-                    newnode.DensityPerSqKm = StateCensusDataDictionary.DensityPerSqKm;
+                    newnode.Population = StateCensusDataDictionary.GetPopulation();
+                    newnode.AreaInSqKm = StateCensusDataDictionary.GetArea();
+                    newnode.DensityPerSqKm = StateCensusDataDictionary.GetDensity();
                 }
                 return newnode;
             }
@@ -290,5 +339,149 @@ namespace CensusAnalyser
                 return newnode;
             }
         }
+    }
+
+    public class StateCensusAdapterDTO
+    {
+        public string statename;
+        public int population;
+        public int area;
+        public int density;
+
+        public void SetStateName(string statename)
+        {
+            this.statename = statename;
+        }
+        public void SetPopulation(int Population)
+        {
+            this.population = Population;
+        }
+        public void SetArea(int area)
+        {
+            this.area = area;
+        }
+        public void SetDensity(int Density)
+        {
+            this.density = Density;
+        }
+
+        public string GetStateName()
+        {
+            return this.statename;
+        }
+
+        public int GetPopulation()
+        {
+            return this.population;
+        }
+
+        public int GetArea()
+        {
+            return this.area;
+        }
+
+        public int GetDensity()
+        {
+            return this.density;
+        }
+    }
+
+    /// <summary>
+    /// USCensusAdapterDTO modal class for DTO
+    /// </summary>
+    public class USCensusAdapterDTO
+    {
+        public string StateCode;
+        public string StateName;
+        public int Population;
+        public double PopulationDensity;
+        public int HousingUnit;
+        public double HousingDensity;
+        public double TotalArea;
+        public double WaterArea;
+        public double LandArea;
+       
+        public void SetStateCode(string StateID)
+        {
+            this.StateCode = StateID;
+        }
+
+        public void SetStateName(string StateName)
+        {
+            this.StateName = StateName;
+        }
+        public void SetPopulation(int Population)
+        {
+            this.Population = Population;
+        }
+        public void SetPopulationDensity(double PopulationDensity)
+        {
+            this.PopulationDensity = PopulationDensity;
+        }
+      
+        public void SetHousingUnit(int HousingUnit)
+        {
+            this.HousingUnit = HousingUnit;
+        }
+        public void SetHousingDensity(double HousingDensity)
+        {
+            this.HousingDensity = HousingDensity;
+        }
+
+        public void SetTotalArea(double TotalArea)
+        {
+            this.TotalArea = TotalArea;
+        }
+
+        public void SetWaterArea(double WaterArea)
+        {
+            this.WaterArea = WaterArea;
+        }
+        public void SetLandArea(double LandArea)
+        {
+            this.LandArea = LandArea;
+        }
+        // getters
+        public string GetStateCode( )
+        {
+           return this.StateCode ;
+        }
+
+        public string GetStateName( )
+        {
+           return this.StateName ;
+        }
+        public int GetPopulation()
+        {
+           return this.Population;
+        }
+        public double GetPopulationDensity( )
+        {
+            return this.PopulationDensity ;
+        }
+
+        public int GetHousingUnit( )
+        {
+            return this.HousingUnit;
+        }
+        public double GetHousingDensity( )
+        {
+            return this.HousingDensity;
+        }
+
+        public double GetTotalArea()
+        {
+            return this.TotalArea;
+        }
+
+        public double GetWaterArea()
+        {
+            return this.WaterArea;
+        }
+        public double GetLandArea()
+        {
+            return this.LandArea;
+        }
+
     }
 }

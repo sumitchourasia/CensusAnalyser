@@ -63,10 +63,10 @@ namespace CensusAnalyser
                     string element;
                     // Read and display lines from the file until the end of 
                     // the file is reached. 
-                    while ((element = sr.ReadLine()) != null)
+                    while ((element = sr.ReadLine()) != null) 
                     {
                         count++;
-                        node = USCensusDataDAO.createNode(element);
+                        node = USCensusDataDAO.createNode(element); 
                         if (node != null)
                             USCensusDictionary.Add(count, node);
                         else
