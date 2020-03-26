@@ -17,7 +17,7 @@ namespace CensusAnalyser
         /// <param name="args">The arguments.</param>
         static void Main()
         {
-            string PathCSVDataFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv";
+            /*string PathCSVDataFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCensusData.csv";
             string PathCSVCodeFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateCode.csv";
             string PathUSCensusDataFile = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\USCensusData.csv";
             string JsonPathStateData = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\StateName.json";
@@ -26,29 +26,42 @@ namespace CensusAnalyser
             string JsonPathPopulationDensity = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\PopulationDensity.json";
             string JsonPathMostArea = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\MostArea.json";
             string JsonPathUSCensusMostPopulation = @"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\USCensusPopulation.json";
-
-            /* ////without using delegate
-             BuilderDirector.CreateBuilder();
-             BuilderDirector.ConstructPath(PathCSVDataFile);
-             BuilderDirector.ConstructDelimiter(null);
-             BuilderDirector.ConstructHeader(null);
-             ICensusDAO CensusObj = BuilderDirector.ConstructCensusUsingFactory("CSVStateCensus");
-             BuilderDirector.Construt(CensusObj);
-             CensusObj.LoadCSVFile();
-             CensusObj.SortDictionary();
-             CensusObj.SerializeDictionary(JsonPathStateData);
-             CensusObj.PrintDictionary();
-             string data = CensusObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCensusDataDAO>>(JsonPathStateData);
-             Console.WriteLine("data :" + data);
-             CensusObj.SortDictionaryMostPopulous();
-             CensusObj.SerializeDictionary(JsonPathMostPopulous);
-             CensusObj.PrintDictionary();
 */
+
+            string PathCSVDataFile = @"D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\StateCensusData.csv";
+            string PathCSVCodeFile = @"D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\StateCode.csv";
+            string PathUSCensusDataFile = @"D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\USCensusData.csv";
+            string JsonPathStateData = @"D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\StateName.json";
+            string JsonPathStateCode = @"D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\StateCode.json";
+            string JsonPathMostPopulous = @"D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\MostPopulous.json";
+            string JsonPathPopulationDensity = @"D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\PopulationDensity.json";
+            string JsonPathMostArea = @"D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\MostArea.json";
+            string JsonPathUSCensusMostPopulation = @"D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\USCensusPopulation.json";
+
+           /* ////without using delegate
+            BuilderDirector.CreateBuilder();
+            BuilderDirector.ConstructPath(PathCSVDataFile);
+            BuilderDirector.ConstructDelimiter(null);
+            BuilderDirector.ConstructHeader(null);
+            ICensus CensusObj = BuilderDirector.ConstructCensusUsingFactory("CSVStateCensus");
+            BuilderDirector.Construt(CensusObj);
+            CensusObj.LoadCSVFile();
+            ////adaptor object
+            IAdaptorCensus adapterobj = new AdaptorIndianCensusImpl(CensusObj);
+            adapterobj.ConvertCensus();
+            //// census dao object
+            ICensusDAO CensusDaoObj = BuilderDirector.CreateCensusDAO();
+            CensusDaoObj.SortDictionary(CensusObj,"StateName");
+            CensusDaoObj.SerializeDictionary(JsonPathStateData);
+            CensusDaoObj.PrintDictionary(CensusObj, "StateName");
+            string data = CensusDaoObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCensusAdapterDTO>>(JsonPathStateData);
+            Console.WriteLine("data :" + data);*/
+
+
             ////using delegate for CSVStateData file sort based on StateName
             dynamic delegateDataobj = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCensus", PathCSVDataFile);
             delegateDataobj(); 
             ICensus CensusObj2 = BuilderDirector.GetCensus();
-
             ////adapter
             BuilderDirector.ConvertCensusUsingAdapter(CensusObj2);
             //// censusDao
@@ -59,57 +72,56 @@ namespace CensusAnalyser
             CensusdaoObj.PrintDictionary(CensusObj2, "StateName");
             dynamic serializedelgateobj = MyDelegate.CreateSerializeDelegate(CensusdaoObj);
             serializedelgateobj(JsonPathStateData);  
-            CensusdaoObj.SerializeDictionary(JsonPathStateData);
-         //   string data2 = CensusdaoObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCensusAdapterDTO>>(JsonPathStateData);
-          //  Console.WriteLine("state census data file first and last statename data :" + data2);
- /*
+
+             string data2 = CensusdaoObj.FirstAndLastItemStateCodeGenerics<Dictionary<int, StateCensusAdapterDTO>>(JsonPathStateData);
+             Console.WriteLine("state census data file first and last statename data :" + data2);
+           
             //// sort based on population
             Console.WriteLine("\n\n\n based on population \n\n\n");
             CensusdaoObj.SortDictionary(CensusObj2,"Population");
-            CensusdaoObj.SerializeDictionary(JsonPathMostPopulous);
+            serializedelgateobj(JsonPathMostPopulous);  
             CensusdaoObj.PrintDictionary(CensusObj2, "Population");
-           
+            
             ////sort based on population density 
             Console.WriteLine("\n\n\n based on population density \n\n\n");
             CensusdaoObj.SortDictionary(CensusObj2,"Density"); 
-            CensusdaoObj.SerializeDictionary(JsonPathPopulationDensity); 
-            CensusdaoObj.PrintDictionary(CensusObj2, "Density"); 
-            
+            serializedelgateobj(JsonPathPopulationDensity); 
+            CensusdaoObj.PrintDictionary(CensusObj2, "Density");
+
             ////sort based on Area in Descending order 
             Console.WriteLine("\n\n\n based on Area Descending order \n\n\n");
-            CensusdaoObj.SortDictionary(CensusObj2,"Area");
-            CensusdaoObj.SerializeDictionary(JsonPathMostArea);
+            CensusdaoObj.SortDictionary(CensusObj2,"Area"); 
+            serializedelgateobj(JsonPathMostArea); 
             CensusdaoObj.PrintDictionary(CensusObj2, "Area");
-          
+           
             ////using delegate for CSVStateCode FIle sort based on statecode
             dynamic delegateCodeobj = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", PathCSVCodeFile);
             delegateCodeobj(); 
             ICensus CensusObj3 = BuilderDirector.GetCensus();
-            IAdaptorCensus adapterCodeObj = new AdaptorIndianCensusImpl();
-            adapterCodeObj.ConvertCensus(CensusObj3);
-            ICensusDAO CensusdaoObj2 = new CensusDAO(CensusObj3);
-            CensusdaoObj2.SortDictionary(CensusObj3);  
-            Console.WriteLine("\n\n\n based on StateCode \n\n\n"); 
-            CensusdaoObj2.PrintDictionary(CensusObj3);
-            dynamic serializedelgateobj3 = MyDelegate.CreateSerializeDelegate(CensusdaoObj2);
-            serializedelgateobj3(JsonPathStateCode);
-            CensusdaoObj2.SerializeDictionary(JsonPathStateCode);
+            BuilderDirector.ConvertCensusUsingAdapter(CensusObj3);
+            CensusdaoObj.SortDictionary(CensusObj3 , "StateCode");  
+            Console.WriteLine("\n\n\n based on StateCode \n\n\n");
+            CensusdaoObj.PrintDictionary(CensusObj3, "StateCode");
+            serializedelgateobj(JsonPathStateCode);
 
             //// merge indian census
-            CensusdaoObj2.CreateIndianCensus();
-            CensusdaoObj2.SerializeDictionary(@"C:\Users\Bridgelabz\source\repos\CensusAnalyser\CensusAnalyser\CensusAnalyser\Files\Merged.json");
-                                   
+            CensusdaoObj.CreateIndianCensus();
+            serializedelgateobj(@"D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\CensusAnalyser\FIles\Merged.json");
+
+            
             ////uscensus 
             dynamic USCensusLoadDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("USCensus", PathUSCensusDataFile);
             USCensusLoadDelegate();
             ICensus USCensusObj = BuilderDirector.GetCensus();  
-           
-
-            ICensusDAO USCensusdaoObj = new CensusDAO(USCensusObj);
-            USCensusdaoObj.SortDictionary(USCensusObj);
+            ////adapter
+            BuilderDirector.ConvertCensusUsingAdapter(USCensusObj);
+            //// censusDao
+            ICensusDAO USCensusdaoObj = BuilderDirector.CreateCensusDAO();
+            USCensusdaoObj.SortDictionary(USCensusObj,"Population");
             USCensusdaoObj.PrintDictionary(USCensusObj);
-            USCensusdaoObj.SerializeDictionary(JsonPathUSCensusMostPopulation);
-         */
+            ////serialize using delegate
+            dynamic serializedelgateobj2 = MyDelegate.CreateSerializeDelegate(USCensusdaoObj);
+            serializedelgateobj2(JsonPathUSCensusMostPopulation);
         }
     }
 }

@@ -214,9 +214,13 @@ namespace CensusAnalyser
             return new CensusDAO(); 
         }
 
+        /// <summary>
+        /// Converts the census using adapter.
+        /// </summary>
+        /// <param name="CensusObj">The census object.</param>
         public static void ConvertCensusUsingAdapter(ICensus CensusObj )
         {
-            IAdaptorCensus AdapterObj = null;
+            IAdaptorCensus AdapterObj = null; 
             if (CensusObj.GetType().ToString().Equals("CensusAnalyser.CSVStateCensus") || CensusObj.GetType().ToString().Equals("CensusAnalyser.CSVStateCode"))
                  AdapterObj = AdaptorIndianCensusImpl.CreateIndiaCensusAdaptor(CensusObj);
             if (CensusObj.GetType().ToString().Equals("CensusAnalyser.USCensus"))

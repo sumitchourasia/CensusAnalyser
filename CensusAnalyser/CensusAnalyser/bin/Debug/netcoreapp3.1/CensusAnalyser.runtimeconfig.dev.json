@@ -1,8 +1,8 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-      "C:\\Users\\Bridgelabz\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\Bridgelabz\\.nuget\\packages"
+      "C:\\Users\\stsum\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\stsum\\.nuget\\packages"
     ]
   }
 }

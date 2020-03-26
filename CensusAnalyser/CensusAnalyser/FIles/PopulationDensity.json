@@ -1,1 +1,176 @@
-{"1":{"statename":"Bihar","population":103804637,"area":94163,"density":1102},"2":{"statename":"West Bengal","population":91347736,"area":88752,"density":1029},"3":{"statename":"Kerala","population":33387677,"area":38863,"density":859},"4":{"statename":"Uttar Pradesh","population":199812341,"area":240928,"density":828},"5":{"statename":"Haryana","population":25353081,"area":44212,"density":573},"6":{"statename":"Tamil Nadu","population":72138958,"area":130058,"density":555},"7":{"statename":"Punjab","population":27704236,"area":50362,"density":550},"8":{"statename":"Jharkhand","population":32966238,"area":79714,"density":414},"9":{"statename":"Assam","population":31169272,"area":78438,"density":397},"10":{"statename":"Goa","population":1457723,"area":3702,"density":394},"11":{"statename":"Maharashta","population":112372972,"area":307713,"density":365},"12":{"statename":"Tripura","population":3671032,"area":10486,"density":350},"13":{"statename":"Karnataka","population":61130704,"area":191791,"density":319},"14":{"statename":"Gujarat","population":60383628,"area":196024,"density":308},"15":{"statename":"Telangana","population":35286757,"area":114840,"density":307},"16":{"statename":"Andhra Pradesh","population":49386799,"area":162968,"density":303},"17":{"statename":"Odisha","population":41947358,"area":155707,"density":269},"18":{"statename":"Madhya Pradesh","population":72597565,"area":308245,"density":236},"19":{"statename":"Rajasthan","population":68621012,"area":342239,"density":201},"20":{"statename":"Chattisgarh","population":25540196,"area":135191,"density":189},"21":{"statename":"Uttarakhand","population":10116752,"area":53483,"density":189},"22":{"statename":"Meghalaya","population":2964007,"area":22429,"density":132},"23":{"statename":"Himachal Pradesh","population":6864602,"area":55673,"density":123},"24":{"statename":"Manipur","population":2721756,"area":22327,"density":122},"25":{"statename":"Nagaland","population":1980602,"area":16579,"density":119},"26":{"statename":"Sikkim","population":607688,"area":7096,"density":86},"27":{"statename":"Jammu and Kashmir","population":12548926,"area":222236,"density":57},"28":{"statename":"Mizoram","population":1091014,"area":21081,"density":52},"29":{"statename":"Arunachal Pradesh","population":1382611,"area":0,"density":0}}
+{
+  "1": {
+    "statename": "Bihar",
+    "population": 103804637,
+    "area": 94163,
+    "density": 1102
+  },
+  "2": {
+    "statename": "West Bengal",
+    "population": 91347736,
+    "area": 88752,
+    "density": 1029
+  },
+  "3": {
+    "statename": "Kerala",
+    "population": 33387677,
+    "area": 38863,
+    "density": 859
+  },
+  "4": {
+    "statename": "Uttar Pradesh",
+    "population": 199812341,
+    "area": 240928,
+    "density": 828
+  },
+  "5": {
+    "statename": "Haryana",
+    "population": 25353081,
+    "area": 44212,
+    "density": 573
+  },
+  "6": {
+    "statename": "Tamil Nadu",
+    "population": 72138958,
+    "area": 130058,
+    "density": 555
+  },
+  "7": {
+    "statename": "Punjab",
+    "population": 27704236,
+    "area": 50362,
+    "density": 550
+  },
+  "8": {
+    "statename": "Jharkhand",
+    "population": 32966238,
+    "area": 79714,
+    "density": 414
+  },
+  "9": {
+    "statename": "Assam",
+    "population": 31169272,
+    "area": 78438,
+    "density": 397
+  },
+  "10": {
+    "statename": "Goa",
+    "population": 1457723,
+    "area": 3702,
+    "density": 394
+  },
+  "11": {
+    "statename": "Maharashta",
+    "population": 112372972,
+    "area": 307713,
+    "density": 365
+  },
+  "12": {
+    "statename": "Tripura",
+    "population": 3671032,
+    "area": 10486,
+    "density": 350
+  },
+  "13": {
+    "statename": "Karnataka",
+    "population": 61130704,
+    "area": 191791,
+    "density": 319
+  },
+  "14": {
+    "statename": "Gujarat",
+    "population": 60383628,
+    "area": 196024,
+    "density": 308
+  },
+  "15": {
+    "statename": "Telangana",
+    "population": 35286757,
+    "area": 114840,
+    "density": 307
+  },
+  "16": {
+    "statename": "Andhra Pradesh",
+    "population": 49386799,
+    "area": 162968,
+    "density": 303
+  },
+  "17": {
+    "statename": "Odisha",
+    "population": 41947358,
+    "area": 155707,
+    "density": 269
+  },
+  "18": {
+    "statename": "Madhya Pradesh",
+    "population": 72597565,
+    "area": 308245,
+    "density": 236
+  },
+  "19": {
+    "statename": "Rajasthan",
+    "population": 68621012,
+    "area": 342239,
+    "density": 201
+  },
+  "20": {
+    "statename": "Chattisgarh",
+    "population": 25540196,
+    "area": 135191,
+    "density": 189
+  },
+  "21": {
+    "statename": "Uttarakhand",
+    "population": 10116752,
+    "area": 53483,
+    "density": 189
+  },
+  "22": {
+    "statename": "Meghalaya",
+    "population": 2964007,
+    "area": 22429,
+    "density": 132
+  },
+  "23": {
+    "statename": "Himachal Pradesh",
+    "population": 6864602,
+    "area": 55673,
+    "density": 123
+  },
+  "24": {
+    "statename": "Manipur",
+    "population": 2721756,
+    "area": 22327,
+    "density": 122
+  },
+  "25": {
+    "statename": "Nagaland",
+    "population": 1980602,
+    "area": 16579,
+    "density": 119
+  },
+  "26": {
+    "statename": "Sikkim",
+    "population": 607688,
+    "area": 7096,
+    "density": 86
+  },
+  "27": {
+    "statename": "Jammu and Kashmir",
+    "population": 12548926,
+    "area": 222236,
+    "density": 57
+  },
+  "28": {
+    "statename": "Mizoram",
+    "population": 1091014,
+    "area": 21081,
+    "density": 52
+  },
+  "29": {
+    "statename": "Arunachal Pradesh",
+    "population": 1382611,
+    "area": 0,
+    "density": 0
+  }
+}
