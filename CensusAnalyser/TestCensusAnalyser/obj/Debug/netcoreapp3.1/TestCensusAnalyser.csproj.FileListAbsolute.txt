@@ -224,3 +224,5 @@ D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\TestCensusAnalyser\bin\Debug\net
 D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\TestCensusAnalyser\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Security.Cryptography.Pkcs.dll
 D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\TestCensusAnalyser\obj\Debug\netcoreapp3.1\TestCensusAnalyser.genruntimeconfig.cache
 D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\TestCensusAnalyser\bin\Debug\netcoreapp3.1\NuGet.Frameworks.dll
+D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\TestCensusAnalyser\bin\Debug\netcoreapp3.1\nunit.framework.dll
+D:\CensusAnalyser\CensusAnalyser\CensusAnalyser\TestCensusAnalyser\obj\Debug\netcoreapp3.1\TestCensusAnalyser.csproj.CoreCompileInputs.cache
