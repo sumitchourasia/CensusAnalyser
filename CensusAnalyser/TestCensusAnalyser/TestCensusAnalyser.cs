@@ -102,7 +102,6 @@ namespace TestCensusAnalyser
         {
             dynamic CensusAnalyserDelegate = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("CSVStateCode", pathCSVStateCodeFile);
             string actual = CensusAnalyserDelegate();
-
             dynamic StateCensusAnalyserObject = MyDelegate.CreateCensusLoadFileDelegateUsingBuilder("StateCensusAnalyser", pathCSVStateCodeFile);
             string expected = StateCensusAnalyserObject();
             Assert.AreEqual(actual, expected);

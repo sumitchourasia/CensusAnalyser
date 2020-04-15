@@ -4903,7 +4903,8 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\stsum\\.nuget\\packages\\": {}
+    "C:\\Users\\stsum\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
@@ -4914,6 +4915,9 @@
       "packagesPath": "C:\\Users\\stsum\\.nuget\\packages\\",
       "outputPath": "D:\\CensusAnalyser\\CensusAnalyser\\CensusAnalyser\\CensusAnalyser\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
         "C:\\Users\\stsum\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -4969,7 +4973,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
       }
     }
   }
